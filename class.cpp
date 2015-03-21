@@ -15,7 +15,9 @@ class Vector; //check
 class Normal; 
 class Point;
 class Ray;
+class SmallMatrix;
 class Matrix;
+class Color;
 class BRDF;
 class Sample;
 class Intersection;
@@ -50,6 +52,9 @@ public:
       void set_x(float x);
       void set_y(float y);
       void set_z(float z);
+      void printline();
+      void print();
+      float dot(Vector v0);
 };
  
 void Vector::vector() {
@@ -139,6 +144,16 @@ void Vector::set_y(float y){
 void Vector::set_z(float z){
       this->z = z;
 }
+void Vector::printline(){           //for testing
+      printf("Vector: x=%f, y=%f, z=%f\n", this->x, this->y, this->z);
+}
+void Vector::print(){              //for testing
+      printf("x=%f, y=%f, z=%f", this->x, this->y, this->z);
+}
+float Vector::dot(Vector v0) {
+      return (this->x * v0.get_x()) + (this->y * v0.get_y()) + (this->z * v0.get_z());
+}
+
                         
 //Point – Point = Vector 
  
@@ -151,6 +166,8 @@ public:
       void reset(float x, float y, float z);
       Normal add(Vector addee);
       Normal subtract(Vector subtractee);
+      void printline();
+      void print();
 };
 void Normal::normal(){
       this->x = 0;
@@ -205,11 +222,16 @@ Normal Normal::subtract(Vector subtractee){
       temp.normal(tempx, tempy, tempz);
       return temp;
 }
+void Normal::printline(){          //for testing
+      printf("Normal: x=%f, y=%f, z=%f\n", this->x, this->y, this->z);
+}
+void Normal::print(){              //for testing
+      printf("x=%f, y=%f, z=%f", this->x, this->y, this->z);
+}
  
 //**************************Point class***************************
 // Point - Point = Vector; Point - Vector = Point;
 class Point {
-       
 public:
       float x;
       float y;
@@ -225,6 +247,8 @@ public:
       void set_x(float x);
       void set_y(float y);
       void set_z(float z);
+      void printline();
+      void print();
  
 };
 void Point::point(){
@@ -276,6 +300,12 @@ void Point::set_y(float y){
 void Point::set_z(float z){
       this->z = z;
 }
+void Point::printline(){                //for testing
+      printf("Point: x=%f, y=%f, z=%f\n", this->x, this->y, this->z);
+}
+void Point::print(){              //for testing
+      printf("x=%f, y=%f, z=%f", this->x, this->y, this->z);
+}
  
  
 //**************************Ray class***************************
@@ -295,6 +325,8 @@ public:
       Vector get_dir();
       void set_pos(Point pos);
       void set_dir(Vector dir);
+      void printline();
+      void print();
 };
 Ray(Point a, Vector b, float c, float d){
       this->pos = a;
@@ -319,6 +351,52 @@ void Ray::set_pos(Point pos){
 void Ray::set_dir(Vector dir){
       this->dir = dir;
 }
+void Ray::printline(){
+      printf("Ray: ");
+      printf("Pos-> (");
+      this->pos.print();
+      printf(") Dir-> (");
+      this->dir.print();
+      printf(")\n");
+}
+
+
+//for calculating intersections
+class SmallMatrix {
+public:
+      float pos[3][3] = {
+            {0,0,0},
+            {0,0,0},
+            {0,0,0}
+      };
+      void smallMatrix();
+      void smallMatrix(float a, float b, float c, float d, float e, float f, float g, float h, float i);
+      float determinant();
+      void print();
+};
+void SmallMatrix::smallMatrix() {
+}
+void SmallMatrix::smallMatrix(float a, float b, float c, float d, float e, float f, float g, float h, float i) {
+      this->pos[0][0] = a;
+      this->pos[1][0] = b;
+      this->pos[2][0] = c;
+      this->pos[0][1] = d;
+      this->pos[1][1] = e;
+      this->pos[2][1] = f;
+      this->pos[0][2] = g;
+      this->pos[1][2] = h;
+      this->pos[2][2] = i;
+}
+float SmallMatrix::determinant() {
+      return (this->pos[0][0] * this->pos[1][1] * this->pos[2][2])
+      + (this->pos[1][0] * this->pos[2][1] * this->pos[0][2])
+      + (this->pos[2][0] * this->pos[0][1] * this->pos[1][2])
+      - (this->pos[2][0] * this->pos[1][1] * this->pos[0][2])
+      - (this->pos[0][0] * this->pos[2][1] * this->pos[1][2])
+      - (this->pos[1][0] * this->pos[0][1] * this->pos[2][2])
+      ;
+}
+
  
 //**************************Matrix class***************************
 //a matrix is 4x4
@@ -713,6 +791,90 @@ LocalGeo Transformation::operator*(LocalGeo localGeo){
 }
  
  
+/***********************Color Class*****************/
+//TODO: May support conversion from xyz
+class Color {
+      float r;
+      float g;
+      float b;
+public:
+      void color();
+      void color(float r, float g, float b);
+      Color addColors(Color addeeColor);
+      Color subColors(Color subtracteeColor);
+      Color mulColorbyScalar(float scalar);
+      Color divColorbyScalar(float scalar);
+      float get_r();
+      float get_g();
+      float get_b();
+      void set_r(float r);
+      void set_g(float g);
+      void set_b(float b);
+
+};
+void Color::color() {
+      r = 0.0;
+      g = 0.0;
+      b = 0.0;
+}
+
+void Color::color(float r, float g, float b){
+      this->r = r;
+      this->g = g;
+      this->b = b;
+}
+
+Color Color::addColors(Color addeeColor){
+      Color newColor;
+      newColor.r = this->r + addeeColor.get_r();
+      newColor.g = this->g + addeeColor.get_g();
+      newColor.b = this->b + addeeColor.get_b();
+      return newColor;
+}
+
+Color Color::subColors(Color subtracteeColor){
+      Color newColor;
+      newColor.r = this->r + subtracteeColor.get_r();
+      newColor.g = this->g + subtracteeColor.get_g();
+      newColor.b = this->b + subtracteeColor.get_b();
+      return newColor;
+}
+
+Color Color::mulColorbyScalar(float scalar){
+      Color newColor;
+      newColor.r = scalar*(this->r);
+      newColor.g = scalar*(this->g);
+      newColor.b = scalar*(this->b);
+      return newColor;
+}
+
+Color Color::divColorbyScalar(float scalar){
+      Color newColor;
+      this->r = (this->r)/scalar;
+      this->g = (this->g)/scalar;
+      this->b = (this->b)/scalar;
+      return newColor;
+}
+
+float Color::get_r(){
+      return this->r;
+}
+float Color::get_g(){
+      return this->g;
+}
+float Color::get_b(){
+      return this->b;
+}
+void Color::set_r(float r){
+      this->r = r;
+}
+void Color::set_g(float g){
+      this->g = g;
+}
+void Color::set_b(float b){
+      this->b = b;
+}
+
   
  
 /**********************BRDF***********************/
@@ -816,7 +978,25 @@ Sample::sample(float x, float y){
       this->x = x;
       this->y = y;
 }
- 
+
+
+/**************************Intersection Class*******************/ 
+class Intersection {
+public:
+      LocalGeo localGeo;
+      Primitive* primitive;
+      void intersection();
+      void intersection(LocalGeo localGeo, Primitive* primitive);
+};
+      void intersection(){
+   }
+      void intersection(LocalGeo localGeo, Primitive* primitive){
+            this->localGeo = localGeo;
+            this->primitive = primitive;
+   }
+
+
+
 /*******************Primitive Class*********************/
 class Primitive{
 public:
@@ -826,10 +1006,6 @@ public:
  
 };
  
-class Intersection{
-      LocalGeo localGeo
-      Primitive* primitive
-};
 /******************GeometricPrimitive Class**************/
 class GeometricPrimitive : public Primitive {
       Tranformation objToWorld;
@@ -1061,37 +1237,375 @@ void Color::set_b(float b){
 	  this->b = b;
 }
 
+
+/*
+      Implementations of triangle and sphere
+      The intersection with the ray at t outside the range [t_min, t_max] should return false.
+*/
+class Shape {
+      /* type=0 for sphere, type=1 for triangle, type=2 for not implemented */
+      int type;
+
+      /* implemented if sphere */
+      float radius;
+      Point center;
+
+      /* if triangle */
+      Point point0;
+      Point point1;
+      Point point2;
+
+public:
+      void shape();
+      void makeSphere(float radius, Point center);
+      void makeTriangle(Point point0, Point point1, Point point2);
+      bool intersect(Ray& ray, float* thit, LocalGeo* local);
+      bool intersectP(Ray& ray);
+
+      float get_radius();
+      Point get_center();
+      Point get_point0();
+      Point get_point1();
+      Point get_point2();
+
+      void set_radius(float radius);
+      void set_center(Point center);
+      void set_point0(Point point0);
+      void set_point1(Point point1);
+      void set_point2(Point point2);
+
+      void printline();
+};
+void Shape::shape(){
+      this->type = 2;
+}
+
+void Shape::makeSphere(float radius, Point center){
+      this->type = 0;
+      this->radius = radius;
+      this->center = center;
+}
+
+void Shape::makeTriangle(Point point0, Point point1, Point point2){
+      this->type = 1;
+      this->point0 = point0;
+      this->point1 = point1;
+      this->point2 = point2;
+}
+
+float Shape::get_radius(){
+      return this->radius;
+}
+Point Shape::get_center(){
+      return this->center;
+}
+Point Shape::get_point0(){
+      return this->point0;
+}
+Point Shape::get_point1(){
+      return this->point1;
+}
+Point Shape::get_point2(){
+      return this->point2;
+}
+
+void Shape::set_radius(float radius){
+      this->radius = radius;
+}
+void Shape::set_center(Point center){
+      this->center = center;
+}
+void Shape::set_point0(Point point0){
+      this->point0 = point0;
+}
+void Shape::set_point1(Point point1){
+      this->point1 = point1;
+}
+void Shape::set_point2(Point point2){
+      this->point2 = point2;
+}
+
+void Shape::printline(){
+      if (this->type==0){ //sphere
+            printf("Sphere: ");
+            printf("Center-> (");
+            this->center.print();
+            printf(") Radius-> (");
+            printf("%f", this->radius);
+            printf(")\n");
+      }
+      else if (this->type==1){ //triangular plane
+            printf("Triangle: ");
+            printf("Point0-> (");
+            this->point0.print();
+            printf(") Point1-> (");
+            this->point1.print();
+            printf(") Point2-> (");
+            this->point2.print();
+            printf(")\n");
+      }
+      else {
+            printf("ERROR: Shape not implemented");
+      }
+}
+
+
+// c = center, r = radius, e = starting position of ray, d = direction vector for ray
+float find_discriminant(Point c, float R, Point e, Vector d) {
+      float discriminant;
+      discriminant = pow(d.scalarmultiply(2).dot(e.PsubtractP(c)), 2) - (4 * d.dot(d) * (e.PsubtractP(c).dot(e.PsubtractP(c)) - pow(R, 2)));
+      return discriminant;
+}
+
+
+// c = center, r = radius, e = starting position of ray, d = direction vector for ray
+float find_t_sphere(Point c, float R, Point e, Vector d) {
+      return (d.scalarmultiply(-1).dot(e.PsubtractP(c)) - sqrt(pow(d.dot(e.PsubtractP(c)), 2) - (d.dot(d) * (e.PsubtractP(c).dot(e.PsubtractP(c)) - pow(R, 2)))))/(d.dot(d));  
+}
+
+// converts a vector to a normal
+Normal vectorToNormal(Vector v) {
+      Vector temp;
+      temp = v.normalize();
+      Normal n;
+      n.normal(temp.get_x(), temp.get_y(), temp.get_z());
+      return n;
+}
+
+// converts a pre-normalized vector to a normal
+Normal normalizedVectorToNormal(Vector v) {
+      Normal n;
+      n.normal(v.get_x(), v.get_y(), v.get_z());
+      return n;
+}
+
+//find distance between 2 points
+float findDistance(Point a, Point b) {
+      return sqrt(pow(b.get_x() - a.get_x(), 2) + pow(b.get_y() - a.get_y(), 2) + pow(b.get_z() - a.get_z(), 2));
+}
+
+//returns true if normal0 is the correct normal
+bool isNormalCorrect(Vector normal0, Vector normal1, Point intersection, Point p) {
+      if (findDistance(p, intersection.PaddvectorV(normal0)) < findDistance(p, intersection.PaddvectorV(normal1))) {
+            return true;
+      }
+      return false;
+}
+
+/*
+      Test if ray intersects with the shape or not (in object space), if so,
+            return intersection point and normal
+*/
+bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
+
+      if (this->type == 0){ //sphere
+            if (find_discriminant(this->center, this->radius, ray.get_pos(), ray.get_dir()) < 0) {
+                  return false;
+            }
+            float myT;
+            myT = find_t_sphere(this->center, this->radius, ray.get_pos(), ray.get_dir());
+            if ((myT < ray.get_t_min()) || (myT > ray.get_t_max())) {
+                  return false;
+            }
+
+            Point intersection;
+            Vector normal;
+            LocalGeo myLocal;
+
+            *thit = myT;
+            intersection = ray.get_pos().PaddvectorV(ray.get_dir().scalarmultiply(myT));
+            normal = intersection.PsubtractP(this->center).scalardivide(this->radius);
+            myLocal.localGeo(intersection, normalizedVectorToNormal(normal));
+            *local = myLocal;
+
+            myLocal.printline();
+            return true;
+      }
+      else if (this->type == 1){ //triangle
+            SmallMatrix A;
+            A.smallMatrix(this->point0.get_x() - this->point1.get_x(), this->point0.get_x() - this->point2.get_x(), ray.get_dir().get_x(),
+                  this->point0.get_y() - this->point1.get_y(), this->point0.get_y() - this->point2.get_y(), ray.get_dir().get_y(),
+                  this->point0.get_z() - this->point1.get_z(), this->point0.get_z() - this->point2.get_z(), ray.get_dir().get_z()
+                  );
+
+            float myT;
+            SmallMatrix t_matrix;
+            t_matrix.smallMatrix(this->point0.get_x() - this->point1.get_x(), this->point0.get_x() - this->point2.get_x(), this->point0.get_x() - ray.get_pos().get_x(),
+                  this->point0.get_y() - this->point1.get_y(), this->point0.get_y() - this->point2.get_y(), this->point0.get_y() - ray.get_pos().get_y(),
+                  this->point0.get_z() - this->point1.get_z(), this->point0.get_z() - this->point2.get_z(), this->point0.get_z() - ray.get_pos().get_z()
+                  );
+            myT = t_matrix.determinant()/A.determinant();
+            if (myT < ray.get_t_min() || myT > ray.get_t_max()) {
+                  return false;
+            }
+
+            float myGamma;
+            SmallMatrix gamma_matrix;
+            gamma_matrix.smallMatrix(this->point0.get_x() - this->point1.get_x(), this->point0.get_x() - ray.get_pos().get_x(), ray.get_dir().get_x(),
+                  this->point0.get_y() - this->point1.get_y(), this->point0.get_y() - ray.get_pos().get_y(), ray.get_dir().get_y(),
+                  this->point0.get_z() - this->point1.get_z(), this->point0.get_z() - ray.get_pos().get_z(), ray.get_dir().get_z()
+                  );
+            myGamma = gamma_matrix.determinant()/A.determinant();
+
+            if (myGamma < 0 || myGamma > 1){
+                  return false;
+            }
+
+            float myBeta;
+            SmallMatrix beta_matrix;
+            beta_matrix.smallMatrix(this->point0.get_x() - ray.get_pos().get_x(), this->point0.get_x() - this->point2.get_x(), ray.get_dir().get_x(),
+                  this->point0.get_y() - ray.get_pos().get_y(), this->point0.get_y() - this->point2.get_y(), ray.get_dir().get_y(),
+                  this->point0.get_z() - ray.get_pos().get_z(), this->point0.get_z() - this->point2.get_z(), ray.get_dir().get_z()
+                  );
+            myBeta = beta_matrix.determinant()/A.determinant();
+
+            if (myBeta < 0 || myBeta > (1-myGamma)){
+                  return false;
+            }
+
+            Point intersection;
+            Vector normal0, normal1, v0, v1; //of normal0 and normal1, one will be the correct normal and one will be on the opposite side of plane
+            LocalGeo myLocal;
+
+            *thit = myT;
+            intersection = ray.get_pos().PaddvectorV(ray.get_dir().scalarmultiply(myT));
+
+            //cross product of 2 vectors is orthogonal to both these vectors
+            v0 = intersection.PsubtractP(this->point0); 
+            v1 = intersection.PsubtractP(this->point1);
+            normal0 = v0.crossproduct(v1);
+            normal1 = normal0.scalarmultiply(-1);
+
+            if (isNormalCorrect(normal0, normal1, intersection, ray.get_pos())) {
+                  myLocal.localGeo(intersection, vectorToNormal(normal0));
+            }
+            else {
+                  myLocal.localGeo(intersection, vectorToNormal(normal1));
+            }
+
+            //printf("%f\n", myT);
+            //myLocal.printline();
+            *local = myLocal;
+            //local->printline();
+            return true;
+      }
+      else { //shape has not been set up
+            return false;
+      }
+}
+
+/*
+      Same as intersect, but just return whether there is any intersection or not
+*/
+bool Shape::intersectP(Ray& ray){
+      bool isIntersect = false;
+      Point* intersection;
+      Normal* normal;
+      float* thit;
+      if (this->type == 0){ //sphere
+            if (find_discriminant(this->center, this->radius, ray.get_pos(), ray.get_dir()) < 0) {
+                  return false;
+            }
+            float myT;
+            myT = find_t_sphere(this->center, this->radius, ray.get_pos(), ray.get_dir());
+            if ((myT < ray.get_t_min()) || (myT > ray.get_t_max())){
+                  return false;
+            }
+            return true;
+      }
+      else if (this->type == 1){ //triangle
+            SmallMatrix A;
+            A.smallMatrix(this->point0.get_x() - this->point1.get_x(), this->point0.get_x() - this->point2.get_x(), ray.get_dir().get_x(),
+                  this->point0.get_y() - this->point1.get_y(), this->point0.get_y() - this->point2.get_y(), ray.get_dir().get_y(),
+                  this->point0.get_z() - this->point1.get_z(), this->point0.get_z() - this->point2.get_z(), ray.get_dir().get_z()
+                  );
+
+            float myT;
+            SmallMatrix t_matrix;
+            t_matrix.smallMatrix(this->point0.get_x() - this->point1.get_x(), this->point0.get_x() - this->point2.get_x(), this->point0.get_x() - ray.get_pos().get_x(),
+                  this->point0.get_y() - this->point1.get_y(), this->point0.get_y() - this->point2.get_y(), this->point0.get_y() - ray.get_pos().get_y(),
+                  this->point0.get_z() - this->point1.get_z(), this->point0.get_z() - this->point2.get_z(), this->point0.get_z() - ray.get_pos().get_z()
+                  );
+            myT = t_matrix.determinant()/A.determinant();
+            if (myT < ray.get_t_min() || myT > ray.get_t_max()) {
+                  return false;
+            }
+
+            float myGamma;
+            SmallMatrix gamma_matrix;
+            gamma_matrix.smallMatrix(this->point0.get_x() - this->point1.get_x(), this->point0.get_x() - ray.get_pos().get_x(), ray.get_dir().get_x(),
+                  this->point0.get_y() - this->point1.get_y(), this->point0.get_y() - ray.get_pos().get_y(), ray.get_dir().get_y(),
+                  this->point0.get_z() - this->point1.get_z(), this->point0.get_z() - ray.get_pos().get_z(), ray.get_dir().get_z()
+                  );
+            myGamma = gamma_matrix.determinant()/A.determinant();
+
+            if (myGamma < 0 || myGamma > 1){
+                  return false;
+            }
+
+            float myBeta;
+            SmallMatrix beta_matrix;
+            beta_matrix.smallMatrix(this->point0.get_x() - ray.get_pos().get_x(), this->point0.get_x() - this->point2.get_x(), ray.get_dir().get_x(),
+                  this->point0.get_y() - ray.get_pos().get_y(), this->point0.get_y() - this->point2.get_y(), ray.get_dir().get_y(),
+                  this->point0.get_z() - ray.get_pos().get_z(), this->point0.get_z() - this->point2.get_z(), ray.get_dir().get_z()
+                  );
+            myBeta = beta_matrix.determinant()/A.determinant();
+
+            if (myBeta < 0 || myBeta > (1-myGamma)){
+                  return false;
+            }
+
+            return true;
+      }
+      else { //shape has not been setup
+            return false;
+      }
+}
+
+
+
+
+
 /**********LocalGeo Class***********/
 class LocalGeo {
-		int is_implemented;
-		Point pos;
-		Normal normal;
 public:
-		void localGeo();
-		void localGeo(Point pos, Normal normal);
-		void printline();
+      Point pos;
+      Normal normal;
+      LocalGeo();
+      void localGeo();
+      void localGeo(Point pos, Normal normal);
+      Point get_pos();
+      Normal get_normal();
+      void printline();
 };
+LocalGeo::LocalGeo(){
+      //object is created
+      this->pos = Point();
+      this->normal = Normal();
+}
 void LocalGeo::localGeo(){
-		this->is_implemented = 0;
+      this->pos = Point();
+      this->normal = Normal();
 }
 void LocalGeo::localGeo(Point pos, Normal normal){
-		this->is_implemented = 1;
-		this->pos = pos;
-		this->normal = normal;
+      this->pos = pos;
+      this->normal = normal;
+}
+Point LocalGeo::get_pos(){
+      return this->pos;
+}
+Normal LocalGeo::get_normal(){
+      return this->normal;
 }
 void LocalGeo::printline(){
-	if (this->is_implemented == 1){
-			printf("LocalGeo: ");
-				printf("Pos-> (");
-				this->pos.print();
-				printf(") Normal-> (");
-			this->normal.print();
-			printf(")\n");
-	  }
-	  else {
-			printf("LocalGeo object not implemented\n");
-	  }
+      printf("LocalGeo: ");
+      printf("Pos-> (");
+      this->pos.print();
+      printf(") Normal-> (");
+      this->normal.print();
+      printf(")\n");
 }
+
 
 /**************Light Class**************/
 class Light {
