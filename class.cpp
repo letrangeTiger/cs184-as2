@@ -9,7 +9,7 @@
 using namespace std;
 
 //***********************//
-//		BASIC CLASSES    //
+//		BASIC CLASSES
 //***********************//
 class Vector; //check
 class Normal; 
