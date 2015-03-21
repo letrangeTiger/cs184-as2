@@ -1141,7 +1141,8 @@ Light::makeDirectionalLight(float dx, float dy, float dz, Color c){
 void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
       if (this->type==POINTLIGHT){
             // create point light ray
-        Point p = local.pos;
+        Point p; 
+		p = local.pos;
         Vector light_dir = this->ltp.PsubtractP(p);
         lray.ray(p, light_dir, 0.0001, FLT_MAX);
       } else if (this->type==DIRECTIONALLIGHT){
