@@ -6,6 +6,7 @@
 #include "Sampler.cpp"
 #include "Camera.cpp"
 #include "Raytracer.cpp"
+#include "lodepng.h"
 
 using namespace std;
 
