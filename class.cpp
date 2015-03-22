@@ -1536,7 +1536,7 @@ void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
 class AggregatePrimitive {
  
 public:
-    std::vector<GeometricPrimitive*> *primitives;
+    std::vector<GeometricPrimitive*> primitives;
     std::vector<GeometricPrimitive*>::iterator it;
     
  
@@ -1552,15 +1552,14 @@ public:
     }
 };
  
-AggregatePrimitive::AggregatePrimitive(){
-      this->primitives = NULL; 
+AggregatePrimitive::AggregatePrimitive(){ 
 }
  
 AggregatePrimitive::AggregatePrimitive(std::vector<GeometricPrimitive*> list){
-     primitives = &list;
+     primitives = list;
 }
 void AggregatePrimitive::addPrimitive(GeometricPrimitive* temp){
-     primitives->push_back(temp);
+     primitives.push_back(temp);
 }
  
  
@@ -1569,27 +1568,27 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
     *thit = 0.0;
     float newThit;
     int i = 0;
-    for (it = primitives->begin() ; it < primitives->end(); it++, i++){
+    for (it = primitives.begin() ; it < primitives.end(); it++, i++){
         Intersection* newIn;
-        GeometricPrimitive primitive;
-        primitive = *primitives->at(i);
-        /*if(primitive.shape->intersect(ray, &newThit, &newIn->localGeo)){
+        GeometricPrimitive* primitive;
+        primitive = primitives.at(i);
+      /*  if(primitive->shape->intersect(ray, &newThit, &newIn->localGeo)){
             intersectobject = true;
             if (newThit < *thit){
                 *thit = newThit;
                 in = newIn;
-            }
-        }*/
+            } */
+       // }
     }
     return intersectobject;
 }
  
 bool AggregatePrimitive::intersectP(Ray& ray){
     int i = 0;
-    for (it = primitives->begin() ; it < primitives->end(); it++, i++){
-      GeometricPrimitive primitive;
-      primitive = *primitives->at(i);
-      if (primitive.shape->intersectP(ray)) {
+    for (it = primitives.begin() ; it < primitives.end(); it++, i++){
+      GeometricPrimitive* primitive;
+      primitive = primitives.at(i);
+      if (primitive->shape->intersectP(ray)) {
         return true;
       }
     }
