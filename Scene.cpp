@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
   	while (counter<argc){
   		cout << "10000";
 		std::string arg = argv[counter];
-	  	if (arg=="cam")) {
+	  	if (arg=="cam") {
 	  		cout << "cam";
 			float ex = atof(argv[counter+1]);
 			float ey = atof(argv[counter+2]);
@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
 			scene.lr = lr;
 			scene.ul = ul;
 			scene.ur = ur;
-	  	} else if (arg=="sph")){
+	  	} else if (arg=="sph"){
 	  		cout << "sph";
 			float cx = atof(argv[counter+1]);
 			float cy = atof(argv[counter+2]);
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
 			sphere->makeSphere(r, Point(cx,cy,cz));
 			GeometricPrimitive geoprim = GeometricPrimitive(sphere,Transformation(trans_mat), brdf);
 			scene.aggreprim.addPrimitive(&geoprim);
-	    } else if (arg=="tri")){
+	    } else if (arg=="tri"){
 	    	cout << "tri";
 			float ax = atof(argv[counter+1]);
 			float ay = atof(argv[counter+2]);
@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
       			} else continue;
       		}	
       			counter = counter+2;
-	    } else if (arg=="ltp")){
+	    } else if (arg=="ltp"){
 	    	cout << "ltp";
 	    	float px = atof(argv[counter+1]);
 	    	float py = atof(argv[counter+2]);
@@ -216,7 +216,7 @@ int main(int argc, char *argv[]) {
 			Light ptlight;
 			ptlight.makePointLight(px,py,pz,Color(r,g,b),falloff); 
 			scene.lights.push_back(ptlight);
-	    } else if (arg=="ltd")){
+	    } else if (arg=="ltd"){
 	    	cout << "ltd";
 	    	float dx = atof(argv[counter+1]);
 	    	float dy = atof(argv[counter+2]);
@@ -228,19 +228,19 @@ int main(int argc, char *argv[]) {
 	  		Light drlight;
 	  		drlight.makeDirectionalLight(dx,dy,dz,Color(r,g,b));
 	  		scene.lights.push_back(drlight);
-	  	} else if (arg=="lta")){
+	  	} else if (arg=="lta"){
 	  		cout << "lta";
 	  		float r = atof(argv[counter+1]);
 	    	float g = atof(argv[counter+2]);
 	    	float b = atof(argv[counter+3]);
 	    	counter=counter+4;
 	    	scene.amblight = Light(r,g,b);
-	    } else if (arg=="xfz")){
+	    } else if (arg=="xfz"){
 	    	cout << "xfz";
 			trans_mat = Matrix();
 			trans_mat = trans_mat.identity();	    	
 			counter+=1;
-	    } else if (arg=="xft")){
+	    } else if (arg=="xft"){
 	    	cout << "xft";
 	    	float tx = atof(argv[counter+1]);
 	    	float ty = atof(argv[counter+2]);
