@@ -24,7 +24,6 @@ class Transformation;
 class Color;
 class BRDF;
 class Sample;
-class Primitive;
 class AggregatePrimitive;
 class GeometricPrimitive;
 class Intersection;
@@ -1421,17 +1420,6 @@ bool Shape::intersectP(Ray& ray){
 }
 
 
-/*******************Primitive Class*********************/
-class  Primitive{
-public:
-      virtual bool intersect(Ray& ray, float* thit, Intersection* in);
-      virtual bool intersectP(Ray& ray);
-      virtual void getBRDF(LocalGeo& local, BRDF* brdf);
- 
-};
-
-
-
 
  
 /******************GeometricPrimitive Class**************/
@@ -1524,8 +1512,10 @@ bool GeometricPrimitive::intersectP(Ray& ray) {
 void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
       this->brdf = brdf;
 }
+
 /************AggregatePrimitive********************/         
-class AggregatePrimitive : public Primitive{
+
+class AggregatePrimitive{
  
 public:
     std::vector<GeometricPrimitive*> *primitives;
@@ -1746,6 +1736,36 @@ void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
       }
 }
 
+int main(int argc, char *argv[]) {
+      //test a: triangle-ray intersection
+      Matrix test1;
+      Matrix test11;
+      test1.matrix(3.2,2,3,4,5,6,7,8,9,5.7,10,12,13,14,15,1);
+      test11 = test1.inverse();
+      //test11.print();
 
+      Matrix test2;
+      test2 = translation(2,3,4);
+      //test2.print();
+
+      
+
+      Matrix test4;
+      Matrix test41;
+      Matrix test42;
+      Matrix test43;
+      test4.matrix(1,2,3,4,5,6,7,8,9,10,11,11,13,14,15,16);
+      test4.print();
+      test41 = test4.transpose();
+      test42 = test41.identity();
+      test41.print();
+      //test42.print();
+      test43 = test4*test41;
+      //test43.print();
+
+      Matrix test3;
+      test3 = scaling(2,3,4);
+      test3.print();
+      }
 
 
