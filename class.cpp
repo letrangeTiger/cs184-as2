@@ -1078,9 +1078,9 @@ public:
       void intersection();
       void intersection(LocalGeo localGeo, Primitive* primitive);
 };
-      void Intersection::Intersection(){
+      Intersection::Intersection(){
 }
-      void Intersection::Intersection(LocalGeo localGeo, Primitive* primitive){
+      Intersection::Intersection(LocalGeo localGeo, Primitive* primitive){
             this->localGeo = localGeo;
             this->primitive = primitive;
 }
