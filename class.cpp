@@ -1055,13 +1055,11 @@ void BRDF::setKr(float r,float g, float b){
 /**************************Sample Class*******************/ 
 /*    stores screen coordinates */
 class Sample {
-      float x;
-      float y;
 public:
+	  float x;
+	  float y;
       Sample();
       Sample(float x, float y);
-      float get_x();
-      float get_y();
 };
 Sample::Sample(){
       x = 0.0;
@@ -1070,12 +1068,6 @@ Sample::Sample(){
 Sample::Sample(float x, float y){
       this->x = x;
       this->y = y;
-}
-float Sample::get_x(){
-      return x;
-}
-float Sample::get_y(){
-      return y;
 }
 
 

@@ -1,14 +1,15 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <queue>
 #include "class.cpp"
 #include "Film.cpp"
 #include "Sampler.cpp"
 #include "Camera.cpp"
-#include "Raytracer.cpp"
+#include "raytracer.cpp"
 #include "lodepng.h"
 
-using namespace std;
+//using namespace std;
 
 class Scene {
 	public:		
@@ -50,7 +51,8 @@ void Scene::render() {
 		Color *color = Color();
 		camera.generateRay(sample, &camray);
 		raytracer.trace(camray, 0, &color);
-		film.commit(sample, color);
+		Color c = Color(color->r, color->g, color->b);
+		film.commit(sample, c);
 	}
 
 	film.writeImage();
