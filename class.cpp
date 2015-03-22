@@ -372,6 +372,8 @@ public:
       Point currentposition(float t);
       Point get_pos();
       Vector get_dir();
+      float get_t_min();
+      float get_t_max();
       void set_pos(Point pos);
       void set_dir(Vector dir);
       void printline();
@@ -407,6 +409,12 @@ Point Ray::get_pos(){
 }
 Vector Ray::get_dir(){
       return this->dir;
+}
+float Ray::get_t_min(){
+      return this->t_min;
+}
+float Ray::get_t_max(){
+      return this->t_max;
 }
 void Ray::set_pos(Point pos){
       this->pos = pos;
