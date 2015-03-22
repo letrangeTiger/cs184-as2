@@ -123,8 +123,8 @@ int main(int argc, char *argv[]) {
 			counter = counter+10;
 			Shape *triangle;
 			triangle->makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
-			GeometricPrimitive* geoprim(&triangle,Transformation(trans_mat), &brdf);
-			scene.aggreprim.addPrimitive(&geoprim);
+			GeometricPrimitive geoprim = GeometricPrimitive(triangle,Transformation(trans_mat), brdf);
+			scene.aggreprim.addPrimitive(geoprim);
 	    } else if (arg=="obj"){
 	    	/*
 			NOTE: .obj file supporting:
@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
       				iss >> c;
       				Shape triangle;
       				triangle.makeTriangle(points[a-1],points[b-1],points[c-1]);
-      				GeometricPrimitive* geoprim(Transformation(trans_mat), triangle, brdf);
+      				GeometricPrimitive geoprim =(Transformation(trans_mat), triangle, brdf);
       				scene.aggreprim.addPrimitive(&geoprim);
       				//TODO: 3 items
       					// Shape triangle;
