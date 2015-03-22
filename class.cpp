@@ -26,7 +26,6 @@ class Sample;
 class Intersection;
 class Material;
 class Color;
-class LocalGeo;
 class Shape;
 class Light;
 
