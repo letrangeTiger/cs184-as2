@@ -1054,9 +1054,9 @@ void BRDF::setKr(float r,float g, float b){
 /**************************Sample Class*******************/ 
 /*    stores screen coordinates */
 class Sample {
+public:
       float x;
       float y;
-public:
       Sample();
       Sample(float x, float y);
       float get_x();
