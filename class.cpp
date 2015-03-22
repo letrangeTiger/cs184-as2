@@ -17,6 +17,7 @@ class Point;
 class Ray;
 class SmallMatrix;
 class Matrix;
+class Transformation;
 class Color;
 class BRDF;
 class Sample;
@@ -24,8 +25,8 @@ class Intersection;
 class Material;
 class Color;
 class LocalGeo;
-class Light;
 class Shape;
+class Light;
 
 #define PI 3.14159265  // Should be used from mathlib
 inline float sqr(float x) { return x*x; } 
@@ -36,7 +37,7 @@ public:
       float x;
       float y;
       float z;
- 
+	  Vector();
       void vector();
       void vector(float a, float b, float c);
       void reset(float x, float y, float z);

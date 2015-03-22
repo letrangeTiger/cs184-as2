@@ -22,6 +22,7 @@ class Scene {
 		std::list<Light> lights;
 		Light amblight;
 		unsigned width, height;
+		Scene();
 		Scene(unsigned width, unsigned height);
 		void render();
 };
@@ -41,7 +42,7 @@ void Scene::render() {
 	// implement this.
 	Film film = Film(this->width,this->height);
 	Sampler sampler = Sampler(this->width,this->height);
-	Sample* sample = Sample();
+	//Sample* sample = Sample();
 	Camera camera = Camera(eye,ll,lr,ul,ur);
 	Raytracer raytracer = Raytracer(max_depth, eye, aggreprim, lights);
 	while (!sampler.generateSample(&sample)){
