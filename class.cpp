@@ -1067,6 +1067,32 @@ Sample::Sample(float x, float y){
       this->y = y;
 }
 
+
+
+class Intersection {
+public:
+      LocalGeo localGeo;
+      Primitive primitive;
+      Intersection();
+      Intersection(LocalGeo localGeo, Primitive* primitive);
+      void intersection();
+      void intersection(LocalGeo localGeo, Primitive* primitive);
+};
+      void Intersection::Intersection(){
+}
+      void Intersection::Intersection(LocalGeo localGeo, Primitive* primitive){
+            this->localGeo = localGeo;
+            this->primitive = primitive;
+}
+      void Intersection::intersection(){
+}
+      void Intersection::intersection(LocalGeo localGeo, Primitive* primitive){
+            this->localGeo = localGeo;
+            this->primitive = primitive;
+}
+
+
+
 /*
       Implementations of triangle and sphere
       The intersection with the ray at t outside the range [t_min, t_max] should return false.
@@ -1604,9 +1630,9 @@ void Color::addColors(Color addeeColor){
 }
  
 Color Color::subColors(Color subtracteeColor){
-	this->r -= addeeColor.get_r();
-	this->g -= addeeColor.get_g();
-	this->b -= addeeColor.get_b();
+	this->r -= subtracteeColor.get_r();
+	this->g -= subtracteeColor.get_g();
+	this->b -= subtracteeColor.get_b();
 }
  
 Color Color::mulColorbyScalar(float scalar){
