@@ -26,7 +26,7 @@ RayTracer::RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primit
 
 void RayTracer::trace(Ray& ray, int depth, Color* color){
       BRDF brdf;
-      float* thit;
+      float thit;
       Intersection in = Intersection();
       /* Find the nearest shape that the ray intersects, if any */
 
@@ -35,11 +35,14 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
          *color = Color(0,0,0);
      }
       //if does not intersect anything return black
-      if(!primitives.intersect(ray, thit, &in)){
+      if(!primitives.intersect(ray, &thit, &in)){
+        cout << "intersect fine?";
          *color = Color(0,0,0);
 
-  }
+      }
+  
       //find BRDF at intersection point
+  /*
       in.primitive->getBRDF(in.localGeo, &brdf);
 
       //loop through lights
@@ -82,5 +85,5 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         trace(reflectRay, depth+1, &temp);
         *color = *color + Color(brdf.krr*temp.get_r(), brdf.krg*temp.get_g(), brdf.krb*temp.get_b());
     }
-
+*/
 }

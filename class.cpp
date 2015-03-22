@@ -1566,20 +1566,20 @@ void AggregatePrimitive::addPrimitive(GeometricPrimitive* temp){
  
 bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
     bool intersectobject = false;
-    *thit = FLT_MAX;
+    *thit = 0.0;
     float newThit;
     int i = 0;
     for (it = primitives->begin() ; it < primitives->end(); it++, i++){
         Intersection* newIn;
         GeometricPrimitive primitive;
         primitive = *primitives->at(i);
-        if(primitive.shape->intersect(ray, &newThit, &newIn->localGeo)){
+        /*if(primitive.shape->intersect(ray, &newThit, &newIn->localGeo)){
             intersectobject = true;
             if (newThit < *thit){
                 *thit = newThit;
                 in = newIn;
             }
-        }
+        }*/
     }
     return intersectobject;
 }

@@ -22,22 +22,22 @@ Sampler::Sampler(float width, float height){
 	current_v = 0.5;
 }
 bool Sampler::generateSample(Sample* sample){
-	cout << "generateSample called";
+	//cout << "generateSample called" << "\n";
 	if ((current_u > width) && (this->current_v > this->height)) {
-		cout << "returning false";
+		//cout << "returning false";
 		return false;
 	} else if(this->current_u > this->width){
 		sample->x = current_u;
 		sample->y = current_v;
 		this->current_u = 0.5;
 		this->current_v += 1.0;
-		cout << "returning the first";
+		//cout << "returning the first";
 		return true;
 	} else {
 		sample->x = current_u;
 		sample->y = current_v;
 		this->current_u += 1.0;
-		cout << "returning the second";
+		//cout << "returning the second";
 		return true;
 	}
 }
