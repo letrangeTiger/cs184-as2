@@ -173,7 +173,7 @@ int main(int argc, char *argv[]) {
       				iss >> c;
       				Shape triangle;
       				triangle.makeTriangle(points[a-1],points[b-1],points[c-1]);
-      				GeometricPrimitive geoprim(Transformation(trans_mat), Transformation(trans_mat.inverse()), triangle, brdf);
+      				GeometricPrimitive geoprim(Transformation(trans_mat), triangle, brdf);
       				scene.aggreprim.addPrimitive(geoprim);
       				//TODO: 3 items
       					// Shape triangle;
