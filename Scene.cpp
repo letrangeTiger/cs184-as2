@@ -65,7 +65,8 @@ int main(int argc, char *argv[]) {
 	Scene scene = Scene(w,h,maxdepth);
 
 	int counter = 1;
-	Matrix trans_mat = Matrix::identity();
+	Matrix trans_mat = Matrix();
+	trans_mat = trans_mat.identity();
 	BRDF brdf = BRDF();
 
   	while (counter<argc){
@@ -213,7 +214,8 @@ int main(int argc, char *argv[]) {
 	    	counter=counter+4;
 	    	scene.amblight = Light(r,g,b);
 	    } else if (arg=="xfz"){
-			trans_mat = Matrix::identity();	    	
+			trans_mat = Matrix();
+			trans_mat = trans_mat.identity();	    	
 			counter+=1;
 	    } else if (arg=="xft"){
 	    	float tx = atof(argv[counter+1]);
