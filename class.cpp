@@ -1755,8 +1755,6 @@ int main(int argc, char *argv[]) {
       Matrix test2;
       test2 = translation(2,3,4);
       //test2.print();
-
-<<<<<<< HEAD
       
 
       Matrix test4;
@@ -1778,5 +1776,3 @@ int main(int argc, char *argv[]) {
       }
 
 
-=======
->>>>>>> 5845009a5c5490c1143c1fa482b3cdb093e5e708
