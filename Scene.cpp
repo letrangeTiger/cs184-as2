@@ -48,10 +48,10 @@ void Scene::render() {
 	Camera camera = Camera(eye,ll,lr,ul,ur);
 	RayTracer raytracer = RayTracer(max_depth, eye, aggreprim, lights);
 	while (!sampler.generateSample(sample)){
-		Ray *camray = Ray();
-		Color *color = Color();
-		camera.generateRay(sample, &camray);
-		raytracer.trace(camray, 0, &color);
+		Ray *camray;
+		Color *color;
+		camera.generateRay(*sample, camray);
+		raytracer.trace(*camray, 0, color);
 		Color c = Color(color->r, color->g, color->b);
 		film.commit(sample, c);
 	}
