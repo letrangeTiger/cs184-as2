@@ -1292,7 +1292,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             intersection = ray.get_pos().PaddvectorV(ray.get_dir().scalarmultiply(myT));
             normal = intersection.PsubtractP(this->center).scalardivide(this->radius);
             myLocal.localGeo(intersection, normalizedVectorToNormal(normal));
-            local = &myLocal;
+            *local = myLocal;
 
             //myLocal.printline();
             return true;
@@ -1529,6 +1529,7 @@ bool GeometricPrimitive::intersectP(Ray& ray) {
                                                 
 }
 void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
+
       brdf = &this->brdf;
 }
 
