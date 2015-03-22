@@ -23,6 +23,9 @@ class Transformation;
 class Color;
 class BRDF;
 class Sample;
+class Primitive;
+class AggregatePrimitive;
+class GeometricPrimitive;
 class Intersection;
 class Material;
 class Color;
@@ -1071,7 +1074,7 @@ Sample::Sample(float x, float y){
 class Intersection {
 public:
       LocalGeo localGeo;
-      Primitive primitive;
+      Primitive* primitive;
       Intersection();
       Intersection(LocalGeo localGeo, Primitive* primitive);
       void intersection();
