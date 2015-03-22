@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 #include "lodepng.cpp" // from "lodev.org/lodepng/"
 #include "class.cpp"
 
@@ -56,7 +57,7 @@ int main(){
 		for(unsigned j=0; j<h; j++){
 			film.commit(Sample(i,j),Color());
 		}
-	film.writeImage();
+	film.writeImage();*/
 /*  
 	//example encode from lodev.org/lodepng/
 	unsigned width = 1000, height = 500;
@@ -75,8 +76,8 @@ int main(){
 	lodepng::State state;
 	lodepng::encode(png, image, width, height,state);
 	lodepng::save_file(png, filename);
-*/
+
 
 	return 0;
 
-}
+}*/

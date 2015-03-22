@@ -15,8 +15,10 @@ class Vector; //check
 class Normal; 
 class Point;
 class Ray;
+class LocalGeo;
 class SmallMatrix;
 class Matrix;
+class Transformation;
 class Color;
 class BRDF;
 class Sample;
@@ -24,8 +26,8 @@ class Intersection;
 class Material;
 class Color;
 class LocalGeo;
-class Light;
 class Shape;
+class Light;
 
 #define PI 3.14159265  // Should be used from mathlib
 inline float sqr(float x) { return x*x; } 
@@ -36,7 +38,6 @@ public:
       float x;
       float y;
       float z;
-
       Vector();
       Vector(float a, float b, float c);
       void vector();
@@ -421,6 +422,50 @@ void Ray::printline(){
       this->dir.print();
       printf(")\n");
 }
+
+
+
+/**********LocalGeo Class***********/
+class LocalGeo {
+public:
+      Point pos;
+      Normal normal;
+      LocalGeo();
+      void localGeo();
+      void localGeo(Point pos, Normal normal);
+      Point get_pos();
+      Normal get_normal();
+      void printline();
+};
+LocalGeo::LocalGeo(){
+      //object is created
+      this->pos = Point();
+      this->normal = Normal();
+}
+void LocalGeo::localGeo(){
+      this->pos = Point();
+      this->normal = Normal();
+}
+void LocalGeo::localGeo(Point pos, Normal normal){
+      this->pos = pos;
+      this->normal = normal;
+}
+Point LocalGeo::get_pos(){
+      return this->pos;
+}
+Normal LocalGeo::get_normal(){
+      return this->normal;
+}
+void LocalGeo::printline(){
+      printf("LocalGeo: ");
+      printf("Pos-> (");
+      this->pos.print();
+      printf(") Normal-> (");
+      this->normal.print();
+      printf(")\n");
+}
+
+
 
 
 //for calculating intersections
@@ -898,6 +943,8 @@ class Color {
       float g;
       float b;
 public:
+      Color();
+      Color(float r, float g, float b);
       void color();
       void color(float r, float g, float b);
       Color addColors(Color addeeColor);
@@ -912,6 +959,18 @@ public:
       void set_b(float b);
 
 };
+Color::Color() {
+      r = 0.0;
+      g = 0.0;
+      b = 0.0;
+}
+
+Color::Color(float r, float g, float b){
+      this->r = r;
+      this->g = g;
+      this->b = b;
+}
+
 void Color::color() {
       r = 0.0;
       g = 0.0;
@@ -1067,33 +1126,18 @@ class Sample {
       float x;
       float y;
 public:
-      sample();
-      sample(float x, float y);
+      Sample();
+      Sample(float x, float y);
 };
-Sample::sample(){
+Sample::Sample(){
       x = 0.0;
       y = 0.0;
 }
-Sample::sample(float x, float y){
+Sample::Sample(float x, float y){
       this->x = x;
       this->y = y;
 }
 
-
-/**************************Intersection Class*******************/ 
-class Intersection {
-public:
-      LocalGeo localGeo;
-      Primitive* primitive;
-      void intersection();
-      void intersection(LocalGeo localGeo, Primitive* primitive);
-};
-      void intersection(){
-   }
-      void intersection(LocalGeo localGeo, Primitive* primitive){
-            this->localGeo = localGeo;
-            this->primitive = primitive;
-   }
 
 
 
@@ -1105,6 +1149,10 @@ public:
       virtual void getBRDF(LocalGeo& local, BRDF* brdf);
  
 };
+
+
+
+
  
 /******************GeometricPrimitive Class**************/
 class GeometricPrimitive : public Primitive {
@@ -1114,14 +1162,14 @@ class GeometricPrimitive : public Primitive {
       BRDF* brdf;
  
 public: 
-      void GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transformation, BRDF brdf);
-      void GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
-      void GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
+      GeometricPrimitive(Shape* shape, Transformation transformation, BRDF* brdf);
+      GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
+      GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
       bool intersect(Ray& ray, float* thit, Intersection* in);
       bool intersectP(Ray& ray);
       void getBRDF(LocalGeo& local, BRDF* brdf);
 }; 
-void GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transformation, BRDF brdf){
+GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transformation, BRDF* brdf){
       this->objToWorld = transformation;
       Transformation temp;
       temp.m = transformation.m.inverse();
@@ -1130,7 +1178,9 @@ void GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transfo
       this->shape = shape;
       this->brdf = brdf;
       }
-void GeometricPrimitive::GeometricPrimitive(Shape* shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
+
+GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
+
       Matrix rotate = Matrix::rotation(rotx,roty,rotz);
       Matrix scale = Matrix::scaling(sx,sy,sz);
       Matrix translate = Matrix::translation(tx,ty,tz);
@@ -1151,7 +1201,7 @@ void GeometricPrimitive::GeometricPrimitive(Shape* shape, float tx, float ty, fl
       this->shape = shape;
       this->brdf = brdf1;
       }
-void GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
+GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
       Matrix rotate = Matrix::arbitrary_rotation(rx,ry,rz,angle);
       Matrix scale = Matrix::scaling(sx,sy,sz);
       Matrix translate = Matrix::translation(tx,ty,tz);
@@ -1665,48 +1715,6 @@ bool Shape::intersectP(Ray& ray){
 
 
 
-
-/**********LocalGeo Class***********/
-class LocalGeo {
-public:
-      Point pos;
-      Normal normal;
-      LocalGeo();
-      void localGeo();
-      void localGeo(Point pos, Normal normal);
-      Point get_pos();
-      Normal get_normal();
-      void printline();
-};
-LocalGeo::LocalGeo(){
-      //object is created
-      this->pos = Point();
-      this->normal = Normal();
-}
-void LocalGeo::localGeo(){
-      this->pos = Point();
-      this->normal = Normal();
-}
-void LocalGeo::localGeo(Point pos, Normal normal){
-      this->pos = pos;
-      this->normal = normal;
-}
-Point LocalGeo::get_pos(){
-      return this->pos;
-}
-Normal LocalGeo::get_normal(){
-      return this->normal;
-}
-void LocalGeo::printline(){
-      printf("LocalGeo: ");
-      printf("Pos-> (");
-      this->pos.print();
-      printf(") Normal-> (");
-      this->normal.print();
-      printf(")\n");
-}
-
-
 /**************Light Class**************/
 class Light {
       const static int POINTLIGHT = 0;
@@ -1755,7 +1763,8 @@ Light::makeDirectionalLight(float dx, float dy, float dz, Color c){
 void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
       if (this->type==POINTLIGHT){
             // create point light ray
-        Point p = local.pos;
+        Point p; 
+		p = local.pos;
         Vector light_dir = this->ltp.PsubtractP(p);
         lray.ray(p, light_dir, 0.0001, FLT_MAX);
       } else if (this->type==DIRECTIONALLIGHT){
