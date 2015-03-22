@@ -18,14 +18,16 @@ class Ray;
 class LocalGeo;
 class SmallMatrix;
 class Matrix;
+class Transformation;
 class Color;
 class BRDF;
 class Sample;
 class Intersection;
 class Material;
 class Color;
-class Light;
+class LocalGeo;
 class Shape;
+class Light;
 
 #define PI 3.14159265  // Should be used from mathlib
 inline float sqr(float x) { return x*x; } 
@@ -36,7 +38,6 @@ public:
       float x;
       float y;
       float z;
-
       Vector();
       Vector(float a, float b, float c);
       void vector();
@@ -1760,7 +1761,8 @@ Light::makeDirectionalLight(float dx, float dy, float dz, Color c){
 void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
       if (this->type==POINTLIGHT){
             // create point light ray
-        Point p = local.pos;
+        Point p; 
+		p = local.pos;
         Vector light_dir = this->ltp.PsubtractP(p);
         lray.ray(p, light_dir, 0.0001, FLT_MAX);
       } else if (this->type==DIRECTIONALLIGHT){
