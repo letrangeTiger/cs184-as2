@@ -3,13 +3,13 @@
 #include <string>
 #include <queue>
 #include <sstream>
+#include <iterator>
+#include <vector>
 #include "class.cpp"
 #include "Film.cpp"
 #include "Sampler.cpp"
 #include "Camera.cpp"
 #include "raytracer.cpp"
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/classification.hpp>
 
 using namespace std;
 
@@ -147,8 +147,9 @@ int main(int argc, char *argv[]) {
 		    	if (line.empty() || line[0] == '#'){	//skip empty line or comment and move onto next line
 		    		continue;
 		    	}
-		    	std::vector<string> tokens;
-		    	split(tokens,line, is_any_of(" "));
+		    	std::istringstream buf(line);
+		    	std::istream_iterator<std::string> beg(buf), end;
+		    	std::vector<std::string> tokens(beg,end);
 		    	lineName = tokens[0];
 
 		    	if (lineName == "s"){
