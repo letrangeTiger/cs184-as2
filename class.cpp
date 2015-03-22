@@ -26,7 +26,6 @@ class Sample;
 class Intersection;
 class Material;
 class Color;
-class LocalGeo;
 class Shape;
 class Light;
 
@@ -432,8 +431,10 @@ public:
       Point pos;
       Normal normal;
       LocalGeo();
+      LocalGeo(Point pos, Vector vector);
       LocalGeo(Point pos, Normal normal);
       void localGeo();
+      void localGeo(Point pos, Vector vector);
       void localGeo(Point pos, Normal normal);
       Point get_pos();
       Normal get_normal();
@@ -444,6 +445,10 @@ LocalGeo::LocalGeo(){
       this->pos = Point();
       this->normal = Normal();
 }
+LocalGeo::LocalGeo(Point pos, Vector vector){
+      this->pos = Point();
+      this->normal = Normal(vector.get_x(), vector.get_y(), vector.get_z());
+}
 LocalGeo::LocalGeo(Point pos, Normal normal){
       this->pos = pos;
       this->normal = normal;
@@ -451,6 +456,10 @@ LocalGeo::LocalGeo(Point pos, Normal normal){
 void LocalGeo::localGeo(){
       this->pos = Point();
       this->normal = Normal();
+}
+void LocalGeo::localGeo(Point pos, Vector vector){
+      this->pos = pos;
+      this->normal = Normal(vector.get_x(), vector.get_y(), vector.get_z());
 }
 void LocalGeo::localGeo(Point pos, Normal normal){
       this->pos = pos;
