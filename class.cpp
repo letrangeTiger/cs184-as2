@@ -12,7 +12,7 @@
 //using namespace std;
 
 //***********************//
-//		BASIC CLASSES
+//	BASIC CLASSES
 //***********************//
 class Vector; //check
 class Normal; 
@@ -1718,6 +1718,7 @@ public:
       Color color;
       int falloff;
       Light();
+      Light(float r, float g, float b);
       void makePointLight(float px, float py, float pz, Color c, int falloff);
       void makeDirectionalLight(float dx, float dy, float dz, Color c);
       void generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor);
@@ -1730,6 +1731,10 @@ Light::Light(){
       this->z = 0.0;
       this->color = Color();
       this->falloff = 0;
+}
+
+Light::Light(float r, float g, float b){
+      this->color = Color(r,g,b);
 }
 
 void Light::makePointLight(float px, float py, float pz, Color c, int falloff){
