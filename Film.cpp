@@ -48,8 +48,9 @@ void Film::writeImage(){
 	lodepng::save_file(png, filename);
 	if(error) std::cout << "png encode error " << error << std::endl;
 }
-/*
-int main(){
+
+//int main(int argc, char *argv[]){
+	/*
 	unsigned w=1000;
 	unsigned h=500;
 	Film film(w,h);
@@ -58,8 +59,9 @@ int main(){
 			film.commit(Sample(i,j),Color());
 		}
 	film.writeImage();*/
-/*  
+  
 	//example encode from lodev.org/lodepng/
+		/*
 	unsigned width = 1000, height = 500;
 	const char *filename = "result.png";
 	std::vector<unsigned char> image;
@@ -76,8 +78,8 @@ int main(){
 	lodepng::State state;
 	lodepng::encode(png, image, width, height,state);
 	lodepng::save_file(png, filename);
+	*/
 
+	//return 0;
 
-	return 0;
-
-}*/
+//}
