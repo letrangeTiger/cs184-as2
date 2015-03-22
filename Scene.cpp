@@ -176,9 +176,13 @@ int main(int argc, char *argv[]) {
 
       			if (lineName == "f"){	//face
       				int a,b,c;
-      				iss >> a;
-      				iss >> b;
-      				iss >> c;
+      				string s;
+		            s = tokens[1];
+		            istringstream(s) >> a;
+		            s = tokens[2];
+		            istringstream(s) >> b;
+		            s = tokens[3];
+		            istringstream(s) >> c;
       				Shape* triangle;
       				triangle->makeTriangle(points[a-1],points[b-1],points[c-1]);
       				GeometricPrimitive geoprim = GeometricPrimitive(triangle, Transformation(trans_mat), brdf);
