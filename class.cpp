@@ -887,16 +887,16 @@ void Matrix::print(){
 /**************************Transformation Class*************************************/
  
 class Transformation{
+public:
       Matrix m;
       Matrix minvt;
-public:
       Transformation();
       Transformation(Matrix temp);
       void reset();
       Transformation operator*(Transformation t);
       Point operator*(Point p);
       Ray operator*(Ray ray);
-      Ray operator*(Localgeo localGeo);
+      Ray operator*(LocalGeo localGeo);
  
  
 };
