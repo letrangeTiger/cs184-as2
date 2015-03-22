@@ -1099,6 +1099,7 @@ public:
       void intersection(LocalGeo localGeo, GeometricPrimitive* primitive);
 };
       Intersection::Intersection(){
+            this->localGeo = LocalGeo();
 }
       Intersection::Intersection(LocalGeo localGeo, GeometricPrimitive* primitive){
             this->localGeo = localGeo;
@@ -1291,9 +1292,9 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             intersection = ray.get_pos().PaddvectorV(ray.get_dir().scalarmultiply(myT));
             normal = intersection.PsubtractP(this->center).scalardivide(this->radius);
             myLocal.localGeo(intersection, normalizedVectorToNormal(normal));
-            *local = myLocal;
+            local = &myLocal;
 
-            myLocal.printline();
+            //myLocal.printline();
             return true;
       }
       else if (this->type == 1){ //triangle
@@ -1360,7 +1361,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
 
             //printf("%f\n", myT);
             //myLocal.printline();
-            *local = myLocal;
+            local = &myLocal;
             //local->printline();
             return true;
       }
@@ -1448,19 +1449,19 @@ public:
       Transformation objToWorld;
       Transformation worldToObj;
       Shape* shape;
-      BRDF* brdf; 
+      BRDF brdf; 
       GeometricPrimitive();
-      GeometricPrimitive(Shape* shape, Transformation transformation, BRDF* brdf);
+      GeometricPrimitive(Shape* shape, Transformation transformation, BRDF brdf);
       GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
       GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
       bool intersect(Ray& ray, float* thit, Intersection* in);
       bool intersectP(Ray& ray);
-      void getBRDF(LocalGeo& local, BRDF* brdf);
+      void getBRDF(LocalGeo& local, BRDF *brdf);
 }; 
 GeometricPrimitive::GeometricPrimitive(){
 
 }
-GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transformation, BRDF* brdf){
+GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transformation, BRDF brdf){
       this->objToWorld = transformation;
       Transformation temp;
       temp.m = transformation.m.inverse();
@@ -1490,7 +1491,7 @@ GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float t
       this->objToWorld.m = translate*rotate*scale;
       this->worldToObj.m = this->objToWorld.m.inverse();
       this->shape = shape;
-      this->brdf = &brdf1;
+      this->brdf = brdf1;
       }
 GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
       Matrix rotate = arbitrary_rotation(rx,ry,rz,angle);
@@ -1512,7 +1513,7 @@ GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float t
       this->objToWorld.m = translate*rotate*scale;
       this->worldToObj.m = this->objToWorld.m.inverse();
       this->shape = shape;
-      this->brdf = &brdf1;
+      this->brdf = brdf1;
 }
 bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
       Ray oray = worldToObj*ray;
@@ -1528,7 +1529,7 @@ bool GeometricPrimitive::intersectP(Ray& ray) {
                                                 
 }
 void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
-      this->brdf = brdf;
+      brdf = &this->brdf;
 }
 
 /************AggregatePrimitive********************/         
@@ -1536,7 +1537,7 @@ void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
 class AggregatePrimitive {
  
 public:
-    std::vector<GeometricPrimitive*> *primitives;
+    std::vector<GeometricPrimitive*> primitives;
     std::vector<GeometricPrimitive*>::iterator it;
     
  
@@ -1546,50 +1547,49 @@ public:
     bool intersect(Ray& ray, float* thit, Intersection* in);
     bool intersectP(Ray& ray);
     void getBRDF(LocalGeo& local, BRDF* brdf){
-        exit(1);
+        //exit(1);
         //This should never get called, because in->primitve
         //will never be an aggregate primitive
     }
 };
  
 AggregatePrimitive::AggregatePrimitive(){
-      this->primitives = NULL; 
 }
  
 AggregatePrimitive::AggregatePrimitive(std::vector<GeometricPrimitive*> list){
-     primitives = &list;
+     primitives = list;
 }
 void AggregatePrimitive::addPrimitive(GeometricPrimitive* temp){
-     primitives->push_back(temp);
+     primitives.push_back(temp);
 }
  
  
 bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
     bool intersectobject = false;
-    *thit = 0.0;
+    *thit = FLT_MAX;
     float newThit;
     int i = 0;
-    for (it = primitives->begin() ; it < primitives->end(); it++, i++){
+    for (it = primitives.begin() ; it < primitives.end(); it++, i++){
         Intersection* newIn;
-        GeometricPrimitive primitive;
-        primitive = *primitives->at(i);
-        /*if(primitive.shape->intersect(ray, &newThit, &newIn->localGeo)){
-            intersectobject = true;
+        GeometricPrimitive *primitive;
+        primitive = primitives.at(i);
+        if(primitive->shape->intersect(ray, &newThit, &newIn->localGeo)){
+            intersectobject = true;/*
             if (newThit < *thit){
                 *thit = newThit;
                 in = newIn;
-            }
-        }*/
+            }*/
+        }
     }
     return intersectobject;
 }
  
 bool AggregatePrimitive::intersectP(Ray& ray){
     int i = 0;
-    for (it = primitives->begin() ; it < primitives->end(); it++, i++){
-      GeometricPrimitive primitive;
-      primitive = *primitives->at(i);
-      if (primitive.shape->intersectP(ray)) {
+    for (it = primitives.begin() ; it < primitives.end(); it++, i++){
+      GeometricPrimitive *primitive;
+      primitive = primitives.at(i);
+      if (primitive->shape->intersectP(ray)) {
         return true;
       }
     }

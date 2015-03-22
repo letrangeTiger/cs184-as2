@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
 			counter = counter+5;
 			Shape sphere;
 			sphere.makeSphere(r, Point(cx,cy,cz));
-			GeometricPrimitive geoprim = GeometricPrimitive(&sphere,Transformation(trans_mat), &brdf);
+			GeometricPrimitive geoprim = GeometricPrimitive(&sphere,Transformation(trans_mat), brdf);
 			//scene.geoprims.push_back(geoprim);
 			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="tri"){
@@ -150,7 +150,7 @@ int main(int argc, char *argv[]) {
 			counter = counter+10;
 			Shape triangle;
 			triangle.makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
-			GeometricPrimitive geoprim = GeometricPrimitive(&triangle,Transformation(trans_mat), &brdf);
+			GeometricPrimitive geoprim = GeometricPrimitive(&triangle,Transformation(trans_mat), brdf);
 			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="obj"){
 	    	/*
@@ -210,7 +210,7 @@ int main(int argc, char *argv[]) {
 		            istringstream(s) >> c;
       				Shape* triangle;
       				triangle->makeTriangle(points[a-1],points[b-1],points[c-1]);
-      				GeometricPrimitive geoprim = GeometricPrimitive(triangle, Transformation(trans_mat), &brdf);
+      				GeometricPrimitive geoprim = GeometricPrimitive(triangle, Transformation(trans_mat), brdf);
       				scene.aggreprim.addPrimitive(&geoprim);
       				//TODO: 3 items
       					// Shape triangle;

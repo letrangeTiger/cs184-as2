@@ -25,7 +25,7 @@ RayTracer::RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primit
 }
 
 void RayTracer::trace(Ray& ray, int depth, Color* color){
-      BRDF brdf;
+      BRDF *brdf;
       float thit;
       Intersection in = Intersection();
       /* Find the nearest shape that the ray intersects, if any */
@@ -36,15 +36,17 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
      }
       //if does not intersect anything return black
       if(!primitives.intersect(ray, &thit, &in)){
-        cout << "intersect fine?";
+        cout << "intersect fine!";
          *color = Color(0,0,0);
 
       }
-  
-      //find BRDF at intersection point
-  /*
-      in.primitive->getBRDF(in.localGeo, &brdf);
 
+      //find BRDF at intersection point
+      in.primitive->getBRDF(in.localGeo, brdf);
+            
+
+
+      /*
       //loop through lights
       int i = 0;
       for(iter = lights.begin(); iter < lights.end(); iter++, i++) {
@@ -63,12 +65,12 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
 
             Color spec_comp = Color(brdf.ksr*lcolor->get_r()*pow(fmax(r.dot(v),0), brdf.p), brdf.ksg*lcolor->get_g()*pow(fmax(r.dot(v),0), brdf.p), brdf.ksb*lcolor->get_b()*pow(fmax(r.dot(v),0), brdf.p));
 
-            Color ambient_comp = Color(brdf.kar*lcolor->get_r(), brdf.kag*lcolor->get_g(), brdf.kab*lcolor->get_b());
+            Color ambient_comp = Color(brdf->kar*lcolor->get_r(), brdf->kag*lcolor->get_g(), brdf->kab*lcolor->get_b());
 
             *color = *color + diffuse_comp + spec_comp + ambient_comp;
 
         }else{
-            *color = *color + Color(brdf.kar*lcolor->get_r(), brdf.kag*lcolor->get_g(), brdf.kab*lcolor->get_b());
+            *color = *color + Color(brdf->kar*lcolor->get_r(), brdf->kag*lcolor->get_g(), brdf->kab*lcolor->get_b());
         }
     }
       if(brdf.krr > 0 || brdf.krg > 0 || brdf.krb > 0){
@@ -83,7 +85,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         //Make a recursive call to trace the reflected ray
         Color temp = Color(0,0,0);
         trace(reflectRay, depth+1, &temp);
-        *color = *color + Color(brdf.krr*temp.get_r(), brdf.krg*temp.get_g(), brdf.krb*temp.get_b());
+        *color = *color + Color(brdf->krr*temp.get_r(), brdf->krg*temp.get_g(), brdf->krb*temp.get_b());
     }
 */
 }
