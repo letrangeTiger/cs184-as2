@@ -1744,7 +1744,7 @@ void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
         lray->ray(local.pos, dirlight_dir, 0.0001, FLT_MAX);
       }
 }
-
+/*
 int main(int argc, char *argv[]) {
       //test a: triangle-ray intersection
       Matrix test1;
@@ -1774,6 +1774,6 @@ int main(int argc, char *argv[]) {
       Matrix test3;
       test3 = scaling(2,3,4);
       test3.print();
-      }
+      }*/
 
 
