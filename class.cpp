@@ -1563,7 +1563,7 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
 }
  
 bool AggregatePrimitive::intersectP(Ray& ray){
-    for (auto primitive: primitives){
+    for (int i = 0; i < primitives.size(); i++){
         if (primitive.shape.intersectP(ray)) {
             return true;
         }
