@@ -892,7 +892,7 @@ public:
       Transformation();
       Transformation(Matrix temp);
       void reset();
-      Transformation Transformation::operator*(Transformation t);
+      Transformation operator*(Transformation t);
       Point operator*(Point p);
       Ray operator*(Ray ray);
       Ray operator*(Localgeo localGeo);
@@ -1138,29 +1138,6 @@ Sample::Sample(float x, float y){
 }
 
 
-/**************************Intersection Class*******************/ 
-class Intersection {
-public:
-      LocalGeo localGeo;
-      Primitive* primitive;
-      Intersection();
-      Intersection(LocalGeo localGeo, Primitive* primitive);
-      void intersection();
-      void intersection(LocalGeo localGeo, Primitive* primitive);
-};
-      Intersection::Intersection(){
-   }
-      Intersection::Intersection(LocalGeo localGeo, Primitive* primitive){
-            this->localGeo = localGeo;
-            this->primitive = primitive;
-   }
-      void Intersection::intersection(){
-   }
-      void Intersection::intersection(LocalGeo localGeo, Primitive* primitive){
-            this->localGeo = localGeo;
-            this->primitive = primitive;
-   }
-
 
 
 /*******************Primitive Class*********************/
@@ -1171,6 +1148,10 @@ public:
       virtual void getBRDF(LocalGeo& local, BRDF* brdf);
  
 };
+
+
+
+
  
 /******************GeometricPrimitive Class**************/
 class GeometricPrimitive : public Primitive {
@@ -1180,14 +1161,14 @@ class GeometricPrimitive : public Primitive {
       BRDF* brdf;
  
 public: 
-      void GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transformation, BRDF brdf);
-      void GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
-      void GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
+      GeometricPrimitive(Shape* shape, Transformation transformation, BRDF* brdf);
+      GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
+      GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
       bool intersect(Ray& ray, float* thit, Intersection* in);
       bool intersectP(Ray& ray);
       void getBRDF(LocalGeo& local, BRDF* brdf);
 }; 
-void GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transformation, BRDF brdf){
+GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transformation, BRDF* brdf){
       this->objToWorld = transformation;
       Transformation temp;
       temp.m = transformation.m.inverse();
@@ -1196,7 +1177,7 @@ void GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transfo
       this->shape = shape;
       this->brdf = brdf;
       }
-void GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
+GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
       Matrix rotate = Matrix::rotation(rotx,roty,rotz);
       Matrix scale = Matrix::scaling(sx,sy,sz);
       Matrix translate = Matrix::translation(tx,ty,tz);
@@ -1217,7 +1198,7 @@ void GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, fl
       this->shape = shape;
       this->brdf = brdf1;
       }
-void GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
+GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
       Matrix rotate = Matrix::arbitrary_rotation(rx,ry,rz,angle);
       Matrix scale = Matrix::scaling(sx,sy,sz);
       Matrix translate = Matrix::translation(tx,ty,tz);
