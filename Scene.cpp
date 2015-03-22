@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
 			Shape *triangle;
 			triangle->makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
 			GeometricPrimitive geoprim = GeometricPrimitive(triangle,Transformation(trans_mat), brdf);
-			scene.aggreprim.addPrimitive(geoprim);
+			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="obj"){
 	    	/*
 			NOTE: .obj file supporting:
