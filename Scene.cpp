@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
 			counter = counter+5;
 			Shape *sphere;
 			sphere->makeSphere(r, Point(cx,cy,cz));
-			GeometricPrimitive* geoprim(&sphere,Transformation(trans_mat), &brdf);
+			GeometricPrimitive geoprim = GeometricPrimitive(sphere,Transformation(trans_mat), brdf);
 			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="tri"){
 			float ax = atof(argv[counter+1]);
