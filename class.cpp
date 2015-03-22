@@ -899,7 +899,6 @@ public:
       Point operator*(Point p);
       Ray operator*(Ray ray);
       LocalGeo operator*(LocalGeo localGeo);
-
 };
 Transformation::Transformation(){
       Matrix result;
@@ -1144,7 +1143,7 @@ Sample::Sample(float x, float y){
 
 
 /*******************Primitive Class*********************/
-class Primitive{
+class  Primitive{
 public:
       virtual bool intersect(Ray& ray, float* thit, Intersection* in);
       virtual bool intersectP(Ray& ray);
