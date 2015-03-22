@@ -25,11 +25,14 @@ class Scene {
 		Point ur;
 		int max_depth;
 		AggregatePrimitive aggreprim;
+		std::vector<GeometricPrimitive> geoprims;
+		std::vector<GeometricPrimitive>::iterator it;
 		std::vector<Light> lights;
 		Light amblight;
 		unsigned width, height;
 		Scene();
 		Scene(unsigned width, unsigned height, int max_depth);
+		//void initiate();
 		void render();
 };
 
@@ -37,28 +40,39 @@ Scene::Scene(){
 	this->width = 1000;
 	this->height = 500;
 	this->max_depth = 5;
+
 }
 
 Scene::Scene(unsigned width, unsigned height, int max_depth) {
 	this->width = width;
 	this->height = height;
 	this->max_depth = max_depth;
+	std::vector<GeometricPrimitive*> list;
+	this->aggreprim = AggregatePrimitive(list);
 }
+/*
+void Scene::initiate(){
+	for(it = geoprims.begin() ; it < geoprims.end(); it++, i++){
+		GeometricPrimitive geo;
+		geo = geoprims.at(i);
+		this->aggreprim.addPrimitive(&geo);
+	}
+}*/
 
 void Scene::render() {
 	// implement this.
 	Film film = Film(this->width,this->height);
-	Sampler sampler = Sampler(this->width,this->height);
-	Sample* sample;
+	Sampler sampler = Sampler((float)this->width,(float)this->height);
+	Sample sample = Sample(); 
 	Camera camera = Camera(eye,ll,lr,ul,ur);
 	RayTracer raytracer = RayTracer(max_depth, eye, aggreprim, lights);
-	while (!sampler.generateSample(sample)){
-		Ray *camray;
-		Color *color;
-		camera.generateRay(*sample, camray);
-		raytracer.trace(*camray, 0, color);
-		Color c = Color(color->r, color->g, color->b);
-		film.commit(*sample, c);
+	while (sampler.generateSample(&sample)){
+		cout << "after while loop"<< "\n";
+		Ray camray = Ray();
+		Color color = Color();
+		camera.generateRay(sample, &camray);
+		raytracer.trace(camray, 0, &color);
+		film.commit(sample, color);
 	}
 
 	film.writeImage();
@@ -76,10 +90,10 @@ int main(int argc, char *argv[]) {
 	trans_mat = trans_mat.identity();
 	BRDF brdf = BRDF(0,0,0,0,0,0,0,0,0,0,0,0,0);
 
-	cout << "once";
+	//cout << "once";
 
   	while (counter<argc){
-  		cout << "10000";
+  		//cout << "10000";
 		std::string arg = argv[counter];
 	  	if (arg=="cam") {
 	  		cout << "cam";
@@ -117,9 +131,10 @@ int main(int argc, char *argv[]) {
 			float cz = atof(argv[counter+3]);
 			float r = atof(argv[counter+4]);
 			counter = counter+5;
-			Shape *sphere;
-			sphere->makeSphere(r, Point(cx,cy,cz));
-			GeometricPrimitive geoprim = GeometricPrimitive(sphere,Transformation(trans_mat), &brdf);
+			Shape sphere;
+			sphere.makeSphere(r, Point(cx,cy,cz));
+			GeometricPrimitive geoprim = GeometricPrimitive(&sphere,Transformation(trans_mat), &brdf);
+			//scene.geoprims.push_back(geoprim);
 			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="tri"){
 	    	cout << "tri";
@@ -133,9 +148,9 @@ int main(int argc, char *argv[]) {
 			float cy = atof(argv[counter+8]);
 			float cz = atof(argv[counter+9]);	
 			counter = counter+10;
-			Shape *triangle;
-			triangle->makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
-			GeometricPrimitive geoprim = GeometricPrimitive(triangle,Transformation(trans_mat), &brdf);
+			Shape triangle;
+			triangle.makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
+			GeometricPrimitive geoprim = GeometricPrimitive(&triangle,Transformation(trans_mat), &brdf);
 			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="obj"){
 	    	/*
@@ -302,8 +317,8 @@ int main(int argc, char *argv[]) {
 		}
 	
 	}
-
-	//scene.render();
+	//cout << "entering render" << "\n";
+	scene.render();
 	return 0;
 }
 

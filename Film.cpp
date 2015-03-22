@@ -21,19 +21,20 @@ Film::Film(unsigned w, unsigned h){
 	this->width = w;
 	this->height = h;
 	pixColors.resize(this->width*this->height*4);
-	/* no need to initialize to black screen
+	// no need to initialize to black screen
 	for(unsigned y = 0; y < height; y++)
 		for(unsigned x = 0; x < width; x++) {
-		image[4 * width * y + 4 * x + 0] = 0;
-		image[4 * width * y + 4 * x + 1] = 0;
-		image[4 * width * y + 4 * x + 2] = 0;
-		image[4 * width * y + 4 * x + 3] = 0;
-		}*/
+		pixColors[4 * width * y + 4 * x + 0] = 0;
+		pixColors[4 * width * y + 4 * x + 1] = 0;
+		pixColors[4 * width * y + 4 * x + 2] = 0;
+		pixColors[4 * width * y + 4 * x + 3] = 0;
+		}
 }
 
 void Film::commit(Sample& sample, Color& color){
 	unsigned x = (unsigned) floor(sample.x);
 	unsigned y = (unsigned) floor(sample.y);
+	cout << "sample" << x << "and "<< y;
 	pixColors[4*width*y + 4*x + 0] = color.get_r()*255;
 	pixColors[4*width*y + 4*x + 1] = color.get_g()*255;
 	pixColors[4*width*y + 4*x + 2] = color.get_b()*255;
