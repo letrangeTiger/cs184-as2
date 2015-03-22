@@ -5,6 +5,7 @@
 class RayTracer{
 
 public:
+      BRDF *brdf;
       std::vector<Light> lights;
       std::vector<Light>::iterator iter;
       AggregatePrimitive primitives;
@@ -25,7 +26,7 @@ RayTracer::RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primit
 }
 
 void RayTracer::trace(Ray& ray, int depth, Color* color){
-      BRDF *brdf;
+      
       float thit;
       Intersection in = Intersection();
       /* Find the nearest shape that the ray intersects, if any */
@@ -58,7 +59,10 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             Vector l = currentray->get_dir().normalize(); 
             float NdotL = n.dot(l);
             Vector r = l.reverse().add(n.scalarmultiply(2*NdotL));
-            r = r.normalize();
+            r = r.normalize(); 
+            float vb = brdf->kdr;// * lcolor->r*fmax(NdotL, 0);
+          } }}
+/*
             Vector v = (eye.PsubtractP(in.localGeo.get_pos())).normalize(); 
 
             Color diffuse_comp = Color(brdf->kdr * lcolor->get_r()*fmax(NdotL, 0), brdf->kdg*lcolor->get_g()*fmax(NdotL, 0), brdf->kdb*lcolor->get_b()*fmax(NdotL, 0));
@@ -67,12 +71,13 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
 
             Color ambient_comp = Color(brdf->kar*lcolor->get_r(), brdf->kag*lcolor->get_g(), brdf->kab*lcolor->get_b());
 
-            *color = *color + diffuse_comp + spec_comp + ambient_comp;
+            *color = *color + diffuse_comp + spec_comp + ambient_comp; 
 
         }else{
             *color = *color + Color(brdf->kar*lcolor->get_r(), brdf->kag*lcolor->get_g(), brdf->kab*lcolor->get_b());
         }
     }
+  } */
      /* if(brdf->krr > 0 || brdf->krg > 0 || brdf->krb > 0){
         
 
@@ -88,4 +93,3 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         *color = *color + Color(brdf->krr*temp.get_r(), brdf->krg*temp.get_g(), brdf->krb*temp.get_b());
     } */
 
-}
