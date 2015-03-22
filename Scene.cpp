@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
 	int counter = 1;
 	Matrix trans_mat = Matrix();
 	trans_mat = trans_mat.identity();
-	BRDF *brdf;
+	BRDF brdf = BRDF(0,0,0,0,0,0,0,0,0,0,0,0,0);
 
 	cout << "once";
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[]) {
 			counter = counter+5;
 			Shape *sphere;
 			sphere->makeSphere(r, Point(cx,cy,cz));
-			GeometricPrimitive geoprim = GeometricPrimitive(sphere,Transformation(trans_mat), brdf);
+			GeometricPrimitive geoprim = GeometricPrimitive(sphere,Transformation(trans_mat), &brdf);
 			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="tri"){
 	    	cout << "tri";
@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
 			counter = counter+10;
 			Shape *triangle;
 			triangle->makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
-			GeometricPrimitive geoprim = GeometricPrimitive(triangle,Transformation(trans_mat), brdf);
+			GeometricPrimitive geoprim = GeometricPrimitive(triangle,Transformation(trans_mat), &brdf);
 			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="obj"){
 	    	/*
@@ -195,7 +195,7 @@ int main(int argc, char *argv[]) {
 		            istringstream(s) >> c;
       				Shape* triangle;
       				triangle->makeTriangle(points[a-1],points[b-1],points[c-1]);
-      				GeometricPrimitive geoprim = GeometricPrimitive(triangle, Transformation(trans_mat), brdf);
+      				GeometricPrimitive geoprim = GeometricPrimitive(triangle, Transformation(trans_mat), &brdf);
       				scene.aggreprim.addPrimitive(&geoprim);
       				//TODO: 3 items
       					// Shape triangle;
@@ -280,10 +280,16 @@ int main(int argc, char *argv[]) {
 	    	float krg = atof(argv[counter+12]);
 	    	float krb = atof(argv[counter+13]);
 
-	    	*brdf = BRDF(kar,kag,kab,
+	    	brdf.setKa(kar, kag, kab);
+	    	brdf.setKd(kdr, kdg, kdb);
+	    	brdf.setKs(ksr, ksg, ksb, p);
+	    	brdf.setKr(krr, krg, krb);
+
+
+	    	/**brdf = BRDF(kar,kag,kab,
 	    				kdr,kdg,kdb,
 	    				ksr,ksg,ksb,p,
-	    				krr,krg,krb);
+	    				krr,krg,krb);*/	
 	    	counter=counter+14;
 	    } 
 	    else if (!strncmp(argv[counter], "xfz", 0)){
