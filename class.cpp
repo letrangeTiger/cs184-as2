@@ -15,6 +15,7 @@ class Vector; //check
 class Normal; 
 class Point;
 class Ray;
+class LocalGeo;
 class SmallMatrix;
 class Matrix;
 class Color;
@@ -23,7 +24,6 @@ class Sample;
 class Intersection;
 class Material;
 class Color;
-class LocalGeo;
 class Light;
 class Shape;
 
@@ -419,6 +419,50 @@ void Ray::printline(){
 }
 
 
+
+/**********LocalGeo Class***********/
+class LocalGeo {
+public:
+      Point pos;
+      Normal normal;
+      LocalGeo();
+      void localGeo();
+      void localGeo(Point pos, Normal normal);
+      Point get_pos();
+      Normal get_normal();
+      void printline();
+};
+LocalGeo::LocalGeo(){
+      //object is created
+      this->pos = Point();
+      this->normal = Normal();
+}
+void LocalGeo::localGeo(){
+      this->pos = Point();
+      this->normal = Normal();
+}
+void LocalGeo::localGeo(Point pos, Normal normal){
+      this->pos = pos;
+      this->normal = normal;
+}
+Point LocalGeo::get_pos(){
+      return this->pos;
+}
+Normal LocalGeo::get_normal(){
+      return this->normal;
+}
+void LocalGeo::printline(){
+      printf("LocalGeo: ");
+      printf("Pos-> (");
+      this->pos.print();
+      printf(") Normal-> (");
+      this->normal.print();
+      printf(")\n");
+}
+
+
+
+
 //for calculating intersections
 class SmallMatrix {
 public:
@@ -492,7 +536,7 @@ public:
       Matrix arbitrary_rotation(float axisX, float axisY, float axisZ, float theta);
       Matrix multiplication(Matrix temp);
       Matrix operator*(Matrix temp);
-      float Matrix::determinant();
+      float determinant();
       Matrix inverse();
       Matrix transpose();
       Matrix identity();
@@ -893,6 +937,8 @@ class Color {
       float g;
       float b;
 public:
+      Color();
+      Color(float r, float g, float b);
       void color();
       void color(float r, float g, float b);
       Color addColors(Color addeeColor);
@@ -907,6 +953,18 @@ public:
       void set_b(float b);
 
 };
+Color::Color() {
+      r = 0.0;
+      g = 0.0;
+      b = 0.0;
+}
+
+Color::Color(float r, float g, float b){
+      this->r = r;
+      this->g = g;
+      this->b = b;
+}
+
 void Color::color() {
       r = 0.0;
       g = 0.0;
@@ -1062,14 +1120,14 @@ class Sample {
       float x;
       float y;
 public:
-      sample();
-      sample(float x, float y);
+      Sample();
+      Sample(float x, float y);
 };
-Sample::sample(){
+Sample::Sample(){
       x = 0.0;
       y = 0.0;
 }
-Sample::sample(float x, float y){
+Sample::Sample(float x, float y){
       this->x = x;
       this->y = y;
 }
@@ -1080,12 +1138,20 @@ class Intersection {
 public:
       LocalGeo localGeo;
       Primitive* primitive;
+      Intersection();
+      Intersection(LocalGeo localGeo, Primitive* primitive);
       void intersection();
       void intersection(LocalGeo localGeo, Primitive* primitive);
 };
-      void intersection(){
+      Intersection::Intersection(){
    }
-      void intersection(LocalGeo localGeo, Primitive* primitive){
+      Intersection::Intersection(LocalGeo localGeo, Primitive* primitive){
+            this->localGeo = localGeo;
+            this->primitive = primitive;
+   }
+      void Intersection::intersection(){
+   }
+      void Intersection::intersection(LocalGeo localGeo, Primitive* primitive){
             this->localGeo = localGeo;
             this->primitive = primitive;
    }
@@ -1658,48 +1724,6 @@ bool Shape::intersectP(Ray& ray){
 }
 
 
-
-
-
-/**********LocalGeo Class***********/
-class LocalGeo {
-public:
-      Point pos;
-      Normal normal;
-      LocalGeo();
-      void localGeo();
-      void localGeo(Point pos, Normal normal);
-      Point get_pos();
-      Normal get_normal();
-      void printline();
-};
-LocalGeo::LocalGeo(){
-      //object is created
-      this->pos = Point();
-      this->normal = Normal();
-}
-void LocalGeo::localGeo(){
-      this->pos = Point();
-      this->normal = Normal();
-}
-void LocalGeo::localGeo(Point pos, Normal normal){
-      this->pos = pos;
-      this->normal = normal;
-}
-Point LocalGeo::get_pos(){
-      return this->pos;
-}
-Normal LocalGeo::get_normal(){
-      return this->normal;
-}
-void LocalGeo::printline(){
-      printf("LocalGeo: ");
-      printf("Pos-> (");
-      this->pos.print();
-      printf(") Normal-> (");
-      this->normal.print();
-      printf(")\n");
-}
 
 
 /**************Light Class**************/
