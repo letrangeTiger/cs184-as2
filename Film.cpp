@@ -49,7 +49,7 @@ void Film::writeImage(){
 	if(error) std::cout << "png encode error " << error << std::endl;
 }
 
-int main(){
+int main(int argc, char *argv[]){
 	/*
 	unsigned w=1000;
 	unsigned h=500;
