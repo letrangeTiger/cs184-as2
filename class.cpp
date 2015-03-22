@@ -1537,7 +1537,7 @@ AggregatePrimitive::AggregatePrimitive(){
       this->primitives = NULL; 
 }
  
-AggregatePrimitive::AggregatePrimitive(vector<Primitive*> list){
+AggregatePrimitive::AggregatePrimitive(list<Primitive*> list){
      primitives = list;
 }
 void AggregatePrimitive::addPrimitive(Primitive temp){
@@ -1589,10 +1589,10 @@ public:
 	Color(float r, float g, float b);
 	void color();
 	void color(float r, float g, float b);
-	Color addColors(Color addeeColor);
-	Color subColors(Color subtracteeColor);
-	Color mulColorbyScalar(float scalar);
-	Color divColorbyScalar(float scalar);
+	void addColors(Color addeeColor);
+	void subColors(Color subtracteeColor);
+	void mulColorbyScalar(float scalar);
+	void divColorbyScalar(float scalar);
 	float get_r();
 	float get_g();
 	float get_b();
@@ -1628,20 +1628,21 @@ void Color::addColors(Color addeeColor){
 	this->g += addeeColor.get_g();
 	this->b += addeeColor.get_b();
 }
- 
-Color Color::subColors(Color subtracteeColor){
+
+void Color::subColors(Color subtracteeColor){
+
 	this->r -= subtracteeColor.get_r();
 	this->g -= subtracteeColor.get_g();
 	this->b -= subtracteeColor.get_b();
 }
  
-Color Color::mulColorbyScalar(float scalar){
+void Color::mulColorbyScalar(float scalar){
 	this->r = scalar*(this->r);
 	this->g = scalar*(this->g);
 	this->b = scalar*(this->b);
 }
  
-Color Color::divColorbyScalar(float scalar){
+void Color::divColorbyScalar(float scalar){
 	this->r = (this->r)/scalar;
 	this->g = (this->g)/scalar;
 	this->b = (this->b)/scalar;
@@ -1719,11 +1720,11 @@ void Light::makeDirectionalLight(float dx, float dy, float dz, Color c){
 void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
       if (this->type==POINTLIGHT){
             // create point light ray
-        Vector light_dir = Point(this->x,this->y,this->z).PsubtractP(local.pos);
-        lray.ray(local.pos, light_dir, 0.0001, FLT_MAX);
+        Vector light_dir = Point(x,y,z).PsubtractP(local.pos);
+        lray->ray(local.pos, light_dir, 0.0001, FLT_MAX);
       } else if (this->type==DIRECTIONALLIGHT){
         Vector dirlight_dir = Vector(x,y,z);
-        lray.ray(local.pos, dirlight_dir, 0.0001, FLT_MAX);
+        lray->ray(local.pos, dirlight_dir, 0.0001, FLT_MAX);
       }
 }
 
