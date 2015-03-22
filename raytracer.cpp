@@ -5,7 +5,6 @@
 class RayTracer{
 
 public:
-      BRDF *brdf;
       std::vector<Light> lights;
       std::vector<Light>::iterator iter;
       AggregatePrimitive primitives;
@@ -40,7 +39,6 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
       if(!primitives.intersect(ray, &thit, &in)){
         cout << "intersect fine!";
          *color = Color(0,0,0);
-
       }
 
       //find BRDF at intersection point
@@ -57,20 +55,28 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         lights.at(i).generateLightRay(in.localGeo, currentray, lcolor);
         if (!primitives.intersectP(*currentray)) {
             Vector n = in.localGeo.normal;
+            n.printline();
             Vector l = currentray->get_dir().normalize(); 
             float NdotL = n.dot(l);
+
+
             Vector r = l.reverse().add(n.scalarmultiply(2*NdotL));
             r = r.normalize(); 
-            float vb = brdf->kdr;// * lcolor->r*fmax(NdotL, 0);
-          } }}
-/*
             Vector v = (eye.PsubtractP(in.localGeo.get_pos())).normalize(); 
-            float fmx = fmax(NdotL, 0);
-            Color diffuse_comp = Color(brdf->kdr * lcolor->get_r()*fmx, brdf->kdg*lcolor->get_g()*fmx, brdf->kdb*lcolor->get_b()*fmx);
-            //float rdv = 
-            //Color spec_comp = Color(brdf->ksr*lcolor->get_r()*pow(fmax(r.dot(v),0), brdf->p), brdf->ksg*lcolor->get_g()*pow(fmax(r.dot(v),0), brdf->p), brdf->ksb*lcolor->get_b()*pow(fmax(r.dot(v),0), brdf->p));
+            //v.printline();
+            //r.printline();
+            float RdotV = r.dot(v);
+            //printf("%f", RdotV);
 
-            //Color ambient_comp = Color(brdf->kar*lcolor->get_r(), brdf->kag*lcolor->get_g(), brdf->kab*lcolor->get_b());
+            float fmx = fmax(NdotL, 0);
+            //float fds = fmax(,0);
+
+
+            Color diffuse_comp = Color(brdf->kdr * lcolor->get_r()*fmx, brdf->kdg*lcolor->get_g()*fmx, brdf->kdb*lcolor->get_b()*fmx);
+
+            //Color spec_comp = Color(brdf->ksr*lcolor->get_r()*pow(fds, brdf->p), brdf->ksg*lcolor->get_g()*pow(fds, brdf->p), brdf->ksb*lcolor->get_b()*pow(fds,0), brdf->p));
+
+            Color ambient_comp = Color(brdf->kar*lcolor->get_r(), brdf->kag*lcolor->get_g(), brdf->kab*lcolor->get_b());
 
             //*color = *color + diffuse_comp + spec_comp + ambient_comp;
 
