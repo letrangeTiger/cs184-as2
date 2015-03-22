@@ -176,16 +176,12 @@ int main(int argc, char *argv[]) {
 
       			if (lineName == "f"){	//face
       				int a,b,c;
-      				string s;
-      				s = tokens[1];
-      				s >> a;
-      				s = tokens[2];
-      				s >> b;
-      				s = tokens[3];
-      				s >> c;
-      				Shape triangle;
-      				triangle.makeTriangle(points[a-1],points[b-1],points[c-1]);
-      				GeometricPrimitive* geoprim(Transformation(trans_mat), triangle, brdf);
+      				iss >> a;
+      				iss >> b;
+      				iss >> c;
+      				Shape* triangle;
+      				triangle->makeTriangle(points[a-1],points[b-1],points[c-1]);
+      				GeometricPrimitive geoprim = GeometricPrimitive(triangle, Transformation(trans_mat), brdf);
       				scene.aggreprim.addPrimitive(&geoprim);
       				//TODO: 3 items
       					// Shape triangle;
