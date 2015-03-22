@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iterator>
 #include <vector>
+#include <algorithm>
 #include "class.cpp"
 #include "Film.cpp"
 #include "Sampler.cpp"
