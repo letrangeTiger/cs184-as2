@@ -53,7 +53,7 @@ void Scene::render() {
 		camera.generateRay(*sample, camray);
 		raytracer.trace(*camray, 0, color);
 		Color c = Color(color->r, color->g, color->b);
-		film.commit(sample, c);
+		film.commit(*sample, c);
 	}
 
 	film.writeImage();
@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
 	int counter = 1;
 	Matrix trans_mat = Matrix();
 	trans_mat = trans_mat.identity();
-	BRDF *brdf = BRDF();
+	BRDF *brdf;
 
   	while (counter<argc){
 		std::string arg = argv[counter];
@@ -237,19 +237,19 @@ int main(int argc, char *argv[]) {
 	    	counter=counter+4;
 	    	trans_mat = trans_mat * scaling(sx,sy,sz);
 	    } else if (arg=="mat"){
-	    	brdf.kar = atof(argv[counter+1]);
-	    	brdf.kag = atof(argv[counter+2]);
-	    	brdf.kab = atof(argv[counter+3]);
-	    	brdf.kdr = atof(argv[counter+4]);
-	    	brdf.kdg = atof(argv[counter+5]);
-	    	brdf.kdb = atof(argv[counter+6]);
-	    	brdf.ksr = atof(argv[counter+7]);
-	    	brdf.ksg = atof(argv[counter+8]);
-	    	brdf.ksb = atof(argv[counter+9]);
-	    	brdf.p = atof(argv[counter+10]);
-	    	brdf.krr = atof(argv[counter+11]);
-	    	brdf.krg = atof(argv[counter+12]);
-	    	brdf.krb = atof(argv[counter+13]);
+	    	brdf->kar = atof(argv[counter+1]);
+	    	brdf->kag = atof(argv[counter+2]);
+	    	brdf->kab = atof(argv[counter+3]);
+	    	brdf->kdr = atof(argv[counter+4]);
+	    	brdf->kdg = atof(argv[counter+5]);
+	    	brdf->kdb = atof(argv[counter+6]);
+	    	brdf->ksr = atof(argv[counter+7]);
+	    	brdf->ksg = atof(argv[counter+8]);
+	    	brdf->ksb = atof(argv[counter+9]);
+	    	brdf->p = atof(argv[counter+10]);
+	    	brdf->krr = atof(argv[counter+11]);
+	    	brdf->krg = atof(argv[counter+12]);
+	    	brdf->krb = atof(argv[counter+13]);
 	    	counter=counter+14;
 	    } else {
 	  		counter+=1;
