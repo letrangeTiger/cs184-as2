@@ -1010,7 +1010,7 @@ BRDF::BRDF(){
       this->krb = 0;
       this->p = 0;
 }
-BRDF::BRDF(float kdr,float kdg, float kdb, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p){
+BRDF::BRDF(float kdr, float kdg, float kdb, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p){
       this->kdr = kdr;
       this->kdg = kdg;
       this->kdb = kdb;
@@ -1054,11 +1054,13 @@ void BRDF::setKr(float r,float g, float b){
 /**************************Sample Class*******************/ 
 /*    stores screen coordinates */
 class Sample {
+      float x;
+      float y;
 public:
-	  float x;
-	  float y;
       Sample();
       Sample(float x, float y);
+      float get_x();
+      float get_y();
 };
 Sample::Sample(){
       x = 0.0;
@@ -1068,27 +1070,33 @@ Sample::Sample(float x, float y){
       this->x = x;
       this->y = y;
 }
+float Sample::get_x(){
+      return this->x;
+}
+float Sample::get_y(){
+      return this->y;
+}
 
 
 
 class Intersection {
 public:
       LocalGeo localGeo;
-      Primitive* primitive;
+      GeometricPrimitive* primitive;
       Intersection();
-      Intersection(LocalGeo localGeo, Primitive* primitive);
+      Intersection(LocalGeo localGeo, GeometricPrimitive* primitive);
       void intersection();
-      void intersection(LocalGeo localGeo, Primitive* primitive);
+      void intersection(LocalGeo localGeo, GeometricPrimitive* primitive);
 };
       Intersection::Intersection(){
 }
-      Intersection::Intersection(LocalGeo localGeo, Primitive* primitive){
+      Intersection::Intersection(LocalGeo localGeo, GeometricPrimitive* primitive){
             this->localGeo = localGeo;
             this->primitive = primitive;
 }
       void Intersection::intersection(){
 }
-      void Intersection::intersection(LocalGeo localGeo, Primitive* primitive){
+      void Intersection::intersection(LocalGeo localGeo, GeometricPrimitive* primitive){
             this->localGeo = localGeo;
             this->primitive = primitive;
 }
@@ -1423,7 +1431,7 @@ bool Shape::intersectP(Ray& ray){
 
  
 /******************GeometricPrimitive Class**************/
-class GeometricPrimitive : public Primitive {
+class GeometricPrimitive {
       
  
 public:
@@ -1515,7 +1523,7 @@ void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
 
 /************AggregatePrimitive********************/         
 
-class AggregatePrimitive{
+class AggregatePrimitive {
  
 public:
     std::vector<GeometricPrimitive*> *primitives;
@@ -1748,6 +1756,7 @@ int main(int argc, char *argv[]) {
       test2 = translation(2,3,4);
       //test2.print();
 
+<<<<<<< HEAD
       
 
       Matrix test4;
@@ -1769,3 +1778,5 @@ int main(int argc, char *argv[]) {
       }
 
 
+=======
+>>>>>>> 5845009a5c5490c1143c1fa482b3cdb093e5e708
