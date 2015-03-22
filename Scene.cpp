@@ -145,7 +145,7 @@ int main(int argc, char *argv[]) {
 		    	if (line.empty() || line[0] == '#'){	//skip empty line or comment and move onto next line
 		    		continue;
 		    	}
-		    	std::istringstream iss(line);
+		    	std::istringstream iss.str(line);
 		    	std::string lineName;
 		    	iss >> lineName;
 
