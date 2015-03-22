@@ -942,104 +942,6 @@ LocalGeo Transformation::operator*(LocalGeo localgeo){
       return result;
 }
  
- 
-/***********************Color Class*****************/
-//TODO: May support conversion from xyz
-class Color {
-      float r;
-      float g;
-      float b;
-public:
-      Color();
-      Color(float r, float g, float b);
-      void color();
-      void color(float r, float g, float b);
-      Color addColors(Color addeeColor);
-      Color subColors(Color subtracteeColor);
-      Color mulColorbyScalar(float scalar);
-      Color divColorbyScalar(float scalar);
-      float get_r();
-      float get_g();
-      float get_b();
-      void set_r(float r);
-      void set_g(float g);
-      void set_b(float b);
-
-};
-Color::Color() {
-      r = 0.0;
-      g = 0.0;
-      b = 0.0;
-}
-
-Color::Color(float r, float g, float b){
-      this->r = r;
-      this->g = g;
-      this->b = b;
-}
-
-void Color::color() {
-      r = 0.0;
-      g = 0.0;
-      b = 0.0;
-}
-
-void Color::color(float r, float g, float b){
-      this->r = r;
-      this->g = g;
-      this->b = b;
-}
-
-Color Color::addColors(Color addeeColor){
-      Color newColor;
-      newColor.r = this->r + addeeColor.get_r();
-      newColor.g = this->g + addeeColor.get_g();
-      newColor.b = this->b + addeeColor.get_b();
-      return newColor;
-}
-
-Color Color::subColors(Color subtracteeColor){
-      Color newColor;
-      newColor.r = this->r + subtracteeColor.get_r();
-      newColor.g = this->g + subtracteeColor.get_g();
-      newColor.b = this->b + subtracteeColor.get_b();
-      return newColor;
-}
-
-Color Color::mulColorbyScalar(float scalar){
-      Color newColor;
-      newColor.r = scalar*(this->r);
-      newColor.g = scalar*(this->g);
-      newColor.b = scalar*(this->b);
-      return newColor;
-}
-
-Color Color::divColorbyScalar(float scalar){
-      Color newColor;
-      this->r = (this->r)/scalar;
-      this->g = (this->g)/scalar;
-      this->b = (this->b)/scalar;
-      return newColor;
-}
-
-float Color::get_r(){
-      return this->r;
-}
-float Color::get_g(){
-      return this->g;
-}
-float Color::get_b(){
-      return this->b;
-}
-void Color::set_r(float r){
-      this->r = r;
-}
-void Color::set_g(float g){
-      this->g = g;
-}
-void Color::set_b(float b){
-      this->b = b;
-}
 
   
  
@@ -1311,10 +1213,11 @@ public:
 /***********************Color Class*****************/
 //TODO: May support conversion from xyz
 class Color {
-	float r;
-	float g;
-	float b;
+
 public:
+      float r;
+      float g;
+      float b;
 	Color();
 	Color(float r, float g, float b);
 	void color();
