@@ -104,8 +104,8 @@ int main(int argc, char *argv[]) {
 			counter = counter+5;
 			Shape sphere;
 			sphere.makeSphere(r, Point(cx,cy,cz));
-			//GeometricPrimitive geoprim(Transformation(trans_mat), Transformation(trans_mat.inverse()), sphere, brdf);
-			//scene.aggreprim.addPrimitive(geoprim);
+			GeometricPrimitive geoprim(Transformation(trans_mat), Transformation(trans_mat.inverse()), sphere, brdf);
+			scene.aggreprim.addPrimitive(geoprim);
 	    } else if (arg=="tri"){
 			float ax = atof(argv[counter+1]);
 			float ay = atof(argv[counter+2]);

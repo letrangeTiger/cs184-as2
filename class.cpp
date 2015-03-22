@@ -1728,7 +1728,7 @@ bool Shape::intersectP(Ray& ray){
 class Light {
       const static int POINTLIGHT = 0;
       const static int DIRECTIONALLIGHT = 1;
-      //const static int AMBIENTLIGHT = 2;
+      const static int NOT_IMPLEMENTED = 2;
 public:
       int type;
       float x;
@@ -1737,13 +1737,13 @@ public:
       Color color;
       int falloff;
       Light();
-      makePointLight(float px, float py, float pz, Color c, int falloff);
-      makeDirectionalLight(float dx, float dy, float dz, Color c);
+      void makePointLight(float px, float py, float pz, Color c, int falloff);
+      void makeDirectionalLight(float dx, float dy, float dz, Color c);
       void generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor);
 };
 
 Light::Light(){
-      this->type = type;
+      this->type = NOT_IMPLEMENTED;
       this->x = 0.0;
       this->y = 0.0;
       this->z = 0.0;
@@ -1751,7 +1751,7 @@ Light::Light(){
       this->falloff = 0;
 }
 
-Light::makePointLight(float px, float py, float pz, Color c, int falloff){
+void Light::makePointLight(float px, float py, float pz, Color c, int falloff){
       this->type = POINTLIGHT;
       this->x = px;
       this->y = py;
@@ -1760,7 +1760,7 @@ Light::makePointLight(float px, float py, float pz, Color c, int falloff){
       this->falloff = falloff;
 }
 
-Light::makeDirectionalLight(float dx, float dy, float dz, Color c){
+void Light::makeDirectionalLight(float dx, float dy, float dz, Color c){
       this->type = DIRECTIONALLIGHT;
       this->x = dx;
       this->y = dy;
@@ -1772,10 +1772,8 @@ Light::makeDirectionalLight(float dx, float dy, float dz, Color c){
 void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
       if (this->type==POINTLIGHT){
             // create point light ray
-        Point p; 
-		p = local.pos;
-        Vector light_dir = this->ltp.PsubtractP(p);
-        lray.ray(p, light_dir, 0.0001, FLT_MAX);
+        Vector light_dir = Point(this->x,this->y,this->z).PsubtractP(local.pos);
+        lray.ray(local.pos, light_dir, 0.0001, FLT_MAX);
       } else if (this->type==DIRECTIONALLIGHT){
         Vector dirlight_dir = Vector(x,y,z);
         lray.ray(local.pos, dirlight_dir, 0.0001, FLT_MAX);
