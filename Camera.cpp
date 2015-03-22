@@ -4,7 +4,7 @@
 class Camera{
 	Point eye,ll,lr,ul,ur;
 	Camera(Point eye,Point ll,Point lr,Point ul,Point ur);
-	void generateRay(LocalGeo& local, Ray* ray)
+	void generateRay(Sample& sample, Ray* ray);
 };
 
 Camera::Camera(Point eye, Point ll, Point lr, Point ul, Point ur){
