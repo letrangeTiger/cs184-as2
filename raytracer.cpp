@@ -5,6 +5,7 @@
 class RayTracer{
 
 public:
+      BRDF *brdf;
       std::vector<Light> lights;
       std::vector<Light>::iterator iter;
       AggregatePrimitive primitives;
@@ -59,7 +60,10 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             Vector l = currentray->get_dir().normalize(); 
             float NdotL = n.dot(l);
             Vector r = l.reverse().add(n.scalarmultiply(2*NdotL));
-            r = r.normalize();
+            r = r.normalize(); 
+            float vb = brdf->kdr;// * lcolor->r*fmax(NdotL, 0);
+          } }}
+/*
             Vector v = (eye.PsubtractP(in.localGeo.get_pos())).normalize(); 
             float fmx = fmax(NdotL, 0);
             Color diffuse_comp = Color(brdf->kdr * lcolor->get_r()*fmx, brdf->kdg*lcolor->get_g()*fmx, brdf->kdb*lcolor->get_b()*fmx);
@@ -87,6 +91,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         Color temp = Color(0,0,0);
         trace(reflectRay, depth+1, &temp);
         *color = *color + Color(brdf->krr*temp.get_r(), brdf->krg*temp.get_g(), brdf->krb*temp.get_b());
+
     }*/
 
 }

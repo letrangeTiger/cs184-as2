@@ -1608,9 +1608,9 @@ public:
 class Color {
 
 public:
-      float r;
-      float g;
-      float b;
+      float r = 0;
+      float g = 0;
+      float b = 0;
 	Color();
 	Color(float r, float g, float b);
 	void color();
@@ -1674,6 +1674,7 @@ void Color::mulColorbyScalar(float scalar){
 	this->g = scalar*(this->g);
 	this->b = scalar*(this->b);
 }
+
  
 void Color::divColorbyScalar(float scalar){
 	this->r = (this->r)/scalar;
