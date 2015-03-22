@@ -26,7 +26,6 @@ class Sample;
 class Intersection;
 class Material;
 class Color;
-class LocalGeo;
 class Shape;
 class Light;
 
@@ -432,8 +431,10 @@ public:
       Point pos;
       Normal normal;
       LocalGeo();
+      LocalGeo(Point pos, Vector vector);
       LocalGeo(Point pos, Normal normal);
       void localGeo();
+      void localGeo(Point pos, Vector vector);
       void localGeo(Point pos, Normal normal);
       Point get_pos();
       Normal get_normal();
@@ -444,6 +445,10 @@ LocalGeo::LocalGeo(){
       this->pos = Point();
       this->normal = Normal();
 }
+LocalGeo::LocalGeo(Point pos, Vector vector){
+      this->pos = Point();
+      this->normal = Normal(vector.get_x(), vector.get_y(), vector.get_z());
+}
 LocalGeo::LocalGeo(Point pos, Normal normal){
       this->pos = pos;
       this->normal = normal;
@@ -451,6 +456,10 @@ LocalGeo::LocalGeo(Point pos, Normal normal){
 void LocalGeo::localGeo(){
       this->pos = Point();
       this->normal = Normal();
+}
+void LocalGeo::localGeo(Point pos, Vector vector){
+      this->pos = pos;
+      this->normal = Normal(vector.get_x(), vector.get_y(), vector.get_z());
 }
 void LocalGeo::localGeo(Point pos, Normal normal){
       this->pos = pos;
@@ -943,104 +952,6 @@ LocalGeo Transformation::operator*(LocalGeo localgeo){
       return result;
 }
  
- 
-/***********************Color Class*****************/
-//TODO: May support conversion from xyz
-class Color {
-      float r;
-      float g;
-      float b;
-public:
-      Color();
-      Color(float r, float g, float b);
-      void color();
-      void color(float r, float g, float b);
-      Color addColors(Color addeeColor);
-      Color subColors(Color subtracteeColor);
-      Color mulColorbyScalar(float scalar);
-      Color divColorbyScalar(float scalar);
-      float get_r();
-      float get_g();
-      float get_b();
-      void set_r(float r);
-      void set_g(float g);
-      void set_b(float b);
-
-};
-Color::Color() {
-      r = 0.0;
-      g = 0.0;
-      b = 0.0;
-}
-
-Color::Color(float r, float g, float b){
-      this->r = r;
-      this->g = g;
-      this->b = b;
-}
-
-void Color::color() {
-      r = 0.0;
-      g = 0.0;
-      b = 0.0;
-}
-
-void Color::color(float r, float g, float b){
-      this->r = r;
-      this->g = g;
-      this->b = b;
-}
-
-Color Color::addColors(Color addeeColor){
-      Color newColor;
-      newColor.r = this->r + addeeColor.get_r();
-      newColor.g = this->g + addeeColor.get_g();
-      newColor.b = this->b + addeeColor.get_b();
-      return newColor;
-}
-
-Color Color::subColors(Color subtracteeColor){
-      Color newColor;
-      newColor.r = this->r + subtracteeColor.get_r();
-      newColor.g = this->g + subtracteeColor.get_g();
-      newColor.b = this->b + subtracteeColor.get_b();
-      return newColor;
-}
-
-Color Color::mulColorbyScalar(float scalar){
-      Color newColor;
-      newColor.r = scalar*(this->r);
-      newColor.g = scalar*(this->g);
-      newColor.b = scalar*(this->b);
-      return newColor;
-}
-
-Color Color::divColorbyScalar(float scalar){
-      Color newColor;
-      this->r = (this->r)/scalar;
-      this->g = (this->g)/scalar;
-      this->b = (this->b)/scalar;
-      return newColor;
-}
-
-float Color::get_r(){
-      return this->r;
-}
-float Color::get_g(){
-      return this->g;
-}
-float Color::get_b(){
-      return this->b;
-}
-void Color::set_r(float r){
-      this->r = r;
-}
-void Color::set_g(float g){
-      this->g = g;
-}
-void Color::set_b(float b){
-      this->b = b;
-}
 
   
  
@@ -1146,256 +1057,6 @@ Sample::Sample(float x, float y){
       this->x = x;
       this->y = y;
 }
-
-
-
-
-/*******************Primitive Class*********************/
-class  Primitive{
-public:
-      virtual bool intersect(Ray& ray, float* thit, Intersection* in);
-      virtual bool intersectP(Ray& ray);
-      virtual void getBRDF(LocalGeo& local, BRDF* brdf);
- 
-};
-
-
-
-
- 
-/******************GeometricPrimitive Class**************/
-class GeometricPrimitive : public Primitive {
-      Transformation objToWorld;
-      Transformation worldToObj;
-      Shape* shape;
-      BRDF* brdf;
- 
-public: 
-      GeometricPrimitive(Shape* shape, Transformation transformation, BRDF* brdf);
-      GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
-      GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
-      bool intersect(Ray& ray, float* thit, Intersection* in);
-      bool intersectP(Ray& ray);
-      void getBRDF(LocalGeo& local, BRDF* brdf);
-}; 
-GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transformation, BRDF* brdf){
-      this->objToWorld = transformation;
-      Transformation temp;
-      temp.m = transformation.m.inverse();
-      temp.minvt = transformation.m;
-      this->worldToObj = temp;
-      this->shape = shape;
-      this->brdf = brdf;
-      }
-
-GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
-
-      Matrix rotate = rotation(rotx,roty,rotz);
-      Matrix scale = scaling(sx,sy,sz);
-      Matrix translate = translation(tx,ty,tz);
-             
-      BRDF brdf1;
-      brdf1.kar = kar;
-      brdf1.kag = kag;
-      brdf1.kab = kab;
-      brdf1.kdr = kdr;
-      brdf1.kdg = kdg;
-      brdf1.kdb = kdb;
-      brdf1.ksr = ksr;
-      brdf1.ksg = ksg;
-      brdf1.ksb = ksb;
- 
-      this->objToWorld.m = translate*rotate*scale;
-      this->worldToObj.m = this->objToWorld.m.inverse();
-      this->shape = shape;
-      this->brdf = brdf1;
-      }
-GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
-      Matrix rotate = arbitrary_rotation(rx,ry,rz,angle);
-      Matrix scale = scaling(sx,sy,sz);
-      Matrix translate = translation(tx,ty,tz);
-             
-      BRDF brdf1;
-      brdf1.kar = kar;
-      brdf1.kag = kag;
-      brdf1.kab = kab;
-      brdf1.kdr = kdr;
-      brdf1.kdg = kdg;
-      brdf1.kdb = kdb;
-      brdf1.ksr = ksr;
-      brdf1.ksg = ksg;
-      brdf1.ksb = ksb;
- 
- 
-      this->objToWorld.m = translate*rotate*scale;
-      this->worldToObj.m = this->objToWorld.m.inverse();
-      this->shape = shape;
-      this->brdf = brdf1;
-}
-bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
-      Ray oray = worldToObj*ray;
-      LocalGeo olocal;                                 
-      if (!shape->intersect(oray, thit, &olocal))  return false;
-      in->primitive = this;
-      in->local = objToWorld*olocal;
-      return true;                               
-}
-bool GeometricPrimitive::intersectP(Ray& ray) {
-      Ray oray = worldToObj*ray;
-      return shape->intersectP(oray); 
-                                                
-}
-void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
-      this->brdf = brdf;
-}
-/************AggregatePrimitive********************/         
-class AggregatePrimitive : public Primitive{
- 
-public:
-    list<Primitive*> *primitives;
- 
-    AggregatePrimitive();
-    AggregatePrimitive(vector<Primitive*> list);
-    bool intersect(Ray& ray, float* thit, Intersection* in);
-    bool intersectP(Ray& ray);
-    void getBRDF(LocalGeo& local, BRDF* brdf){
-        exit(1);
-        //This should never get called, because in->primitve
-        //will never be an aggregate primitive
-    }
-};
- 
-AggregatePrimitive::AggregatePrimitive(){
-      this->primitives = NULL; 
-}
- 
-AggregatePrimitive::AggregatePrimitive(vector<Primitive*> list){
-     primitives = list;
-}
-void AggregatePrimitive::addPrimitive(Primitive temp){
-     primitives.insert(temp);
-}
- 
- 
-bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
-    bool intersectobject = false;
-    *thit = FLT_MAX;
-    float newThit;
-    for (auto primitive : primitives){
-        Intersection newIn;
-        if(primitive.shape.intersect(ray, &newThit, &newIn)){
-            intersectobject = true;
-            if (newThit < *thit){
-                *thit = newThit;
-                *in = newIn;
-            }
-        }
-    }
-    return intersectobject;
-}
- 
-bool AggregatePrimitive::intersectP(Ray& ray){
-    for (auto primitive: primitives){
-        if (primitive.shape.intersectP(ray)) {
-            return true;
-        }
-    }
-    return false;
-} 
-/********************Material Class***********************/
-class Material{
-public:
-      BRDF constantBRDF;
-      BRDF getBRDF(LocalGeo& local, BRDF* brdf);
-}; 
-
-/***********************Color Class*****************/
-//TODO: May support conversion from xyz
-class Color {
-	float r;
-	float g;
-	float b;
-public:
-	Color();
-	Color(float r, float g, float b);
-	void color();
-	void color(float r, float g, float b);
-	Color addColors(Color addeeColor);
-	Color subColors(Color subtracteeColor);
-	Color mulColorbyScalar(float scalar);
-	Color divColorbyScalar(float scalar);
-	float get_r();
-	float get_g();
-	float get_b();
-	void set_r(float r);
-	void set_g(float g);
-    void set_b(float b);
- 
-};
-Color::Color() {
-	r = 0.0;
-	g = 0.0;
-	b = 0.0;
-}
-Color::Color(float r, float g, float b){
-	this->r = r;
-	this->g = g;
-	this->b = b;
-}
-void Color::color() {
-	r = 0.0;
-	g = 0.0;
-	b = 0.0;
-}
- 
-void Color::color(float r, float g, float b){
-	this->r = r;
-	this->g = g;
-	this->b = b;
-}
- 
-void Color::addColors(Color addeeColor){
-	this->r += addeeColor.get_r();
-	this->g += addeeColor.get_g();
-	this->b += addeeColor.get_b();
-}
- 
-Color Color::subColors(Color subtracteeColor){
-	this->r -= addeeColor.get_r();
-	this->g -= addeeColor.get_g();
-	this->b -= addeeColor.get_b();
-}
- 
-Color Color::mulColorbyScalar(float scalar){
-	this->r = scalar*(this->r);
-	this->g = scalar*(this->g);
-	this->b = scalar*(this->b);
-}
- 
-Color Color::divColorbyScalar(float scalar){
-	this->r = (this->r)/scalar;
-	this->g = (this->g)/scalar;
-	this->b = (this->b)/scalar;
-}
-float Color::get_r(){
-	  return this->r;
-}
-float Color::get_g(){
-	  return this->g;
-}
-float Color::get_b(){
-	  return this->b;
-}
-void Color::set_r(float r){
-	  this->r = r;
-}
-void Color::set_g(float g){
-	  this->g = g;
-}
-void Color::set_b(float b){
-	  this->b = b;
-}
-
 
 /*
       Implementations of triangle and sphere
@@ -1720,6 +1381,257 @@ bool Shape::intersectP(Ray& ray){
             return false;
       }
 }
+
+
+/*******************Primitive Class*********************/
+class  Primitive{
+public:
+      virtual bool intersect(Ray& ray, float* thit, Intersection* in);
+      virtual bool intersectP(Ray& ray);
+      virtual void getBRDF(LocalGeo& local, BRDF* brdf);
+ 
+};
+
+
+
+
+ 
+/******************GeometricPrimitive Class**************/
+class GeometricPrimitive : public Primitive {
+      Transformation objToWorld;
+      Transformation worldToObj;
+      Shape* shape;
+      BRDF* brdf;
+ 
+public: 
+      GeometricPrimitive(Shape* shape, Transformation transformation, BRDF* brdf);
+      GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
+      GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
+      bool intersect(Ray& ray, float* thit, Intersection* in);
+      bool intersectP(Ray& ray);
+      void getBRDF(LocalGeo& local, BRDF* brdf);
+}; 
+GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transformation, BRDF* brdf){
+      this->objToWorld = transformation;
+      Transformation temp;
+      temp.m = transformation.m.inverse();
+      temp.minvt = transformation.m;
+      this->worldToObj = temp;
+      this->shape = shape;
+      this->brdf = brdf;
+      }
+
+GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
+
+      Matrix rotate = rotation(rotx,roty,rotz);
+      Matrix scale = scaling(sx,sy,sz);
+      Matrix translate = translation(tx,ty,tz);
+             
+      BRDF brdf1;
+      brdf1.kar = kar;
+      brdf1.kag = kag;
+      brdf1.kab = kab;
+      brdf1.kdr = kdr;
+      brdf1.kdg = kdg;
+      brdf1.kdb = kdb;
+      brdf1.ksr = ksr;
+      brdf1.ksg = ksg;
+      brdf1.ksb = ksb;
+ 
+      this->objToWorld.m = translate*rotate*scale;
+      this->worldToObj.m = this->objToWorld.m.inverse();
+      this->shape = shape;
+      this->brdf = &brdf1;
+      }
+GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
+      Matrix rotate = arbitrary_rotation(rx,ry,rz,angle);
+      Matrix scale = scaling(sx,sy,sz);
+      Matrix translate = translation(tx,ty,tz);
+             
+      BRDF brdf1;
+      brdf1.kar = kar;
+      brdf1.kag = kag;
+      brdf1.kab = kab;
+      brdf1.kdr = kdr;
+      brdf1.kdg = kdg;
+      brdf1.kdb = kdb;
+      brdf1.ksr = ksr;
+      brdf1.ksg = ksg;
+      brdf1.ksb = ksb;
+ 
+ 
+      this->objToWorld.m = translate*rotate*scale;
+      this->worldToObj.m = this->objToWorld.m.inverse();
+      this->shape = shape;
+      this->brdf = &brdf1;
+}
+bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
+      Ray oray = worldToObj*ray;
+      LocalGeo olocal;                                 
+      if (!shape->intersect(oray, thit, &olocal))  return false;
+      in->primitive = this;
+      in->local = objToWorld*olocal;
+      return true;                               
+}
+bool GeometricPrimitive::intersectP(Ray& ray) {
+      Ray oray = worldToObj*ray;
+      return shape->intersectP(oray); 
+                                                
+}
+void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
+      this->brdf = brdf;
+}
+/************AggregatePrimitive********************/         
+class AggregatePrimitive : public Primitive{
+ 
+public:
+    list<Primitive*> *primitives;
+ 
+    AggregatePrimitive();
+    AggregatePrimitive(vector<Primitive*> list);
+    bool intersect(Ray& ray, float* thit, Intersection* in);
+    bool intersectP(Ray& ray);
+    void getBRDF(LocalGeo& local, BRDF* brdf){
+        exit(1);
+        //This should never get called, because in->primitve
+        //will never be an aggregate primitive
+    }
+};
+ 
+AggregatePrimitive::AggregatePrimitive(){
+      this->primitives = NULL; 
+}
+ 
+AggregatePrimitive::AggregatePrimitive(vector<Primitive*> list){
+     primitives = list;
+}
+void AggregatePrimitive::addPrimitive(Primitive temp){
+     primitives.insert(temp);
+}
+ 
+ 
+bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
+    bool intersectobject = false;
+    *thit = FLT_MAX;
+    float newThit;
+    for (auto primitive : primitives){
+        Intersection newIn;
+        if(primitive.shape.intersect(ray, &newThit, &newIn)){
+            intersectobject = true;
+            if (newThit < *thit){
+                *thit = newThit;
+                *in = newIn;
+            }
+        }
+    }
+    return intersectobject;
+}
+ 
+bool AggregatePrimitive::intersectP(Ray& ray){
+    for (auto primitive: primitives){
+        if (primitive.shape.intersectP(ray)) {
+            return true;
+        }
+    }
+    return false;
+} 
+/********************Material Class***********************/
+class Material{
+public:
+      BRDF constantBRDF;
+      BRDF getBRDF(LocalGeo& local, BRDF* brdf);
+}; 
+
+/***********************Color Class*****************/
+//TODO: May support conversion from xyz
+class Color {
+
+public:
+      float r;
+      float g;
+      float b;
+	Color();
+	Color(float r, float g, float b);
+	void color();
+	void color(float r, float g, float b);
+	Color addColors(Color addeeColor);
+	Color subColors(Color subtracteeColor);
+	Color mulColorbyScalar(float scalar);
+	Color divColorbyScalar(float scalar);
+	float get_r();
+	float get_g();
+	float get_b();
+	void set_r(float r);
+	void set_g(float g);
+    void set_b(float b);
+ 
+};
+Color::Color() {
+	r = 0.0;
+	g = 0.0;
+	b = 0.0;
+}
+Color::Color(float r, float g, float b){
+	this->r = r;
+	this->g = g;
+	this->b = b;
+}
+void Color::color() {
+	r = 0.0;
+	g = 0.0;
+	b = 0.0;
+}
+ 
+void Color::color(float r, float g, float b){
+	this->r = r;
+	this->g = g;
+	this->b = b;
+}
+ 
+void Color::addColors(Color addeeColor){
+	this->r += addeeColor.get_r();
+	this->g += addeeColor.get_g();
+	this->b += addeeColor.get_b();
+}
+ 
+Color Color::subColors(Color subtracteeColor){
+	this->r -= addeeColor.get_r();
+	this->g -= addeeColor.get_g();
+	this->b -= addeeColor.get_b();
+}
+ 
+Color Color::mulColorbyScalar(float scalar){
+	this->r = scalar*(this->r);
+	this->g = scalar*(this->g);
+	this->b = scalar*(this->b);
+}
+ 
+Color Color::divColorbyScalar(float scalar){
+	this->r = (this->r)/scalar;
+	this->g = (this->g)/scalar;
+	this->b = (this->b)/scalar;
+}
+float Color::get_r(){
+	  return this->r;
+}
+float Color::get_g(){
+	  return this->g;
+}
+float Color::get_b(){
+	  return this->b;
+}
+void Color::set_r(float r){
+	  this->r = r;
+}
+void Color::set_g(float g){
+	  this->g = g;
+}
+void Color::set_b(float b){
+	  this->b = b;
+}
+
+
+
 
 
 
