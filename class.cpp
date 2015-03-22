@@ -52,6 +52,7 @@ public:
       Vector scalarmultiply(float a);
       Vector scalardivide(float b);
       Vector normalize();
+      Vector reverse();
       Vector crossproduct(Vector other);
       float get_x();
       float get_y();
@@ -136,6 +137,14 @@ Vector Vector::normalize(){
       } else {
             return result;
       }
+}
+Vector Vector::reverse(){
+      Vector result;
+      result.vector();
+      result.set_x(this->x * -1);
+      result.set_y(this->y * -1);
+      result.set_z(this->z * -1);
+      return result;
 }
 Vector Vector::crossproduct(Vector other){ //computes u x v with u->this and v->other
       Vector temp;
@@ -1607,6 +1616,7 @@ public:
 	void color();
 	void color(float r, float g, float b);
 	void addColors(Color addeeColor);
+      Color operator+(Color input);
 	void subColors(Color subtracteeColor);
 	void mulColorbyScalar(float scalar);
 	void divColorbyScalar(float scalar);
@@ -1645,7 +1655,13 @@ void Color::addColors(Color addeeColor){
 	this->g += addeeColor.get_g();
 	this->b += addeeColor.get_b();
 }
-
+Color Color::operator+(Color input){
+      Color result;
+      result.r = this->get_r() + input.get_r();
+      result.g = this->get_g() + input.get_g();
+      result.b = this->get_b() + input.get_b();
+      return result;
+}
 void Color::subColors(Color subtracteeColor){
 
 	this->r -= subtracteeColor.get_r();
