@@ -108,8 +108,8 @@ int main(int argc, char *argv[]) {
 			counter = counter+5;
 			Shape *sphere;
 			sphere->makeSphere(r, Point(cx,cy,cz));
-			GeometricPrimitive geoprim(&sphere,Transformation(trans_mat), &brdf);
-			scene.aggreprim.addPrimitive(geoprim);
+			GeometricPrimitive* geoprim(&sphere,Transformation(trans_mat), &brdf);
+			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="tri"){
 			float ax = atof(argv[counter+1]);
 			float ay = atof(argv[counter+2]);
@@ -123,8 +123,8 @@ int main(int argc, char *argv[]) {
 			counter = counter+10;
 			Shape *triangle;
 			triangle->makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
-			GeometricPrimitive geoprim(&triangle,Transformation(trans_mat), &brdf);
-			scene.aggreprim.addPrimitive(geoprim);
+			GeometricPrimitive* geoprim(&triangle,Transformation(trans_mat), &brdf);
+			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="obj"){
 	    	/*
 			NOTE: .obj file supporting:
@@ -174,8 +174,8 @@ int main(int argc, char *argv[]) {
       				iss >> c;
       				Shape triangle;
       				triangle.makeTriangle(points[a-1],points[b-1],points[c-1]);
-      				GeometricPrimitive geoprim(Transformation(trans_mat), triangle, brdf);
-      				scene.aggreprim.addPrimitive(geoprim);
+      				GeometricPrimitive* geoprim(Transformation(trans_mat), triangle, brdf);
+      				scene.aggreprim.addPrimitive(&geoprim);
       				//TODO: 3 items
       					// Shape triangle;
 						// triangle.makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
