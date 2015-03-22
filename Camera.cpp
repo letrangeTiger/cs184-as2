@@ -4,7 +4,7 @@
 class Camera{
 	Point eye,ll,lr,ul,ur;
 	Camera(Point eye,Point ll,Point lr,Point ul,Point ur);
-	void generateRay(LocalGeo& local, Ray* ray)
+	void generateRay(Sample& sample, Ray* ray);
 };
 
 Camera::Camera(Point eye, Point ll, Point lr, Point ul, Point ur){
@@ -16,12 +16,12 @@ Camera::Camera(Point eye, Point ll, Point lr, Point ul, Point ur){
 }
 
 void Camera::generateRay(Sample& sample, Ray* ray){
-	float u = sample.x;
-	float v = sample.y;
+	float u = sample.get_x();
+	float v = sample.get_y();
 	float px = u*(v*ll.x+(1.0-v)*ul.x)+ (1.0-u)*(v*lr.x+(1.0-v)*ur.x);
 	float py = u*(v*ll.y+(1.0-v)*ul.y)+ (1.0-u)*(v*lr.y+(1.0-v)*ur.y);
 	float pz = u*(v*ll.z+(1.0-v)*ul.z)+ (1.0-u)*(v*lr.z+(1.0-v)*ur.z);
 	Point p = Point(px,py,pz);
-	Vector cam_dir = p.PsutratctP(this->eye);
-	ray.ray(this->eye, cam_dir, 0.0, FLT_MAX);
+	Vector cam_dir = p.PsubtractP(this->eye);
+	ray->ray(this->eye, cam_dir, 0.0, FLT_MAX);
 }

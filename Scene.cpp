@@ -152,7 +152,7 @@ int main(int argc, char *argv[]) {
 		    		continue; //object name - do nothing
 		    	}
 		    	if (lineName == "vn"){
-		    		continue;
+		    		continue; // vertexnormals not enabled
 		    	}
 		    	if (lineName == "v"){	//vertex
 		            float x,y,z;
@@ -179,7 +179,7 @@ int main(int argc, char *argv[]) {
       				
 
       			} else continue;
-      			}	
+      		}	
       			counter = counter+2;
 	    } else if (arg=="ltp"){
 	    	float px = atof(argv[counter+1]);

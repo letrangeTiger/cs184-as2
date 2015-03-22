@@ -1060,6 +1060,8 @@ class Sample {
 public:
       Sample();
       Sample(float x, float y);
+      float get_x();
+      float get_y();
 };
 Sample::Sample(){
       x = 0.0;
@@ -1068,6 +1070,12 @@ Sample::Sample(){
 Sample::Sample(float x, float y){
       this->x = x;
       this->y = y;
+}
+Sample::get_x(){
+      return this->x;
+}
+Sample::get_y(){
+      return this->y;
 }
 
 
