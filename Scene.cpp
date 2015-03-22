@@ -19,7 +19,7 @@ class Scene {
 		Point ur;
 		int max_depth;
 		AggregatePrimitive aggreprim;
-		std::list<Light> lights;
+		std::vector<Light> lights;
 		Light amblight;
 		unsigned width, height;
 		Scene();
