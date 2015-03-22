@@ -8,7 +8,8 @@
 #include "Sampler.cpp"
 #include "Camera.cpp"
 #include "raytracer.cpp"
-
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 using namespace std;
 
@@ -174,9 +175,13 @@ int main(int argc, char *argv[]) {
 
       			if (lineName == "f"){	//face
       				int a,b,c;
-      				iss >> a;
-      				iss >> b;
-      				iss >> c;
+      				string s;
+      				s = tokens[1];
+      				s >> a;
+      				s = tokens[2];
+      				s >> b;
+      				s = tokens[3];
+      				s >> c;
       				Shape triangle;
       				triangle.makeTriangle(points[a-1],points[b-1],points[c-1]);
       				GeometricPrimitive* geoprim(Transformation(trans_mat), triangle, brdf);
