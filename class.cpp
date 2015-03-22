@@ -1522,10 +1522,10 @@ void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
 class AggregatePrimitive : public Primitive{
  
 public:
-    list<Primitive*> *primitives;
+    std::list<Primitive*> *primitives;
  
     AggregatePrimitive();
-    AggregatePrimitive(vector<Primitive*> list);
+    AggregatePrimitive(std::list<Primitive*> list);
     bool intersect(Ray& ray, float* thit, Intersection* in);
     bool intersectP(Ray& ray);
     void getBRDF(LocalGeo& local, BRDF* brdf){
@@ -1539,11 +1539,11 @@ AggregatePrimitive::AggregatePrimitive(){
       this->primitives = NULL; 
 }
  
-AggregatePrimitive::AggregatePrimitive(list<Primitive*> list){
-     primitives = list;
+AggregatePrimitive::AggregatePrimitive(std::list<Primitive*> list){
+     primitives = &list;
 }
 void AggregatePrimitive::addPrimitive(Primitive temp){
-     primitives.insert(temp);
+     primitives->insert(temp);
 }
  
  
