@@ -1572,13 +1572,13 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
         Intersection* newIn;
         GeometricPrimitive* primitive;
         primitive = primitives.at(i);
-      /*  if(primitive->shape->intersect(ray, &newThit, &newIn->localGeo)){
-            intersectobject = true;
+        if(primitive->shape->intersect(ray, &newThit, &newIn->localGeo)){
+          /*  intersectobject = true;
             if (newThit < *thit){
                 *thit = newThit;
                 in = newIn;
             } */
-       // }
+        }
     }
     return intersectobject;
 }
