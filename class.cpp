@@ -1070,11 +1070,11 @@ Sample::Sample(float x, float y){
       this->x = x;
       this->y = y;
 }
-Sample::get_x(){
-      return this->x;
+float Sample::get_x(){
+      return x;
 }
-Sample::get_y(){
-      return this->y;
+float Sample::get_y(){
+      return y;
 }
 
 
