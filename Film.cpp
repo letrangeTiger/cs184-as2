@@ -32,8 +32,8 @@ Film::Film(unsigned w, unsigned h){
 }
 
 void Film::commit(Sample& sample, Color& color){
-	unsigned x = (unsigned) floor(sample.get_x());
-	unsigned y = (unsigned) floor(sample.get_y());
+	unsigned x = (unsigned) floor(sample.x);
+	unsigned y = (unsigned) floor(sample.y);
 	pixColors[4*width*y + 4*x + 0] = color.get_r()*255;
 	pixColors[4*width*y + 4*x + 1] = color.get_g()*255;
 	pixColors[4*width*y + 4*x + 2] = color.get_b()*255;

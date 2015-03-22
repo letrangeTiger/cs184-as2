@@ -24,7 +24,6 @@ class Transformation;
 class Color;
 class BRDF;
 class Sample;
-class Primitive;
 class AggregatePrimitive;
 class GeometricPrimitive;
 class Intersection;
@@ -1083,21 +1082,21 @@ float Sample::get_y(){
 class Intersection {
 public:
       LocalGeo localGeo;
-      Primitive* primitive;
+      GeometricPrimitive* primitive;
       Intersection();
-      Intersection(LocalGeo localGeo, Primitive* primitive);
+      Intersection(LocalGeo localGeo, GeometricPrimitive* primitive);
       void intersection();
-      void intersection(LocalGeo localGeo, Primitive* primitive);
+      void intersection(LocalGeo localGeo, GeometricPrimitive* primitive);
 };
       Intersection::Intersection(){
 }
-      Intersection::Intersection(LocalGeo localGeo, Primitive* primitive){
+      Intersection::Intersection(LocalGeo localGeo, GeometricPrimitive* primitive){
             this->localGeo = localGeo;
             this->primitive = primitive;
 }
       void Intersection::intersection(){
 }
-      void Intersection::intersection(LocalGeo localGeo, Primitive* primitive){
+      void Intersection::intersection(LocalGeo localGeo, GeometricPrimitive* primitive){
             this->localGeo = localGeo;
             this->primitive = primitive;
 }
@@ -1429,21 +1428,9 @@ bool Shape::intersectP(Ray& ray){
 }
 
 
-/*******************Primitive Class*********************/
-class  Primitive{
-public:
-      virtual bool intersect(Ray& ray, float* thit, Intersection* in);
-      virtual bool intersectP(Ray& ray);
-      virtual void getBRDF(LocalGeo& local, BRDF* brdf);
- 
-};
-
-
-
-
  
 /******************GeometricPrimitive Class**************/
-class GeometricPrimitive : public Primitive {
+class GeometricPrimitive {
       
  
 public:
@@ -1532,8 +1519,9 @@ bool GeometricPrimitive::intersectP(Ray& ray) {
 void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
       this->brdf = brdf;
 }
+
 /************AggregatePrimitive********************/         
-class AggregatePrimitive : public Primitive{
+class AggregatePrimitive {
  
 public:
     std::vector<GeometricPrimitive*> *primitives;
@@ -1753,7 +1741,5 @@ void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
         lray->ray(local.pos, dirlight_dir, 0.0001, FLT_MAX);
       }
 }
-
-
 
 
