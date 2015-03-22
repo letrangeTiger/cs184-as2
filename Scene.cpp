@@ -269,7 +269,7 @@ int main(int argc, char *argv[]) {
 	
 	}
 
-	scene.render();
+	//scene.render();
 	return 0;
 }
 
