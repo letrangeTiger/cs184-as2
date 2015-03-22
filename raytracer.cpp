@@ -1,19 +1,23 @@
 #include "class.cpp"
 #include <iostream>
+#include <vector>
 
 class RayTracer{
 
 public:
-      std::list<Light*> lights;
+      std::vector<Light> lights;
+      std::vector<Light>::iterator iter;
       AggregatePrimitive primitives;
       int maxrecursiondepth;
       Point eye;
       RayTracer();
-      RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, std::list<Light*> lights);
+      RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, std::vector<Light> lights);
       void trace(Ray& ray, int depth, Color* color);
 };
+RayTracer::RayTracer(){
 
-RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, List<Lights*> lights){
+}
+RayTracer::RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, std::vector<Light> lights){
       this->maxrecursiondepth = maxrecursiondepth;
       this->eye = eye;
       this->primitives = primitives;
@@ -28,25 +32,25 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
 
       //no need to continue if reached maxrecursiondepth
       if (depth > this->maxrecursiondepth) {
-         *color.color(0,0,0);
-         return;
+         *color = Color(0,0,0);
      }
       //if does not intersect anything return black
-      if(!primitives.intersect(ray, &thit, &in)){
-        *color = {0,0,0};
-        return;
+      if(!primitives.intersect(ray, thit, &in)){
+         *color = Color(0,0,0);
+
   }
       //find BRDF at intersection point
       in.primitive->getBRDF(in.localGeo, &brdf);
 
       //loop through lights
-      for(int i = 0; i < lights.size(); i++) {
-        Ray* currentray = Ray();
-        Color* lcolor = Color();
-        lights[i].generateLightRay(in.localGeo, &currentray, &lcolor);
-        if (!primitives.intersectP(currentray)) {
-            Vector n = in.localGeo.normal();
-            Vector l = currentlight.get_dir().normalize(); //surface->light
+      int i = 0;
+      for(iter = lights.begin(); iter < lights.end(); iter++, i++) {
+        Ray* currentray;
+        Color* lcolor;
+        lights.at(i).generateLightRay(in.localGeo, currentray, lcolor);
+        if (!primitives.intersectP(*currentray)) {
+            Vector n = in.localGeo.normal;
+            Vector l = currentray->get_dir().normalize(); //surface->light
             float NDotL = n.dot(l);
             Vector r = -l + 2*NDotL*n; //The reflection ray
             r = r.normalize();
