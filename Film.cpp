@@ -61,7 +61,7 @@ int main(int argc, char *argv[]){
 	film.writeImage();*/
   
 	//example encode from lodev.org/lodepng/
-		/*
+		
 	unsigned width = 1000, height = 500;
 	const char *filename = "result.png";
 	std::vector<unsigned char> image;
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]){
 	lodepng::State state;
 	lodepng::encode(png, image, width, height,state);
 	lodepng::save_file(png, filename);
-	*/
+	
 
 	return 0;
 
