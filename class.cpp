@@ -1511,7 +1511,7 @@ AggregatePrimitive::AggregatePrimitive(){
       this->primitives = NULL; 
 }
  
-AggregatePrimitive::AggregatePrimitive(vector<Primitive*> list){
+AggregatePrimitive::AggregatePrimitive(list<Primitive*> list){
      primitives = list;
 }
 void AggregatePrimitive::addPrimitive(Primitive temp){
