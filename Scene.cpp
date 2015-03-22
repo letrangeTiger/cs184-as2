@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <queue>
+#include <sstream>
 #include "class.cpp"
 #include "Film.cpp"
 #include "Sampler.cpp"
@@ -145,9 +146,9 @@ int main(int argc, char *argv[]) {
 		    	if (line.empty() || line[0] == '#'){	//skip empty line or comment and move onto next line
 		    		continue;
 		    	}
-		    	std::istringstream iss.str(line);
-		    	std::string lineName;
-		    	iss >> lineName;
+		    	std::vector<string> tokens;
+		    	split(tokens,line, is_any_of(" "));
+		    	lineName = tokens[0];
 
 		    	if (lineName == "s"){
 		    		continue; //smooth shading not enabled
@@ -160,9 +161,13 @@ int main(int argc, char *argv[]) {
 		    	}
 		    	if (lineName == "v"){	//vertex
 		            float x,y,z;
-		            iss >> x;
-		            iss >> y;
-		            iss >> z;
+		            string s;
+		            s = tokens[1];
+		            istringstream(s) >> x;
+		            s = tokens[2];
+		            istringstream(s) >> y;
+		            s = tokens[3];
+		            istringstream(s) >> z;
 		            Point p = Point(x,y,z);
 		            points.push_back(p);
       			}
@@ -172,9 +177,11 @@ int main(int argc, char *argv[]) {
       				iss >> a;
       				iss >> b;
       				iss >> c;
-      				Shape triangle;
-      				triangle.makeTriangle(points[a-1],points[b-1],points[c-1]);
-      				GeometricPrimitive geoprim =(Transformation(trans_mat), triangle, brdf);
+
+
+      				Shape* triangle;
+      				triangle->makeTriangle(points[a-1],points[b-1],points[c-1]);
+      				GeometricPrimitive geoprim = GeometricPrimitive(triangle, Transformation(trans_mat), brdf);
       				scene.aggreprim.addPrimitive(&geoprim);
       				//TODO: 3 items
       					// Shape triangle;
