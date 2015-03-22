@@ -3,6 +3,7 @@
 #include <vector>
 #include "lodepng.cpp" // from "lodev.org/lodepng/"
 #include "class.cpp"
+#include "Camera.cpp"
 
 using namespace std;
 
