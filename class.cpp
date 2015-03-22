@@ -15,6 +15,7 @@ class Vector; //check
 class Normal; 
 class Point;
 class Ray;
+class LocalGeo;
 class SmallMatrix;
 class Matrix;
 class Transformation;
@@ -24,7 +25,11 @@ class Sample;
 class Intersection;
 class Material;
 class Color;
+<<<<<<< HEAD
 class LocalGeo;
+=======
+class Light;
+>>>>>>> 820f483af0b3dbf455d49f1f1036e69f4bc38341
 class Shape;
 class Light;
 
@@ -421,6 +426,50 @@ void Ray::printline(){
       this->dir.print();
       printf(")\n");
 }
+
+
+
+/**********LocalGeo Class***********/
+class LocalGeo {
+public:
+      Point pos;
+      Normal normal;
+      LocalGeo();
+      void localGeo();
+      void localGeo(Point pos, Normal normal);
+      Point get_pos();
+      Normal get_normal();
+      void printline();
+};
+LocalGeo::LocalGeo(){
+      //object is created
+      this->pos = Point();
+      this->normal = Normal();
+}
+void LocalGeo::localGeo(){
+      this->pos = Point();
+      this->normal = Normal();
+}
+void LocalGeo::localGeo(Point pos, Normal normal){
+      this->pos = pos;
+      this->normal = normal;
+}
+Point LocalGeo::get_pos(){
+      return this->pos;
+}
+Normal LocalGeo::get_normal(){
+      return this->normal;
+}
+void LocalGeo::printline(){
+      printf("LocalGeo: ");
+      printf("Pos-> (");
+      this->pos.print();
+      printf(") Normal-> (");
+      this->normal.print();
+      printf(")\n");
+}
+
+
 
 
 //for calculating intersections
@@ -898,6 +947,8 @@ class Color {
       float g;
       float b;
 public:
+      Color();
+      Color(float r, float g, float b);
       void color();
       void color(float r, float g, float b);
       Color addColors(Color addeeColor);
@@ -912,6 +963,18 @@ public:
       void set_b(float b);
 
 };
+Color::Color() {
+      r = 0.0;
+      g = 0.0;
+      b = 0.0;
+}
+
+Color::Color(float r, float g, float b){
+      this->r = r;
+      this->g = g;
+      this->b = b;
+}
+
 void Color::color() {
       r = 0.0;
       g = 0.0;
@@ -978,7 +1041,7 @@ void Color::set_b(float b){
   
  
 /**********************BRDF***********************/
- Class BRDF {
+ class BRDF {
       float kdr;
       float kdg;
       float kdb;
@@ -1005,22 +1068,22 @@ public:
  
  };
  
-void BRDF::BRDF(){
-      kdr = 0;
-      kdg = 0;
-      kdb = 0;
-      ksr = 0;
-      ksg = 0;
-      ksb = 0;
-      kar = 0;
-      kag = 0;
-      kab = 0;
-      krr = 0;
-      krg = 0;
-      krb = 0;
-      p = 0;
+BRDF::BRDF(){
+      this->kdr = 0;
+      this->kdg = 0;
+      this->kdb = 0;
+      this->ksr = 0;
+      this->ksg = 0;
+      this->ksb = 0;
+      this->kar = 0;
+      this->kag = 0;
+      this->kab = 0;
+      this->krr = 0;
+      this->krg = 0;
+      this->krb = 0;
+      this->p = 0;
 }
-void BRDF::BRDF(float kdr,float kdg, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p){
+BRDF::BRDF(float kdr,float kdg, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p){
       this->kdr = kdr;
       this->kdg = kdg;
       this->kdb = kdb;
@@ -1067,14 +1130,14 @@ class Sample {
       float x;
       float y;
 public:
-      sample();
-      sample(float x, float y);
+      Sample();
+      Sample(float x, float y);
 };
-Sample::sample(){
+Sample::Sample(){
       x = 0.0;
       y = 0.0;
 }
-Sample::sample(float x, float y){
+Sample::Sample(float x, float y){
       this->x = x;
       this->y = y;
 }
@@ -1085,12 +1148,20 @@ class Intersection {
 public:
       LocalGeo localGeo;
       Primitive* primitive;
+      Intersection();
+      Intersection(LocalGeo localGeo, Primitive* primitive);
       void intersection();
       void intersection(LocalGeo localGeo, Primitive* primitive);
 };
-      void intersection(){
+      Intersection::Intersection(){
    }
-      void intersection(LocalGeo localGeo, Primitive* primitive){
+      Intersection::Intersection(LocalGeo localGeo, Primitive* primitive){
+            this->localGeo = localGeo;
+            this->primitive = primitive;
+   }
+      void Intersection::intersection(){
+   }
+      void Intersection::intersection(LocalGeo localGeo, Primitive* primitive){
             this->localGeo = localGeo;
             this->primitive = primitive;
    }
@@ -1663,48 +1734,6 @@ bool Shape::intersectP(Ray& ray){
 }
 
 
-
-
-
-/**********LocalGeo Class***********/
-class LocalGeo {
-public:
-      Point pos;
-      Normal normal;
-      LocalGeo();
-      void localGeo();
-      void localGeo(Point pos, Normal normal);
-      Point get_pos();
-      Normal get_normal();
-      void printline();
-};
-LocalGeo::LocalGeo(){
-      //object is created
-      this->pos = Point();
-      this->normal = Normal();
-}
-void LocalGeo::localGeo(){
-      this->pos = Point();
-      this->normal = Normal();
-}
-void LocalGeo::localGeo(Point pos, Normal normal){
-      this->pos = pos;
-      this->normal = normal;
-}
-Point LocalGeo::get_pos(){
-      return this->pos;
-}
-Normal LocalGeo::get_normal(){
-      return this->normal;
-}
-void LocalGeo::printline(){
-      printf("LocalGeo: ");
-      printf("Pos-> (");
-      this->pos.print();
-      printf(") Normal-> (");
-      this->normal.print();
-      printf(")\n");
-}
 
 
 /**************Light Class**************/
