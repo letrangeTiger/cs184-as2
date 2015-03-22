@@ -5,6 +5,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <float.h>
+#include <list>
 //#include <queue>
 
 using namespace std;
