@@ -842,51 +842,51 @@ void Matrix::print(){
 /**************************Transformation Class*************************************/
  
 class Transformation{
+
+public:
       Matrix m;
       Matrix minvt;
-public:
       Transformation();
       Transformation(Matrix temp);
-      void reset();
-      Transformation Transformation::operator*(Transformation t);
+      void reset(Matrix new1);
+      Transformation operator*(Transformation t);
       Point operator*(Point p);
       Ray operator*(Ray ray);
-      Ray operator*(Localgeo localGeo);
- 
- 
+      LocalGeo operator*(LocalGeo localGeo);
+
 };
 Transformation::Transformation(){
       Matrix result;
       this->m = result;
-      this->minvt = this->inverse();
+      this->minvt = result.inverse();
 }
 Transformation::Transformation(Matrix temp){
       this->m = temp;
-      this->minvt = this->inverse();
+      this->minvt = temp.inverse();
 }
-Transformation Transformation::reset(Matrix new1){
-      this->m = new1
+void Transformation::reset(Matrix new1){
+      this->m = new1;
       this->minvt = new1.inverse();
 }
 Transformation Transformation::operator*(Transformation t){
       Transformation result; 
-      result.m = this->m * t;
+      result.m = this->m * t.m;
       result.minvt = result.m.inverse();
       return result;
 }
 Point Transformation::operator*(Point p){
       Point result;
-      result = this->m.multiplicationP(p);
+      result = multiplicationP(this->m, p);
       return result;
 }
 Ray Transformation::operator*(Ray ray){
       Ray result;
-      result = this->m.multiplicationR(ray);
+      result = multiplicationR(this->m, ray);
       return result;
 }
-LocalGeo Transformation::operator*(LocalGeo localGeo){
+LocalGeo Transformation::operator*(LocalGeo localgeo){
       LocalGeo result;
-      result = this->m.multiplicationL(localGeo);
+      result = multiplicationL(this->m, localgeo);
       return result;
 }
  
@@ -1130,7 +1130,7 @@ void GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transfo
       this->shape = shape;
       this->brdf = brdf;
       }
-void GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
+void GeometricPrimitive::GeometricPrimitive(Shape* shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
       Matrix rotate = Matrix::rotation(rotx,roty,rotz);
       Matrix scale = Matrix::scaling(sx,sy,sz);
       Matrix translate = Matrix::translation(tx,ty,tz);
