@@ -37,7 +37,8 @@ public:
       float x;
       float y;
       float z;
-	  Vector();
+      Vector();
+      Vector(float a, float b, float c);
       void vector();
       void vector(float a, float b, float c);
       void reset(float x, float y, float z);
@@ -57,7 +58,18 @@ public:
       void print();
       float dot(Vector v0);
 };
- 
+
+Vector::Vector() {
+      this->x = 0;
+      this->y = 0;
+      this->z = 0;
+}
+Vector::Vector(float a, float b, float c){
+      this->x = a;
+      this->y = b;
+      this->z = c;
+}
+
 void Vector::vector() {
       this->x = 0;
       this->y = 0;
@@ -162,6 +174,8 @@ float Vector::dot(Vector v0) {
 //*********This is a child of Vector class, the results of operations of the Normal are automatically normalized****                       
 class Normal : public Vector {
 public:
+      Normal();
+      Normal(float a, float b, float c);
       void normal();
       void normal(float a, float b, float c);
       void reset(float x, float y, float z);
@@ -170,6 +184,24 @@ public:
       void printline();
       void print();
 };
+Normal::Normal(){
+      this->x = 0;
+      this->y = 0;
+      this->z = 0;
+}
+Normal::Normal(float a, float b, float c){
+      if (x != 0 || y != 0 || z != 0) {
+            Vector notnormalized;
+            notnormalized.vector(x, y, z);
+            this->x = notnormalized.normalize().get_x();
+            this->y = notnormalized.normalize().get_y();
+            this->z = notnormalized.normalize().get_z();
+      } else {
+            this->x = 0;
+            this->y = 0;
+            this->z = 0;
+      }  
+}
 void Normal::normal(){
       this->x = 0;
       this->y = 0;
@@ -237,6 +269,8 @@ public:
       float x;
       float y;
       float z;
+      Point();
+      Point(float x, float y, float z);
       void point();
       void point(float x, float y, float z);
       Point PaddvectorV(Vector addee);
@@ -252,10 +286,20 @@ public:
       void print();
  
 };
+Point::Point(){
+      this->x = 0;
+      this->y = 0;
+      this->z = 0;
+}
+Point::Point(float x, float y, float z){
+      this->x = x;
+      this->y = y;
+      this->z = z;
+}
 void Point::point(){
-      x = 0;
-      y = 0;
-      z = 0;
+      this->x = 0;
+      this->y = 0;
+      this->z = 0;
 }
 void Point::point(float x, float y, float z){
       this->x = x;
@@ -319,8 +363,11 @@ public:
       float t_min;
       float t_max;
       float t;
-      void ray();
+
+      Ray();
       Ray(Point a, Vector b, float c, float d);
+      void ray();
+      void ray(Point a, Vector b, float c, float d);
       Point currentposition(float t);
       Point get_pos();
       Vector get_dir();
@@ -329,7 +376,21 @@ public:
       void printline();
       void print();
 };
-Ray(Point a, Vector b, float c, float d){
+Ray::Ray(){
+
+}
+
+Ray::Ray(Point a, Vector b, float c, float d){
+      this->pos = a;
+      this->dir = b;
+      this->t_min = c;
+      this->t_max = d;
+}
+void Ray::ray(){
+      //do nothing
+}
+void Ray::ray(Point a, Vector b, float c, float d){
+
       this->pos = a;
       this->dir = b;
       this->t_min = c;
@@ -370,11 +431,26 @@ public:
             {0,0,0},
             {0,0,0}
       };
+      SmallMatrix();
+      SmallMatrix(float a, float b, float c, float d, float e, float f, float g, float h, float i);
       void smallMatrix();
       void smallMatrix(float a, float b, float c, float d, float e, float f, float g, float h, float i);
       float determinant();
       void print();
 };
+SmallMatrix::SmallMatrix(){
+}
+SmallMatrix::SmallMatrix(float a, float b, float c, float d, float e, float f, float g, float h, float i){
+      this->pos[0][0] = a;
+      this->pos[1][0] = b;
+      this->pos[2][0] = c;
+      this->pos[0][1] = d;
+      this->pos[1][1] = e;
+      this->pos[2][1] = f;
+      this->pos[0][2] = g;
+      this->pos[1][2] = h;
+      this->pos[2][2] = i;
+}
 void SmallMatrix::smallMatrix() {
 }
 void SmallMatrix::smallMatrix(float a, float b, float c, float d, float e, float f, float g, float h, float i) {
@@ -410,7 +486,8 @@ public:
             {0,0,0,0},
             {0,0,0,0},
             {0,0,0,0}};
- 
+      Matrix();
+      Matrix(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float m, float n, float o, float p);
       void matrix();
       void matrix(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float m, float n, float o, float p);
       Matrix translation(float tx, float ty, float tz);
@@ -419,13 +496,34 @@ public:
       Matrix arbitrary_rotation(float axisX, float axisY, float axisZ, float theta);
       Matrix multiplication(Matrix temp);
       Matrix operator*(Matrix temp);
-      float Matrix::determinant();
+      float determinant();
       Matrix inverse();
       Matrix transpose();
       Matrix identity();
       void print();
 };
+Matrix::Matrix(){
+      pos[0][0] = 0;
+}
+Matrix::Matrix(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float m, float n, float o, float p){
+      this->pos[0][0] = a;
+      this->pos[1][0] = b;
+      this->pos[2][0] = c;
+      this->pos[3][0] = d;
+      this->pos[0][1] = e;
+      this->pos[1][1] = f;
+      this->pos[2][1] = g;
+      this->pos[3][1] = h;
+      this->pos[0][2] = i;
+      this->pos[1][2] = j;
+      this->pos[2][2] = k;
+      this->pos[3][2] = l;
+      this->pos[0][3] = m;
+      this->pos[1][3] = n;
+      this->pos[2][3] = o;
+      this->pos[3][3] = p;
  
+}
 void Matrix::matrix(){
       pos[0][0] = 0;
 }
@@ -527,12 +625,13 @@ Ray multiplicationR(Matrix m, Ray ray){
       Vector r = Vector(x, y, z);
       return Ray(p, r, 0, 0);
 }
-LocalGeo multiplicationL(LocalGeo localGeo){
+LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
       Vector v = localGeo.get_normal();
-      minvt = this->inverse();
-      float x = minvt.pos[0][0] * v.x + minvt.pos[0][1] * v.y + m.pos[0][2] * v.z;
-      float y = minvt.pos[1][0] * v.x + minvt.pos[1][1] * v.y + m.pos[1][2] * v.z;
-      float z = minvt.pos[2][0] * v.x + minvt.pos[2][1] * v.y + m.pos[2][2] * v.z;
+      Matrix minvt;
+      minvt = m.inverse();
+      float x = minvt.pos[0][0] * v.x + minvt.pos[0][1] * v.y + minvt.pos[0][2] * v.z;
+      float y = minvt.pos[1][0] * v.x + minvt.pos[1][1] * v.y + minvt.pos[1][2] * v.z;
+      float z = minvt.pos[2][0] * v.x + minvt.pos[2][1] * v.y + minvt.pos[2][2] * v.z;
       v = Vector(x, y, z);
       v.normalize();
       return LocalGeo(operator*(localGeo.pos), v);
@@ -1074,7 +1173,7 @@ void GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, fl
       this->shape = shape;
       this->brdf = brdf1;
 }
-bool intersect(Ray& ray, float* thit, Intersection* in)  {
+bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
       Ray oray = worldToObj*ray;
       LocalGeo olocal;                                 
       if (!shape->intersect(oray, thit, &olocal))  return false;
@@ -1082,12 +1181,12 @@ bool intersect(Ray& ray, float* thit, Intersection* in)  {
       in->local = objToWorld*olocal;
       return true;                               
 }
-bool intersectP(Ray& ray) {
+bool GeometricPrimitive::intersectP(Ray& ray) {
       Ray oray = worldToObj*ray;
       return shape->intersectP(oray); 
                                                 
 }
-void getBRDF(LocalGeo& local, BRDF* brdf) {
+void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
       this->brdf = brdf;
 }
 /************AggregatePrimitive********************/         
