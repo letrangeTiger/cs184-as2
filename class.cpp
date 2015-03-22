@@ -986,7 +986,7 @@ public:
       float krb;
       float p;
       BRDF();
-      BRDF(float kdr,float kdg, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p);
+      BRDF(float kdr,float kdg, float kdb, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p);
       void setKa(float r,float g, float b);
       void setKr(float r,float g, float b);
       void setKd(float r,float g, float b);
@@ -1011,7 +1011,7 @@ BRDF::BRDF(){
       this->krb = 0;
       this->p = 0;
 }
-BRDF::BRDF(float kdr,float kdg, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p){
+BRDF::BRDF(float kdr, float kdg, float kdb, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p){
       this->kdr = kdr;
       this->kdg = kdg;
       this->kdb = kdb;
@@ -1071,10 +1071,10 @@ Sample::Sample(float x, float y){
       this->x = x;
       this->y = y;
 }
-Sample::get_x(){
+float Sample::get_x(){
       return this->x;
 }
-Sample::get_y(){
+float Sample::get_y(){
       return this->y;
 }
 
