@@ -7,9 +7,8 @@
 #include "Sampler.cpp"
 #include "Camera.cpp"
 #include "raytracer.cpp"
-#include "lodepng.h"
 
-//using namespace std;
+using namespace std;
 
 class Scene {
 	public:		
@@ -24,7 +23,7 @@ class Scene {
 		Light amblight;
 		unsigned width, height;
 		Scene();
-		Scene(unsigned width, unsigned height);
+		Scene(unsigned width, unsigned height, int max_depth);
 		void render();
 };
 
@@ -34,9 +33,10 @@ Scene::Scene(){
 	this->max_depth = 5;
 }
 
-Scene::Scene(unsigned width, unsigned height) {
+Scene::Scene(unsigned width, unsigned height, int max_depth) {
 	this->width = width;
 	this->height = height;
+	this->max_depth = max_depth;
 }
 
 void Scene::render() {
