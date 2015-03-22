@@ -52,35 +52,35 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             Vector n = in.localGeo.normal;
             Vector l = currentray->get_dir().normalize(); //surface->light
             float NDotL = n.dot(l);
-            Vector r = -l + 2*NDotL*n; //The reflection ray
+            Vector r = l.reverse().add(n.scalarmultiply(2*NDotL));
             r = r.normalize();
             Vector v = (eye.PsubtractP(in.localGeo.get_pos())).normalize(); //The view vector
 
-            Color diffuse_comp = Color(brdf.kdr * lcolor.get_r()*max<float>(NDotL, 0), brdf.kdg*lcolor.get_g()*max<float>(NDotL, 0), ), brdf.kdb*lcolor.get_b()*max<float>(NDotL, 0));
+            Color diffuse_comp = Color(brdf.kdr * lcolor->get_r()*fmax(NDotL, 0), brdf.kdg*lcolor->get_g()*fmax(NDotL, 0), brdf.kdb*lcolor->get_b()*fmax(NDotL, 0));
 
-            Color spec_comp = Color(brdf.ksr*lcolor.get_r()*pow(max<float>(r.dot(v),0), brdf.p), brdf.ksg*lcolor.get_g()*pow(max<float>(r.dot(v),0), brdf.p), brdf.ksb*lcolor.get_b()*pow(max<float>(r.dot(v),0), brdf.p));
+            Color spec_comp = Color(brdf.ksr*lcolor->get_r()*pow(fmax(r.dot(v),0), brdf.p), brdf.ksg*lcolor->get_g()*pow(fmax(r.dot(v),0), brdf.p), brdf.ksb*lcolor->get_b()*pow(fmax(r.dot(v),0), brdf.p));
 
-            Color ambient_comp = brdf.ka*lcolor; = Color(brdf.kar*lcolor.get_r(), brdf.kag*lcolor.get_g(), brdf.kab*lcolor.get_b());
+            Color ambient_comp = Color(brdf.kar*lcolor->get_r(), brdf.kag*lcolor->get_g(), brdf.kab*lcolor->get_b());
 
-            *color += diffuse_comp + spec_comp + ambient_comp;
+            *color = *color + diffuse_comp + spec_comp + ambient_comp;
 
         }else{
-            *color += Color(brdf.kar*lcolor.get_r(), brdf.kag*lcolor.get_g(), brdf.kab*lcolor.get_b());
+            *color = *color + Color(brdf.kar*lcolor->get_r(), brdf.kag*lcolor->get_g(), brdf.kab*lcolor->get_b());
         }
     }
       if(brdf.krr > 0 || brdf.krg > 0 || brdf.krb > 0){
         
 
-        Vector n = in.localGeo.normal();
-        Vector l = -ray.direction.normalize();
-        
+        Vector n = in.localGeo.normal;
+        Vector l = ray.get_dir().reverse().normalize();
 
-        Ray reflectRay = Ray(in.localGeo.position(), -l + 2*n.dot(l)*n, 0.001f, FLT_MAX);
+        float NDotL = n.dot(l);
+        Ray reflectRay = Ray(in.localGeo.pos, l.reverse().add(n.scalarmultiply(2*NDotL)), 0.001f, FLT_MAX);
         
         //Make a recursive call to trace the reflected ray
         Color temp = Color(0,0,0);
         trace(reflectRay, depth+1, &temp);
-        *color += Color(brdf.krr*temp.get_r, brdf.krg*temp.get_g, brdf.krb*temp.get_b);
+        *color = *color + Color(brdf.krr*temp.get_r(), brdf.krg*temp.get_g(), brdf.krb*temp.get_b());
     }
 
 }
