@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
 	int counter = 1;
 	Matrix trans_mat = Matrix();
 	trans_mat = trans_mat.identity();
-	BRDF brdf = BRDF();
+	BRDF *brdf = BRDF();
 
   	while (counter<argc){
 		std::string arg = argv[counter];
@@ -106,10 +106,10 @@ int main(int argc, char *argv[]) {
 			float cz = atof(argv[counter+3]);
 			float r = atof(argv[counter+4]);
 			counter = counter+5;
-			Shape sphere;
-			sphere.makeSphere(r, Point(cx,cy,cz));
-			GeometricPrimitive geoprim(Transformation(trans_mat), sphere, brdf);
-			scene.aggreprim.addPrimitive(geoprim);
+			Shape *sphere;
+			sphere->makeSphere(r, Point(cx,cy,cz));
+			GeometricPrimitive* geoprim(&sphere,Transformation(trans_mat), &brdf);
+			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="tri"){
 			float ax = atof(argv[counter+1]);
 			float ay = atof(argv[counter+2]);
@@ -121,10 +121,10 @@ int main(int argc, char *argv[]) {
 			float cy = atof(argv[counter+8]);
 			float cz = atof(argv[counter+9]);	
 			counter = counter+10;
-			Shape triangle;
-			triangle.makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
-			GeometricPrimitive geoprim(Transformation(trans_mat), triangle, brdf);
-			scene.aggreprim.addPrimitive(geoprim);
+			Shape *triangle;
+			triangle->makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
+			GeometricPrimitive* geoprim(&triangle,Transformation(trans_mat), &brdf);
+			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="obj"){
 	    	/*
 			NOTE: .obj file supporting:
@@ -174,8 +174,8 @@ int main(int argc, char *argv[]) {
       				iss >> c;
       				Shape triangle;
       				triangle.makeTriangle(points[a-1],points[b-1],points[c-1]);
-      				GeometricPrimitive geoprim(Transformation(trans_mat), Transformation(trans_mat.inverse()), triangle, brdf);
-      				scene.aggreprim.addPrimitive(geoprim);
+      				GeometricPrimitive* geoprim(Transformation(trans_mat), triangle, brdf);
+      				scene.aggreprim.addPrimitive(&geoprim);
       				//TODO: 3 items
       					// Shape triangle;
 						// triangle.makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
