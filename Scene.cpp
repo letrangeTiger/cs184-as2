@@ -44,10 +44,10 @@ void Scene::render() {
 	// implement this.
 	Film film = Film(this->width,this->height);
 	Sampler sampler = Sampler(this->width,this->height);
-	//Sample* sample = Sample();
+	Sample* sample;
 	Camera camera = Camera(eye,ll,lr,ul,ur);
-	Raytracer raytracer = Raytracer(max_depth, eye, aggreprim, lights);
-	while (!sampler.generateSample(&sample)){
+	RayTracer raytracer = RayTracer(max_depth, eye, aggreprim, lights);
+	while (!sampler.generateSample(sample)){
 		Ray *camray = Ray();
 		Color *color = Color();
 		camera.generateRay(sample, &camray);
