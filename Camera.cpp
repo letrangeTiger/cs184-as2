@@ -2,6 +2,7 @@
 #include <iostream>
 
 class Camera{
+public:
 	Point eye,ll,lr,ul,ur;
 	Camera(Point eye,Point ll,Point lr,Point ul,Point ur);
 	void generateRay(Sample& sample, Ray* ray);
@@ -16,8 +17,8 @@ Camera::Camera(Point eye, Point ll, Point lr, Point ul, Point ur){
 }
 
 void Camera::generateRay(Sample& sample, Ray* ray){
-	float u = sample.get_x();
-	float v = sample.get_y();
+	float u = sample.x;
+	float v = sample.y;
 	float px = u*(v*ll.x+(1.0-v)*ul.x)+ (1.0-u)*(v*lr.x+(1.0-v)*ur.x);
 	float py = u*(v*ll.y+(1.0-v)*ul.y)+ (1.0-u)*(v*lr.y+(1.0-v)*ur.y);
 	float pz = u*(v*ll.z+(1.0-v)*ul.z)+ (1.0-u)*(v*lr.z+(1.0-v)*ur.z);

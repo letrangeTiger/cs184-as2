@@ -1,12 +1,15 @@
+#include "class.cpp"
+#include <iostream>
+
 class RayTracer{
 
 public:
-      List<Lights*> lights;
+      std::list<Light*> lights;
       AggregatePrimitive primitives;
       int maxrecursiondepth;
       Point eye;
       RayTracer();
-      RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, List<Lights*> lights);
+      RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, std::list<Light*> lights);
       void trace(Ray& ray, int depth, Color* color);
 };
 
@@ -37,7 +40,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
       in.primitive->getBRDF(in.localGeo, &brdf);
 
       //loop through lights
-      for (int i = 0; i < lights.size(); i++) {
+      for(int i = 0; i < lights.size(); i++) {
         Ray* currentray = Ray();
         Color* lcolor = Color();
         lights[i].generateLightRay(in.localGeo, &currentray, &lcolor);
@@ -49,7 +52,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             r = r.normalize();
             Vector v = (eye.PsubtractP(in.localGeo.get_pos())).normalize(); //The view vector
 
-            Color diffuse_comp = Color(brdf.kdr*lcolor.get_r()*max<float>(NDotL, 0), brdf.kdg*lcolor.get_g()*max<float>(NDotL, 0), ), brdf.kdb*lcolor.get_b()*max<float>(NDotL, 0));
+            Color diffuse_comp = Color(brdf.kdr * lcolor.get_r()*max<float>(NDotL, 0), brdf.kdg*lcolor.get_g()*max<float>(NDotL, 0), ), brdf.kdb*lcolor.get_b()*max<float>(NDotL, 0));
 
             Color spec_comp = Color(brdf.ksr*lcolor.get_r()*pow(max<float>(r.dot(v),0), brdf.p), brdf.ksg*lcolor.get_g()*pow(max<float>(r.dot(v),0), brdf.p), brdf.ksb*lcolor.get_b()*pow(max<float>(r.dot(v),0), brdf.p));
 
