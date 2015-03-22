@@ -4,6 +4,7 @@
 #include <string>
 #include <cstring>
 #include <cstdlib>
+#include <float.h>
 //#include <queue>
 
 using namespace std;
@@ -1038,6 +1039,9 @@ void Color::set_b(float b){
  
 /**********************BRDF***********************/
  class BRDF {
+
+ 
+public:
       float kdr;
       float kdg;
       float kdb;
@@ -1051,8 +1055,6 @@ void Color::set_b(float b){
       float krg;
       float krb;
       float p;
- 
-public:
       BRDF();
       BRDF(float kdr,float kdg, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p);
       void setKa(float r,float g, float b);
@@ -1156,8 +1158,8 @@ public:
  
 /******************GeometricPrimitive Class**************/
 class GeometricPrimitive : public Primitive {
-      Tranformation objToWorld;
-      Tranformation worldToObj;
+      Transformation objToWorld;
+      Transformation worldToObj;
       Shape* shape;
       BRDF* brdf;
  
@@ -1181,9 +1183,9 @@ GeometricPrimitive::GeometricPrimitive(Shape* shape, Transformation transformati
 
 GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
 
-      Matrix rotate = Matrix::rotation(rotx,roty,rotz);
-      Matrix scale = Matrix::scaling(sx,sy,sz);
-      Matrix translate = Matrix::translation(tx,ty,tz);
+      Matrix rotate = rotation(rotx,roty,rotz);
+      Matrix scale = scaling(sx,sy,sz);
+      Matrix translate = translation(tx,ty,tz);
              
       BRDF brdf1;
       brdf1.kar = kar;
@@ -1202,9 +1204,9 @@ GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float t
       this->brdf = brdf1;
       }
 GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb){
-      Matrix rotate = Matrix::arbitrary_rotation(rx,ry,rz,angle);
-      Matrix scale = Matrix::scaling(sx,sy,sz);
-      Matrix translate = Matrix::translation(tx,ty,tz);
+      Matrix rotate = arbitrary_rotation(rx,ry,rz,angle);
+      Matrix scale = scaling(sx,sy,sz);
+      Matrix translate = translation(tx,ty,tz);
              
       BRDF brdf1;
       brdf1.kar = kar;
