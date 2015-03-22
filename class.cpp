@@ -36,7 +36,7 @@ public:
       float x;
       float y;
       float z;
- 
+
       void vector();
       void vector(float a, float b, float c);
       void reset(float x, float y, float z);
@@ -56,7 +56,7 @@ public:
       void print();
       float dot(Vector v0);
 };
- 
+
 void Vector::vector() {
       this->x = 0;
       this->y = 0;
@@ -319,6 +319,7 @@ public:
       float t_max;
       float t;
       void ray();
+      Ray();
       Ray(Point a, Vector b, float c, float d);
       Point currentposition(float t);
       Point get_pos();
@@ -328,7 +329,10 @@ public:
       void printline();
       void print();
 };
-Ray(Point a, Vector b, float c, float d){
+Ray::Ray(){
+
+}
+Ray::Ray(Point a,Vector b, float c, float d){
       this->pos = a;
       this->dir = b;
       this->t_min = c;
@@ -418,7 +422,7 @@ public:
       Matrix arbitrary_rotation(float axisX, float axisY, float axisZ, float theta);
       Matrix multiplication(Matrix temp);
       Matrix operator*(Matrix temp);
-      float Matrix::determinant();
+      float determinant();
       Matrix inverse();
       Matrix transpose();
       Matrix identity();
@@ -526,12 +530,13 @@ Ray multiplicationR(Matrix m, Ray ray){
       Vector r = Vector(x, y, z);
       return Ray(p, r, 0, 0);
 }
-LocalGeo multiplicationL(LocalGeo localGeo){
+LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
       Vector v = localGeo.get_normal();
-      minvt = this->inverse();
-      float x = minvt.pos[0][0] * v.x + minvt.pos[0][1] * v.y + m.pos[0][2] * v.z;
-      float y = minvt.pos[1][0] * v.x + minvt.pos[1][1] * v.y + m.pos[1][2] * v.z;
-      float z = minvt.pos[2][0] * v.x + minvt.pos[2][1] * v.y + m.pos[2][2] * v.z;
+      Matrix minvt;
+      minvt = m.inverse();
+      float x = minvt.pos[0][0] * v.x + minvt.pos[0][1] * v.y + minvt.pos[0][2] * v.z;
+      float y = minvt.pos[1][0] * v.x + minvt.pos[1][1] * v.y + minvt.pos[1][2] * v.z;
+      float z = minvt.pos[2][0] * v.x + minvt.pos[2][1] * v.y + minvt.pos[2][2] * v.z;
       v = Vector(x, y, z);
       v.normalize();
       return LocalGeo(operator*(localGeo.pos), v);
@@ -1073,7 +1078,7 @@ void GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, fl
       this->shape = shape;
       this->brdf = brdf1;
 }
-bool intersect(Ray& ray, float* thit, Intersection* in)  {
+bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
       Ray oray = worldToObj*ray;
       LocalGeo olocal;                                 
       if (!shape->intersect(oray, thit, &olocal))  return false;
@@ -1081,12 +1086,12 @@ bool intersect(Ray& ray, float* thit, Intersection* in)  {
       in->local = objToWorld*olocal;
       return true;                               
 }
-bool intersectP(Ray& ray) {
+bool GeometricPrimitive::intersectP(Ray& ray) {
       Ray oray = worldToObj*ray;
       return shape->intersectP(oray); 
                                                 
 }
-void getBRDF(LocalGeo& local, BRDF* brdf) {
+void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
       this->brdf = brdf;
 }
 /************AggregatePrimitive********************/         
