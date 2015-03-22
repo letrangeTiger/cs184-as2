@@ -11,6 +11,8 @@
 #include "Sampler.cpp"
 #include "Camera.cpp"
 #include "raytracer.cpp"
+#include <algorithm>
+
 
 using namespace std;
 
@@ -63,6 +65,7 @@ void Scene::render() {
 }
 
 int main(int argc, char *argv[]) {
+
 	unsigned w = 1000;
 	unsigned h = 1000;
 	int maxdepth = 5;
@@ -235,11 +238,7 @@ int main(int argc, char *argv[]) {
 	    	float b = atof(argv[counter+3]);
 	    	counter=counter+4;
 	    	scene.amblight = Light(r,g,b);
-	    } else if (!strncmp(argv[counter], "xfz", 0)){
-	    	cout << "xfz";
-			trans_mat = Matrix();
-			trans_mat = trans_mat.identity();	    	
-			counter+=1;
+
 	    } else if (!strncmp(argv[counter], "xft", 3)){
 	    	cout << "xft";
 	    	float tx = atof(argv[counter+1]);
@@ -261,7 +260,7 @@ int main(int argc, char *argv[]) {
 	    	float sz = atof(argv[counter+3]);
 	    	counter=counter+4;
 	    	trans_mat = trans_mat * scaling(sx,sy,sz);
-	    } else if (arg=="mat"){
+	    } else if (!strncmp(argv[counter], "mat", 13)){
 	    	float kar = atof(argv[counter+1]);
 	    	float kag = atof(argv[counter+2]);
 	    	float kab = atof(argv[counter+3]);
@@ -275,12 +274,23 @@ int main(int argc, char *argv[]) {
 	    	float krr = atof(argv[counter+11]);
 	    	float krg = atof(argv[counter+12]);
 	    	float krb = atof(argv[counter+13]);
-	    	brdf = BRDF(kar,kag,kab,
+	    	//brdf.setKa(kar,kag, kab);
+           // brdf.setKr(krr,float g, float b);
+    //  void setKd(float r,float g, float b);
+      //void setKs(float r,float g, float b, float p);
+      //void setP(float p);
+	    	*brdf = BRDF(kar,kag,kab,
 	    				kdr,kdg,kdb,
 	    				ksr,ksg,ksb,p,
 	    				krr,krg,krb);
 	    	counter=counter+14;
-	    } else {
+	    } 
+	    else if (!strncmp(argv[counter], "xfz", 0)){
+	    	cout << "xfz";
+			trans_mat = Matrix();
+			trans_mat = trans_mat.identity();	    	
+			counter+=1;
+		}else {
 	  		counter+=1;
 		}
 	
