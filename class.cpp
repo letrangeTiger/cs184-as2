@@ -978,7 +978,7 @@ void Color::set_b(float b){
   
  
 /**********************BRDF***********************/
- Class BRDF {
+ class BRDF {
       float kdr;
       float kdg;
       float kdb;
@@ -1005,22 +1005,22 @@ public:
  
  };
  
-void BRDF::BRDF(){
-      kdr = 0;
-      kdg = 0;
-      kdb = 0;
-      ksr = 0;
-      ksg = 0;
-      ksb = 0;
-      kar = 0;
-      kag = 0;
-      kab = 0;
-      krr = 0;
-      krg = 0;
-      krb = 0;
-      p = 0;
+BRDF::BRDF(){
+      this->kdr = 0;
+      this->kdg = 0;
+      this->kdb = 0;
+      this->ksr = 0;
+      this->ksg = 0;
+      this->ksb = 0;
+      this->kar = 0;
+      this->kag = 0;
+      this->kab = 0;
+      this->krr = 0;
+      this->krg = 0;
+      this->krb = 0;
+      this->p = 0;
 }
-void BRDF::BRDF(float kdr,float kdg, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p){
+BRDF::BRDF(float kdr,float kdg, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p){
       this->kdr = kdr;
       this->kdg = kdg;
       this->kdb = kdb;
