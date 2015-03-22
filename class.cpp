@@ -431,6 +431,7 @@ public:
       Point pos;
       Normal normal;
       LocalGeo();
+      LocalGeo(Point pos, Normal normal);
       void localGeo();
       void localGeo(Point pos, Normal normal);
       Point get_pos();
@@ -441,6 +442,10 @@ LocalGeo::LocalGeo(){
       //object is created
       this->pos = Point();
       this->normal = Normal();
+}
+LocalGeo::LocalGeo(Point pos, Normal normal){
+      this->pos = pos;
+      this->normal = normal;
 }
 void LocalGeo::localGeo(){
       this->pos = Point();
@@ -625,7 +630,7 @@ Matrix rotation(float rx, float ry, float rz){
  
       return result;
 }
-Matrix Matrix::arbitrary_rotation(float axisX, float axisY, float axisZ, float theta){
+Matrix arbitrary_rotation(float axisX, float axisY, float axisZ, float theta){
       //inputs are the x, y, z coordinates of the rotation axis and the angle of rotation about this axis
       Matrix result;
       Normal raxis;
@@ -677,9 +682,12 @@ LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
       float x = minvt.pos[0][0] * v.x + minvt.pos[0][1] * v.y + minvt.pos[0][2] * v.z;
       float y = minvt.pos[1][0] * v.x + minvt.pos[1][1] * v.y + minvt.pos[1][2] * v.z;
       float z = minvt.pos[2][0] * v.x + minvt.pos[2][1] * v.y + minvt.pos[2][2] * v.z;
-      v = Vector(x, y, z);
-      v.normalize();
-      return LocalGeo(operator*(localGeo.pos), v);
+      v = Normal(x, y, z);
+      Point n;
+      n = localGeo.pos;
+      LocalGeo t;
+      t = LocalGeo(n, v);
+      return t;
 }
 Matrix Matrix::identity(){
       Matrix result;
