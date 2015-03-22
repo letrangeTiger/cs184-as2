@@ -46,7 +46,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             
 
 
-      /*
+      
       //loop through lights
       int i = 0;
       for(iter = lights.begin(); iter < lights.end(); iter++, i++) {
@@ -61,9 +61,9 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             r = r.normalize();
             Vector v = (eye.PsubtractP(in.localGeo.get_pos())).normalize(); 
 
-            Color diffuse_comp = Color(brdf.kdr * lcolor->get_r()*fmax(NdotL, 0), brdf.kdg*lcolor->get_g()*fmax(NdotL, 0), brdf.kdb*lcolor->get_b()*fmax(NdotL, 0));
+            Color diffuse_comp = Color(brdf->kdr * lcolor->get_r()*fmax(NdotL, 0), brdf->kdg*lcolor->get_g()*fmax(NdotL, 0), brdf->kdb*lcolor->get_b()*fmax(NdotL, 0));
 
-            Color spec_comp = Color(brdf.ksr*lcolor->get_r()*pow(fmax(r.dot(v),0), brdf.p), brdf.ksg*lcolor->get_g()*pow(fmax(r.dot(v),0), brdf.p), brdf.ksb*lcolor->get_b()*pow(fmax(r.dot(v),0), brdf.p));
+            Color spec_comp = Color(brdf->ksr*lcolor->get_r()*pow(fmax(r.dot(v),0), brdf->p), brdf->ksg*lcolor->get_g()*pow(fmax(r.dot(v),0), brdf->p), brdf->ksb*lcolor->get_b()*pow(fmax(r.dot(v),0), brdf->p));
 
             Color ambient_comp = Color(brdf->kar*lcolor->get_r(), brdf->kag*lcolor->get_g(), brdf->kab*lcolor->get_b());
 
@@ -73,7 +73,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             *color = *color + Color(brdf->kar*lcolor->get_r(), brdf->kag*lcolor->get_g(), brdf->kab*lcolor->get_b());
         }
     }
-      if(brdf.krr > 0 || brdf.krg > 0 || brdf.krb > 0){
+     /* if(brdf->krr > 0 || brdf->krg > 0 || brdf->krb > 0){
         
 
         Vector n = in.localGeo.normal;
@@ -86,6 +86,6 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         Color temp = Color(0,0,0);
         trace(reflectRay, depth+1, &temp);
         *color = *color + Color(brdf->krr*temp.get_r(), brdf->krg*temp.get_g(), brdf->krb*temp.get_b());
-    }
-*/
+    } */
+
 }
