@@ -8,6 +8,7 @@
 #include "Camera.cpp"
 #include "raytracer.cpp"
 
+
 using namespace std;
 
 class Scene {
@@ -234,19 +235,19 @@ int main(int argc, char *argv[]) {
 	    	counter=counter+4;
 	    	trans_mat = trans_mat * scaling(sx,sy,sz);
 	    } else if (arg=="mat"){
-	    	float brdf.kar = atof(argv[counter+1]);
-	    	float brdf.kag = atof(argv[counter+2]);
-	    	float brdf.kab = atof(argv[counter+3]);
-	    	float brdf.kdr = atof(argv[counter+4]);
-	    	float brdf.kdg = atof(argv[counter+5]);
-	    	float brdf.kdb = atof(argv[counter+6]);
-	    	float brdf.ksr = atof(argv[counter+7]);
-	    	float brdf.ksg = atof(argv[counter+8]);
-	    	float brdf.ksb = atof(argv[counter+9]);
-	    	float brdf.ksp = atof(argv[counter+10]);
-	    	float brdf.krr = atof(argv[counter+11]);
-	    	float brdf.krg = atof(argv[counter+12]);
-	    	float brdf.krb = atof(argv[counter+13]);
+	    	brdf.kar = atof(argv[counter+1]);
+	    	brdf.kag = atof(argv[counter+2]);
+	    	brdf.kab = atof(argv[counter+3]);
+	    	brdf.kdr = atof(argv[counter+4]);
+	    	brdf.kdg = atof(argv[counter+5]);
+	    	brdf.kdb = atof(argv[counter+6]);
+	    	brdf.ksr = atof(argv[counter+7]);
+	    	brdf.ksg = atof(argv[counter+8]);
+	    	brdf.ksb = atof(argv[counter+9]);
+	    	brdf.p = atof(argv[counter+10]);
+	    	brdf.krr = atof(argv[counter+11]);
+	    	brdf.krg = atof(argv[counter+12]);
+	    	brdf.krb = atof(argv[counter+13]);
 	    	counter=counter+14;
 	    } else {
 	  		counter+=1;

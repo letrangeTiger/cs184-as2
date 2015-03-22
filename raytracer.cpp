@@ -50,13 +50,13 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         lights.at(i).generateLightRay(in.localGeo, currentray, lcolor);
         if (!primitives.intersectP(*currentray)) {
             Vector n = in.localGeo.normal;
-            Vector l = currentray->get_dir().normalize(); //surface->light
-            float NDotL = n.dot(l);
-            Vector r = l.reverse().add(n.scalarmultiply(2*NDotL));
+            Vector l = currentray->get_dir().normalize(); 
+            float NdotL = n.dot(l);
+            Vector r = l.reverse().add(n.scalarmultiply(2*NdotL));
             r = r.normalize();
-            Vector v = (eye.PsubtractP(in.localGeo.get_pos())).normalize(); //The view vector
+            Vector v = (eye.PsubtractP(in.localGeo.get_pos())).normalize(); 
 
-            Color diffuse_comp = Color(brdf.kdr * lcolor->get_r()*fmax(NDotL, 0), brdf.kdg*lcolor->get_g()*fmax(NDotL, 0), brdf.kdb*lcolor->get_b()*fmax(NDotL, 0));
+            Color diffuse_comp = Color(brdf.kdr * lcolor->get_r()*fmax(NdotL, 0), brdf.kdg*lcolor->get_g()*fmax(NdotL, 0), brdf.kdb*lcolor->get_b()*fmax(NdotL, 0));
 
             Color spec_comp = Color(brdf.ksr*lcolor->get_r()*pow(fmax(r.dot(v),0), brdf.p), brdf.ksg*lcolor->get_g()*pow(fmax(r.dot(v),0), brdf.p), brdf.ksb*lcolor->get_b()*pow(fmax(r.dot(v),0), brdf.p));
 
@@ -74,8 +74,8 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         Vector n = in.localGeo.normal;
         Vector l = ray.get_dir().reverse().normalize();
 
-        float NDotL = n.dot(l);
-        Ray reflectRay = Ray(in.localGeo.pos, l.reverse().add(n.scalarmultiply(2*NDotL)), 0.001f, FLT_MAX);
+        float NdotL = n.dot(l);
+        Ray reflectRay = Ray(in.localGeo.pos, l.reverse().add(n.scalarmultiply(2*NdotL)), 0.001f, FLT_MAX);
         
         //Make a recursive call to trace the reflected ray
         Color temp = Color(0,0,0);
