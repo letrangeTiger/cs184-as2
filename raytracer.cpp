@@ -58,6 +58,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         //currentray.get_dir().printline();
         //lcolor.print();
         if (!primitives.intersectP(currentray)) {
+          cout << "in raytracer loop";
             Vector n = in.localGeo.normal;
             Vector l =  currentray.get_dir().normalize();
             float NdotL = n.dot(l);

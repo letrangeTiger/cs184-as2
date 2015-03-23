@@ -1604,10 +1604,12 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
     bool intersectobject = false;
     float newThit;
     Intersection newInter;
+    cout << "outsideeeeeeeeeeeeeeeeee";
     int i = 0;
     for (auto primitive : primitives){
         if(primitive->intersect(ray, &newThit, &newInter)){
-           // cout << "assign hereeee";
+
+           cout << "inside auto primitive loop";
             *in = newInter;
             *thit = newThit;
             intersectobject = true;
