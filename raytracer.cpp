@@ -64,9 +64,10 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             Vector r = l.reverse().add(n.scalarmultiply(2*NdotL));
             r = r.normalize();
             Vector v = (eye.PsubtractP(in.localGeo.get_pos())).normalize(); 
-            float fmx = fmax(NdotL, 0.0f);
+            float fmx = fmax(NdotL, 0.0f);   
+          }}
             
-            //float test = brdf->kdr*lcolor->get_r()*fmx;
+       /*     //float test = brdf->kdr*lcolor->get_r()*fmx;
             Color diffuse_comp = Color(brdf->kdr * lcolor->get_r()*fmx, brdf->kdg*lcolor->get_g()*fmx, brdf->kdb*lcolor->get_b()*fmx);
             
             float RdotV = r.dot(v);
@@ -80,7 +81,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         }else{
             *color = *color + Color(brdf->kar*lcolor->get_r(), brdf->kag*lcolor->get_g(), brdf->kab*lcolor->get_b());
         }
-    }
+    }*/
       /*if(brdf->krr > 0 || brdf->krg > 0 || brdf->krb > 0){
         
 
