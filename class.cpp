@@ -1677,15 +1677,50 @@ void Color::color(float r, float g, float b){
 }
  
 void Color::addColors(Color addeeColor){
-	this->r += addeeColor.get_r();
-	this->g += addeeColor.get_g();
-	this->b += addeeColor.get_b();
+      if (addeeColor.get_r() + this->r > 1.0){
+            this->r = 1.0;
+      }
+      else {
+            this->r = addeeColor.get_r() + this->r;
+      }
+
+      if (addeeColor.get_g() + this->g > 1.0){
+            this->g = 1.0;
+      }
+      else {
+            this->g = addeeColor.get_g() + this->g;
+      }
+
+      if (addeeColor.get_b() + this->b > 1.0){
+            this->b = 1.0;
+      }
+      else {
+            this->b = addeeColor.get_b() + this->b;
+      }
 }
 Color Color::operator+(Color input){
       Color result;
-      result.r = this->get_r() + input.get_r();
-      result.g = this->get_g() + input.get_g();
-      result.b = this->get_b() + input.get_b();
+
+      if (input.get_r() + this->get_r() > 1.0){
+            result.set_r(1.0);
+      }
+      else {
+            result.set_r(input.get_r() + this->get_r());
+      }
+
+      if (input.get_g() + this->get_g() > 1.0){
+            result.set_g(1.0);
+      }
+      else {
+            result.set_g(input.get_g() + this->get_g());
+      }
+
+      if (input.get_b() + this->get_b() > 1.0){
+            result.set_b(1.0);
+      }
+      else {
+            result.set_b(input.get_b() + this->get_b());
+      }
       return result;
 }
 void Color::subColors(Color subtracteeColor){
@@ -1696,9 +1731,26 @@ void Color::subColors(Color subtracteeColor){
 }
  
 void Color::mulColorbyScalar(float scalar){
-	this->r = scalar*(this->r);
-	this->g = scalar*(this->g);
-	this->b = scalar*(this->b);
+	if (scalar*(this->r) > 1.0){
+            this->r = 1.0;
+      }
+      else {
+            this->r = scalar*(this->r);
+      }
+
+	if (scalar*(this->g) > 1.0){
+            this->g = 1.0;
+      }
+      else {
+            this->g = scalar*(this->g);
+      }
+
+	if (scalar*(this->b) > 1.0){
+            this->b = 1.0;
+      }
+      else {
+            this->b = scalar*(this->b);
+      }
 }
  
 void Color::divColorbyScalar(float scalar){
