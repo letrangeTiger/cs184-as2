@@ -17,3 +17,14 @@ cam 0 0 2 -1 -1 1 1 -1 1 -1 1 1 1 1 1 mat 1 1 1 .5 0 .5 0 0 0 64 .4 .4 .4 ltp 1 
 
 TRIANGLE:
 cam 0 0 2 -1 -1 1 1 -1 1 -1 1 1 1 1 1 mat 1 1 1 1 1 1 0 0 0 64 0 0 0 ltp 1 1 1 1 1 1 0 lta 0.1 0.1 0.1 tri 2 2 -1 -2 -2 -1 2 -2 -1
+
+
+sphere and triangle (shadow from directional light):
+Shadow From Directional Light
+
+cam 0 0 2 -1 -1 1 1 -1 1 -1 1 1 1 1 1 mat 1 1 1 1 1 1 0 0 0 64 0 0 0 ltd 1 1 -1 1 1 1 0 lta 0.1 0.1 0.1 tri 2 2 -1 -2 -2 -1 2 -2 -1 sph 0.2 -0.2 0.0 0.1
+
+
+sphere and sphere (point light)
+
+cam 0 0 2 -1 -1 1 1 -1 1 -1 1 1 1 1 1 mat 1 1 1 1 1 1 1 1 1 256 0 0 0 ltp 0.5 0.8 0.5 1 1 1 0 lta 0.1 0.1 0.1 sph 0 0 -2 1.5 sph 0.5 0.5 0 0.1

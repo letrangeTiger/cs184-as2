@@ -1588,6 +1588,7 @@ AggregatePrimitive::AggregatePrimitive(std::vector<GeometricPrimitive*> list){
      primitives = list;
 }
 void AggregatePrimitive::addPrimitive(GeometricPrimitive* temp){
+     printf("FUCK EVERYTHING");
      primitives.push_back(temp);
 }
  

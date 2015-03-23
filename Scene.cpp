@@ -133,6 +133,7 @@ int main(int argc, char *argv[]) {
 			scene.ul = ul;
 			scene.ur = ur;
 	  	} else if (arg=="sph"){
+	  		printf("SPHERE BITCHES!!!!!!");
 	  		cout << "sph";
 			float cx = atof(argv[counter+1]);
 			float cy = atof(argv[counter+2]);
@@ -141,7 +142,9 @@ int main(int argc, char *argv[]) {
 			counter = counter+5;
 			Shape sphere;
 			sphere.makeSphere(r, Point(cx,cy,cz));
-			GeometricPrimitive geoprim = GeometricPrimitive(&sphere,Transformation(trans_mat), brdf);
+			Shape* mySphere;
+			mySphere = &sphere;
+			GeometricPrimitive geoprim = GeometricPrimitive(mySphere, Transformation(trans_mat), brdf);
 			//scene.geoprims.push_back(geoprim);
 			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="tri"){
