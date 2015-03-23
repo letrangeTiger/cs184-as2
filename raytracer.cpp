@@ -13,7 +13,7 @@ public:
       AggregatePrimitive primitives;
       int maxrecursiondepth;
       Point eye;
-      BRDF *brdf;
+      BRDF brdf;
       RayTracer();
       RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, std::vector<Light> lights);
       void trace(Ray& ray, int depth, Color* color);
@@ -44,7 +44,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
       } else {  
 
       //find BRDF at intersection point
-      //inn.primitive->getBRDF(inn.localGeo, brdf);
+      in.primitive->getBRDF(in.localGeo, &brdf);
       //in.localGeo.printline();   
       
 
@@ -57,7 +57,6 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         light.generateLightRay(in.localGeo, &currentray, &lcolor);
         //currentray.get_dir().printline();
         if (!primitives.intersectP(currentray)) {
-
 
             Vector n = in.localGeo.normal;
             //n.printline();
@@ -75,25 +74,25 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             //l.printline();
             //r.printline();
             float fmx = fmax(NdotL, 0.0f);
-            //printf("%f", fmx);
 
-            
-            float test = brdf->kdr;//*lcolor.get_r()*fmx;
-            Color diffuse_comp = Color(brdf->kdr * lcolor.get_r()*fmx, brdf->kdg*lcolor.get_g()*fmx, brdf->kdb*lcolor.get_b()*fmx);
+            float test = brdf.kdr;//*lcolor.get_r()*fmx;
+
+
+            Color diffuse_comp = Color(brdf.kdr * lcolor.get_r()*fmx, brdf.kdg*lcolor.get_g()*fmx, brdf.kdb*lcolor.get_b()*fmx);
             
             float RdotV = r.dot(v);
             float rdv = fmax(RdotV,0.0f);
-            Color spec_comp = Color(brdf->ksr*lcolor.get_r()*rdv, brdf->ksg*lcolor.get_g()*rdv, brdf->ksb*lcolor.get_b()*rdv);
+            Color spec_comp = Color(brdf.ksr*lcolor.get_r()*rdv, brdf.ksg*lcolor.get_g()*rdv, brdf.ksb*lcolor.get_b()*rdv);
 
-            //Color ambient_comp = Color(brdf->kar*lcolor.get_r(), brdf->kag*lcolor.get_g(), brdf->kab*lcolor.get_b());
+            Color ambient_comp = Color(brdf.kar*lcolor.get_r(), brdf.kag*lcolor.get_g(), brdf.kab*lcolor.get_b());
 
-            //*color = *color + diffuse_comp + spec_comp + ambient_comp;
+            *color = *color + diffuse_comp + spec_comp + ambient_comp;
             
 
-            cout << "this has run";
-        }else{
+            //cout << "this has run";
+        } else {
             //cout << "else";
-            //*color = *color + Color(brdf->kar*lcolor.get_r(), brdf->kag*lcolor.get_g(), brdf->kab*lcolor.get_b());
+            *color = *color + Color(brdf.kar*lcolor.get_r(), brdf.kag*lcolor.get_g(), brdf.kab*lcolor.get_b());
         }
     }}
       /*if(brdf->krr > 0 || brdf->krg > 0 || brdf->krb > 0){

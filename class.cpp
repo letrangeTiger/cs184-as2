@@ -191,9 +191,9 @@ float Vector::dot(Vector v0) {
 class Normal : public Vector {
 public:
       Normal();
-      Normal(float a, float b, float c);
+      Normal(float x, float y, float z);
       void normal();
-      void normal(float a, float b, float c);
+      void normal(float x, float y, float z);
       void reset(float x, float y, float z);
       Normal add(Vector addee);
       Normal subtract(Vector subtractee);
@@ -1005,7 +1005,8 @@ public:
       void setKd(float r,float g, float b);
       void setKs(float r,float g, float b, float p);
       void setP(float p);
- 
+      float get_kdr();
+      void printline();
  
  };
  
@@ -1061,7 +1062,12 @@ void BRDF::setKr(float r,float g, float b){
       this->krg = g;
       this->krb = b;
 }
- 
+float BRDF::get_kdr(){
+      return this->kdr;
+}
+void BRDF::printline(){
+      printf("BRDF-> kdr: %f, kdg: %f, kdb: %f, ksr: %f, ksg: %f, ksb: %f, kar: %f, kag: %f, kab: %f, krr: %f, krg: %f, krb: %f, p: %f\n"this->kdr, this->kdg, this->kdb, this->ksr, this->ksg, this->ksb, this->kar, this->kag, this->kab, this->krr, this->krg, this->krb, this->p);
+}
  
  
  
