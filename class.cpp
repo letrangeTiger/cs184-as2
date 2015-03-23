@@ -1607,9 +1607,8 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
  
 bool AggregatePrimitive::intersectP(Ray& ray){
     int i = 0;
-    for (it = primitives.begin() ; it < primitives.end(); it++, i++){
-      GeometricPrimitive *primitive;
-      primitive = primitives.at(i);
+    for (auto primitive : primitives){
+      
       if (primitive->shape->intersectP(ray)) {
         return true;
       }
