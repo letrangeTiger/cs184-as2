@@ -9,7 +9,7 @@
 #include <list>
 #include <vector>
 
-//using namespace std;
+using namespace std;
 
 //***********************//
 //	BASIC CLASSES
@@ -39,9 +39,9 @@ inline float sqr(float x) { return x*x; }
 class Vector {
        
 public:
-      float x;
-      float y;
-      float z;
+      float x=0.;
+      float y=0.;
+      float z=0.;
       Vector();
       Vector(float a, float b, float c);
       void vector();
@@ -66,9 +66,9 @@ public:
 };
 
 Vector::Vector() {
-      this->x = 0;
-      this->y = 0;
-      this->z = 0;
+      this->x = 0.;
+      this->y = 0.;
+      this->z = 0.;
 }
 Vector::Vector(float a, float b, float c){
       this->x = a;
@@ -77,9 +77,9 @@ Vector::Vector(float a, float b, float c){
 }
 
 void Vector::vector() {
-      this->x = 0;
-      this->y = 0;
-      this->z = 0;
+      this->x = 0.;
+      this->y = 0.;
+      this->z = 0.;
 }
 void Vector::vector(float a, float b, float c){
       this->x = a;
@@ -128,8 +128,8 @@ Vector Vector::scalardivide(float a){
 Vector Vector::normalize(){
       Vector result;
       result.vector();
-      if (x != 0 || y != 0 || z != 0) {
-            float temp = sqrt(sqrt(this->x)+sqrt(this->y)+sqrt(this->z));
+      if (x != 0.0f || y != 0.0f || z != 0.0f) {
+            float temp = sqrt(pow(this->x,2)+pow(this->y,2)+pow(this->z,2));
             result.set_x(this->x / temp);
             result.set_y(this->y / temp);
             result.set_z(this->z / temp);
@@ -178,7 +178,10 @@ void Vector::print(){              //for testing
       printf("x=%f, y=%f, z=%f", this->x, this->y, this->z);
 }
 float Vector::dot(Vector v0) {
-      return (this->x * v0.get_x()) + (this->y * v0.get_y()) + (this->z * v0.get_z());
+      float res;
+      res = (this->x * v0.get_x()) + (this->y * v0.get_y()) + (this->z * v0.get_z());
+      //std::cout << res;
+      return res;
 }
 
                         
@@ -398,7 +401,7 @@ Ray::Ray(){
 
 Ray::Ray(Point a, Vector b, float c, float d){
       this->pos = a;
-      this->dir = b;
+      this->dir = b.normalize();
       this->t_min = c;
       this->t_max = d;
 }
@@ -408,7 +411,7 @@ void Ray::ray(){
 void Ray::ray(Point a, Vector b, float c, float d){
 
       this->pos = a;
-      this->dir = b;
+      this->dir = b.normalize();
       this->t_min = c;
       this->t_max = d;
 }
@@ -1276,11 +1279,13 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
 
       if (this->type == 0){ //sphere
             if (find_discriminant(this->center, this->radius, ray.get_pos(), ray.get_dir()) < 0) {
+                  //cout << "fdd";
                   return false;
             }
             float myT;
             myT = find_t_sphere(this->center, this->radius, ray.get_pos(), ray.get_dir());
             if ((myT < ray.get_t_min()) || (myT > ray.get_t_max())) {
+                  //cout << "returning false at the find_t_sphere";
                   return false;
             }
 
@@ -1293,8 +1298,8 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             normal = intersection.PsubtractP(this->center).scalardivide(this->radius);
             myLocal.localGeo(intersection, normalizedVectorToNormal(normal));
             local = &myLocal;
-
-            //myLocal.printline();
+            myLocal.printline();
+            //cout << "returning true at sphere";
             return true;
       }
       else if (this->type == 1){ //triangle
@@ -1312,6 +1317,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
                   );
             myT = t_matrix.determinant()/A.determinant();
             if (myT < ray.get_t_min() || myT > ray.get_t_max()) {
+                  cout << "returning false for tri at alpha";
                   return false;
             }
 
@@ -1324,6 +1330,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             myGamma = gamma_matrix.determinant()/A.determinant();
 
             if (myGamma < 0 || myGamma > 1){
+                  cout << "returning false for tri at gamma";
                   return false;
             }
 
@@ -1336,6 +1343,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             myBeta = beta_matrix.determinant()/A.determinant();
 
             if (myBeta < 0 || myBeta > (1-myGamma)){
+                  cout << "returning false for tri at beta";
                   return false;
             }
 
@@ -1361,11 +1369,13 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
 
             //printf("%f\n", myT);
             //myLocal.printline();
-            local = &myLocal;
+            *local = myLocal;
             //local->printline();
+            cout << "returning true at tri";
             return true;
       }
       else { //shape has not been set up
+            cout << "returning false due to non-implemented shape";
             return false;
       }
 }
@@ -1519,6 +1529,7 @@ bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
       Ray oray = worldToObj*ray;
       LocalGeo olocal;                                 
       if (!shape->intersect(oray, thit, &olocal))  return false;
+      std::cout << "intersected!!!";
       in->primitive = this;
       in->localGeo = objToWorld*olocal;
       return true;                               
@@ -1608,9 +1619,9 @@ public:
 class Color {
 
 public:
-      float r = 0;
-      float g = 0;
-      float b = 0;
+      float r;
+      float g;
+      float b;
 	Color();
 	Color(float r, float g, float b);
 	void color();
@@ -1674,7 +1685,6 @@ void Color::mulColorbyScalar(float scalar){
 	this->g = scalar*(this->g);
 	this->b = scalar*(this->b);
 }
-
  
 void Color::divColorbyScalar(float scalar){
 	this->r = (this->r)/scalar;

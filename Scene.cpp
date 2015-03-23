@@ -64,14 +64,22 @@ void Scene::render() {
 	Film film = Film(this->width,this->height);
 	Sampler sampler = Sampler((float)this->width,(float)this->height);
 	Sample sample = Sample(); 
-	Camera camera = Camera(eye,ll,lr,ul,ur);
+	Camera camera = Camera(eye,ll,lr,ul,ur,(float)this->width,(float)this->height);
+	//ll.printline();
+	//lr.printline();
+	//ul.printline();
+	//ur.printline();
 	RayTracer raytracer = RayTracer(max_depth, eye, aggreprim, lights);
 	while (sampler.generateSample(&sample)){
 		//cout << "after while loop"<< "\n";
+
 		Ray camray = Ray();
+
 		Color color = Color(1,0,0);
 		camera.generateRay(sample, &camray);
+		//camray.printline();
 		raytracer.trace(camray, 0, &color);
+		//cout <<color.get_r();
 		film.commit(sample, color);
 	}
 	cout << "outputing image"<< "\n";
