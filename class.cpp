@@ -723,16 +723,16 @@ Ray multiplicationR(Matrix m, Ray ray){
       return Ray(p, r, 0, 0);
 }
 LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
-      Vector v = localGeo.normal;
+      Normal v = localGeo.normal;
       Matrix minv;
       Matrix minvt;
       minv = m.inverse();
       minvt = minv.transpose();
 
-      float x = minvt.pos[0][0] * v.x + minvt.pos[1][0] * v.y + minvt.pos[2][0] * v.z;
-      float y = minvt.pos[0][1] * v.x + minvt.pos[1][1] * v.y + minvt.pos[2][1] * v.z;
-      float z = minvt.pos[0][2] * v.x + minvt.pos[1][2] * v.y + minvt.pos[2][2] * v.z;
-      v = Vector(x, y, z).normalize();
+      float x = minvt.pos[0][0] * v.get_x() + minvt.pos[1][0] * v.get_y() + minvt.pos[2][0] * v.get_z();
+      float y = minvt.pos[0][1] * v.get_x() + minvt.pos[1][1] * v.get_y() + minvt.pos[2][1] * v.get_z();
+      float z = minvt.pos[0][2] * v.get_x() + minvt.pos[1][2] * v.get_y() + minvt.pos[2][2] * v.get_z();
+      v.normal(x, y, z);
 
       return LocalGeo(multiplicationP(m, localGeo.pos), v);
 }
