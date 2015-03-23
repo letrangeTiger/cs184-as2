@@ -1560,7 +1560,9 @@ bool GeometricPrimitive::intersectP(Ray& ray) {
                                                 
 }
 void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
-      brdf = &this->brdf;
+      cout << "successfully called";
+      brdf = this->brdf;
+      cout << "getBRDF completed";
 }
 
 /************AggregatePrimitive********************/         

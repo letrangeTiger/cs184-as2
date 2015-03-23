@@ -45,6 +45,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
 
       //find BRDF at intersection point
       in.primitive->getBRDF(in.localGeo, &brdf);
+
       //in.localGeo.printline();   
       
 
@@ -63,7 +64,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             Vector l = currentray.get_dir().normalize();
             //l.printline();
             float NdotL = n.dot(l);
-            printf("%f", NdotL);
+            //printf("%f", NdotL);
             Vector r = l.reverse().add(n.scalarmultiply(2*NdotL));
 
             r = r.normalize();
