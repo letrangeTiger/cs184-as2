@@ -88,8 +88,8 @@ void Scene::render() {
 
 int main(int argc, char *argv[]) {
 
-	unsigned w = 500;
-	unsigned h = 500;
+	unsigned w = 1000;
+	unsigned h = 1000;
 	int maxdepth = 5;
 	Scene scene = Scene(w,h,maxdepth);
 
@@ -216,9 +216,9 @@ int main(int argc, char *argv[]) {
 		            istringstream(s) >> b;
 		            s = tokens[3];
 		            istringstream(s) >> c;
-      				Shape* triangle;
-      				triangle->makeTriangle(points[a-1],points[b-1],points[c-1]);
-      				GeometricPrimitive geoprim = GeometricPrimitive(triangle, Transformation(trans_mat), brdf);
+      				Shape triangle;
+      				triangle.makeTriangle(points[a-1],points[b-1],points[c-1]);
+      				GeometricPrimitive geoprim = GeometricPrimitive(&triangle, Transformation(trans_mat), brdf);
       				scene.aggreprim.addPrimitive(&geoprim);
       				//TODO: 3 items
       					// Shape triangle;
