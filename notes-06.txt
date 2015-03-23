@@ -1,0 +1,21 @@
+image: image-06
+
+Command line used to produce image:
+	cam 0 0 13 -1 -1 10 1 -1 10 -1 1 10 1 1 10
+	lta 0.3 0.3 0.3
+	ltd 1 1 -0.2 1 1 1
+	ltp 2 -2 13 1 1 1 0
+
+	xfr 45 0 0
+	xfs 1 1 2
+	xft 1 2 3
+
+	mat 0.4 0.5 0.9 0.1 0.9 0.75 0.9 0.1 0.7 64 0 0 0 
+	obj icosahedron.obj
+
+How long it took to run: //TODO
+
+Features demonstrated by the image:
+	rendering polygons in an OBJ file and then applying transformations
+
+OBJ FILE SOURCE: http://people.sc.fsu.edu/~jburkardt/data/obj/icosahedron.obj
