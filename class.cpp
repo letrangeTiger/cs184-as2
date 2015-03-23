@@ -198,6 +198,9 @@ public:
       void reset(float x, float y, float z);
       Normal add(Vector addee);
       Normal subtract(Vector subtractee);
+      float get_x();
+      float get_y();
+      float get_z();
       void printline();
       void print();
 };
@@ -271,6 +274,15 @@ Normal Normal::subtract(Vector subtractee){
       tempz = this->z - subtractee.get_z();
       temp.normal(tempx, tempy, tempz);
       return temp;
+}
+float Normal::get_x(){
+      return this->x;
+}
+float Normal::get_y(){
+      return this->y;
+}
+float Normal::get_z(){
+      return this->z;
 }
 void Normal::printline(){          //for testing
       printf("Normal: x=%f, y=%f, z=%f\n", this->x, this->y, this->z);
