@@ -732,9 +732,10 @@ LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
       float x = minvt.pos[0][0] * v.get_x() + minvt.pos[1][0] * v.get_y() + minvt.pos[2][0] * v.get_z();
       float y = minvt.pos[0][1] * v.get_x() + minvt.pos[1][1] * v.get_y() + minvt.pos[2][1] * v.get_z();
       float z = minvt.pos[0][2] * v.get_x() + minvt.pos[1][2] * v.get_y() + minvt.pos[2][2] * v.get_z();
+
       v.normal(x, y, z);
 
-      return LocalGeo(multiplicationP(m, localGeo.pos), v);
+      return LocalGeo(multiplicationP(m, localGeo.pos), multiplicationV(minvt, localGeo.normal));
 }
 Matrix Matrix::identity(){
       Matrix result;
@@ -1864,9 +1865,10 @@ int main(int argc, char *argv[]) {
       //test3.print();
 
       Matrix test5;
-      test5.matrix(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+      test5.matrix(3.2,2,3,4,5,6,7,8,9,5.7,10,12,13,14,15,1);
       LocalGeo test6;
       LocalGeo test7 = LocalGeo(Point(4,5,6), Normal(1,1,1));
+      test7.printline();
 
  
       test6 = multiplicationL(test5, test7);
