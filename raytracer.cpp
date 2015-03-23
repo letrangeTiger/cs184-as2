@@ -58,12 +58,9 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         lights.at(i).generateLightRay(in.localGeo, currentray, lcolor);
         if (!primitives.intersectP(*currentray)) {
             Vector n = in.localGeo.normal;
+            n.printline();
             Vector l = currentray->get_dir().normalize(); 
             float NdotL = n.dot(l);
-            //cout << "printing n...\n";
-            //n.printline();
-            //cout << "printing l...\n";
-            //l.printline();
             Vector r = l.reverse().add(n.scalarmultiply(2*NdotL));
             r = r.normalize();
             Vector v = (eye.PsubtractP(in.localGeo.get_pos())).normalize(); 

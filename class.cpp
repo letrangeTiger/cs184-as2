@@ -1278,6 +1278,10 @@ bool isNormalCorrect(Vector normal0, Vector normal1, Point intersection, Point p
 bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
 
       if (this->type == 0){ //sphere
+            // this->center.printline();
+            // printf("%f\n", this->radius);
+            // ray.get_pos().printline();
+            // ray.get_dir().printline();
             if (find_discriminant(this->center, this->radius, ray.get_pos(), ray.get_dir()) < 0) {
                   //cout << "fdd";
                   return false;
@@ -1288,6 +1292,9 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
                   //cout << "returning false at the find_t_sphere";
                   return false;
             }
+
+            //ray.printline();
+            //local->printline();
 
             Point intersection;
             Vector normal;
@@ -1540,6 +1547,7 @@ bool GeometricPrimitive::intersectP(Ray& ray) {
                                                 
 }
 void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
+
       brdf = &this->brdf;
 }
 
@@ -1807,5 +1815,138 @@ int main(int argc, char *argv[]) {
       test3 = scaling(2,3,4);
       test3.print();
       }*/
+
+
+//****************************************************
+// TESTING SHAPE
+//****************************************************
+// int main(int argc, char *argv[]) {
+//       bool intersect_a, intersect_b, intersect_c, intersect_d, intersect_e;
+
+//       //test a: triangle-ray intersection
+//       printf("test a: triangle-ray intersection\n");
+
+//       Point point0_a, point1_a, point2_a, ray_point_a;
+//       Vector ray_dir_a, temp_ray_dir_a;
+//       Shape triangle_a;
+//       Ray ray_a;
+//       float thit_a = 0;
+//       LocalGeo localgeo_a = LocalGeo();
+
+//       point0_a.point(0, 0, 0);
+//       point1_a.point(0, 3, 0);
+//       point2_a.point(3, 0, 0);
+
+
+//       ray_point_a.point(1, 1, 3);
+//       temp_ray_dir_a.vector(0, 0, -1);
+//       ray_dir_a = temp_ray_dir_a.normalize();
+
+//       ray_a.ray(ray_point_a, ray_dir_a, 0, 10000);
+
+//       triangle_a.makeTriangle(point0_a, point1_a, point2_a);
+
+//       intersect_a = triangle_a.intersect(ray_a, &thit_a, &localgeo_a);
+      
+//       localgeo_a.printline();
+//       printf("%d\n", intersect_a);
+
+      
+
+//       //test b: sphere-ray intersection
+//       printf("\n");
+//       printf("test b: sphere-ray intersection\n");
+
+//       Point center_b, ray_point_b;
+//       float radius_b;
+//       Vector ray_dir_b, temp_ray_dir_b;
+//       Shape sphere_b;
+//       Ray ray_b;
+//       float thit_b;
+//       LocalGeo localgeo_b;
+
+//       center_b.point(0, 0, 0);
+//       radius_b = 5;
+
+//       ray_point_b.point(7, 2, 0);
+//       temp_ray_dir_b.vector(-1, -1, 0);
+
+//       temp_ray_dir_b.printline();
+
+//       ray_dir_b = temp_ray_dir_b.normalize();
+
+//       printf("ray_dir_b\n");
+//       ray_dir_b.printline();
+
+//       ray_b.ray(ray_point_b, ray_dir_b, 0, 10000);
+//       ray_b.printline();
+
+//       sphere_b.makeSphere(radius_b, center_b);
+
+//       intersect_b = sphere_b.intersect(ray_b, &thit_b, &localgeo_b);
+
+//       printf("%f\n", thit_b);
+
+//       localgeo_b.printline();
+//       printf("%d\n", intersect_b);
+      
+
+//       //test c: no intersection (triangle)
+//       printf("\n");
+//       printf("test c: no intersection (triangle)\n");
+
+//       Point point0_c, point1_c, point2_c, ray_point_c;
+//       Vector ray_dir_c, temp_ray_dir_c;
+//       Shape triangle_c;
+//       Ray ray_c;
+//       float thit_c;
+//       LocalGeo localgeo_c; 
+
+//       point0_c.point(2, 0, 0);
+//       point1_c.point(0, 0, 0);
+//       point2_c.point(0, 2, 0);
+
+//       ray_point_c.point(2, 2, 10);
+//       temp_ray_dir_c.vector(0, 0, -1);
+//       ray_dir_c = temp_ray_dir_c.normalize();
+
+//       ray_c.ray(ray_point_c, ray_dir_c, 0, 10000);
+
+//       triangle_c.makeTriangle(point0_c, point1_c, point2_c);
+
+//       intersect_c = triangle_c.intersect(ray_c, &thit_c, &localgeo_c);
+
+//       localgeo_c.printline();
+//       printf("%d\n", intersect_c);
+
+
+//       //test d: no intersection (sphere)
+//       printf("\n");
+//       printf("test d: no intersection (sphere)\n");
+
+//       Point center_d, ray_point_d;
+//       float radius_d;
+//       Vector ray_dir_d, temp_ray_dir_d;
+//       Shape sphere_d;
+//       Ray ray_d;
+//       float thit_d;
+//       LocalGeo localgeo_d;
+
+//       center_d.point(9, 9, 9);
+//       radius_d = 1;
+
+//       ray_point_d.point(11, 11, 0);
+//       temp_ray_dir_d.vector(1, 1, 0);
+//       ray_dir_d = temp_ray_dir_d.normalize();
+
+//       ray_d.ray(ray_point_d, ray_dir_d, 0, 10000);
+
+//       sphere_d.makeSphere(radius_d, center_d);
+
+//       intersect_d = sphere_d.intersect(ray_d, &thit_d, &localgeo_d);
+
+//       localgeo_d.printline();
+//       printf("%d\n", intersect_d);
+// }
 
 
