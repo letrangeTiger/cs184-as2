@@ -191,6 +191,7 @@ float Vector::dot(Vector v0) {
 //*********This is a child of Vector class, the results of operations of the Normal are automatically normalized****                       
 class Normal : public Vector {
 public:
+
       Normal();
       Normal(float a, float b, float c);
       void normal();
@@ -207,9 +208,9 @@ Normal::Normal(){
       this->z = 0;
 }
 Normal::Normal(float a, float b, float c){
-      if (x != 0 || y != 0 || z != 0) {
+      if (a != 0 || b != 0 || c != 0) {
             Vector notnormalized;
-            notnormalized.vector(x, y, z);
+            notnormalized.vector(a, b, c);
             this->x = notnormalized.normalize().get_x();
             this->y = notnormalized.normalize().get_y();
             this->z = notnormalized.normalize().get_z();
@@ -695,33 +696,33 @@ Vector multiplicationV(Matrix m, Vector v){
       return Vector(x, y, z);
 }
 Point multiplicationP(Matrix m, Point p){
-      float x = m.pos[0][0] * p.x + m.pos[0][1] * p.y + m.pos[0][2] * p.z + m.pos[0][3];
-      float y = m.pos[1][0] * p.x + m.pos[1][1] * p.y + m.pos[1][2] * p.z + m.pos[1][3];
-      float z = m.pos[2][0] * p.x + m.pos[2][1] * p.y + m.pos[2][2] * p.z + m.pos[2][3];
+      float x = m.pos[0][0] * p.x + m.pos[1][0] * p.y + m.pos[2][0] * p.z + m.pos[3][0];
+      float y = m.pos[0][1] * p.x + m.pos[1][1] * p.y + m.pos[2][1] * p.z + m.pos[3][1];
+      float z = m.pos[0][2] * p.x + m.pos[1][2] * p.y + m.pos[2][2] * p.z + m.pos[3][2];
       return Point(x, y, z);
 }
 Ray multiplicationR(Matrix m, Ray ray){
       Vector v = ray.get_dir();
       Point p = ray.get_pos();
-      float x = m.pos[0][0] * v.x + m.pos[0][1] * v.y + m.pos[0][2] * v.z;
-      float y = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z;
-      float z = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z;
+      float x = m.pos[0][0] * v.x + m.pos[1][0] * v.y + m.pos[2][0] * v.z;
+      float y = m.pos[0][1] * v.x + m.pos[1][1] * v.y + m.pos[2][1] * v.z;
+      float z = m.pos[0][2] * v.x + m.pos[1][2] * v.y + m.pos[2][2] * v.z;
       Vector r = Vector(x, y, z);
       return Ray(p, r, 0, 0);
 }
 LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
-      Vector v = localGeo.get_normal();
+      Vector v = localGeo.normal;
+      Matrix minv;
       Matrix minvt;
-      minvt = m.inverse();
-      float x = minvt.pos[0][0] * v.x + minvt.pos[0][1] * v.y + minvt.pos[0][2] * v.z;
-      float y = minvt.pos[1][0] * v.x + minvt.pos[1][1] * v.y + minvt.pos[1][2] * v.z;
-      float z = minvt.pos[2][0] * v.x + minvt.pos[2][1] * v.y + minvt.pos[2][2] * v.z;
-      v = Normal(x, y, z);
-      Point n;
-      n = localGeo.pos;
-      LocalGeo t;
-      t = LocalGeo(n, v);
-      return t;
+      minv = m.inverse();
+      minvt = minv.transpose();
+
+      float x = minvt.pos[0][0] * v.x + minvt.pos[1][0] * v.y + minvt.pos[2][0] * v.z;
+      float y = minvt.pos[0][1] * v.x + minvt.pos[1][1] * v.y + minvt.pos[2][1] * v.z;
+      float z = minvt.pos[0][2] * v.x + minvt.pos[1][2] * v.y + minvt.pos[2][2] * v.z;
+      v = Vector(x, y, z).normalize();
+
+      return LocalGeo(multiplicationP(m, localGeo.pos), v);
 }
 Matrix Matrix::identity(){
       Matrix result;
@@ -1303,9 +1304,12 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             *thit = myT;
             intersection = ray.get_pos().PaddvectorV(ray.get_dir().scalarmultiply(myT));
             normal = intersection.PsubtractP(this->center).scalardivide(this->radius);
+            //local->pos = intersection;
+            //local->normal = normalizedVectorToNormal(normal);
+            //local->printline();
             myLocal.localGeo(intersection, normalizedVectorToNormal(normal));
             local = &myLocal;
-            myLocal.printline();
+            //local->printline();
             //cout << "returning true at sphere";
             return true;
       }
@@ -1532,7 +1536,7 @@ GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float t
       this->shape = shape;
       this->brdf = brdf1;
 }
-bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
+/*bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
       Ray oray = worldToObj*ray;
       LocalGeo olocal;                                 
       if (!shape->intersect(oray, thit, &olocal))  return false;
@@ -1540,7 +1544,17 @@ bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
       in->primitive = this;
       in->localGeo = objToWorld*olocal;
       return true;                               
-}
+}*/
+bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
+      cout << "inside GeometricPrimitive";
+        Ray oray = this->worldToObj * ray;
+        LocalGeo olocal;
+        if (!shape->intersect(ray, thit, &olocal))  return false;
+        cout << "returning true!!!!!!!!!!!!!!!";
+        in->primitive = this;
+        in->localGeo = this->objToWorld*olocal;
+        return true;
+    }
 bool GeometricPrimitive::intersectP(Ray& ray) {
       Ray oray = worldToObj*ray;
       return shape->intersectP(oray); 
@@ -1583,24 +1597,46 @@ void AggregatePrimitive::addPrimitive(GeometricPrimitive* temp){
 }
  
  
-bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
+/*bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
     bool intersectobject = false;
     *thit = FLT_MAX;
     float newThit;
+    LocalGeo newlocalgeo;
     int i = 0;
     for (it = primitives.begin() ; it < primitives.end(); it++, i++){
         Intersection* newIn;
         GeometricPrimitive *primitive;
         primitive = primitives.at(i);
-        if(primitive->shape->intersect(ray, &newThit, &newIn->localGeo)){
-            intersectobject = true;/*
+        if(primitive->intersect(ray, &newThit, &newIn)){
+            intersectobject = true;
             if (newThit < *thit){
                 *thit = newThit;
-                in = newIn;
-            }*/
+                *in = Intersection(newlocalgeo, primitive);
+            }
         }
     }
     return intersectobject;
+}*/
+bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in)
+{
+    bool foundIntersect = false;
+    *thit = 88888888;
+    for (auto primitive : primitives)
+    {
+      cout << "inside forloop";
+        float newThit;
+        Intersection newIn;
+        if(primitive->intersect(ray, &newThit, &newIn))
+        { cout << "first if ";
+            foundIntersect = true;
+            if (newThit < *thit)
+            {
+                *thit = newThit;
+                *in = newIn;
+            }
+        }
+    }
+    return foundIntersect;
 }
  
 bool AggregatePrimitive::intersectP(Ray& ray){
@@ -1784,7 +1820,7 @@ void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
         lray->ray(local.pos, dirlight_dir, 0.0001, FLT_MAX);
       }
 }
-/*
+
 int main(int argc, char *argv[]) {
       //test a: triangle-ray intersection
       Matrix test1;
@@ -1813,8 +1849,17 @@ int main(int argc, char *argv[]) {
 
       Matrix test3;
       test3 = scaling(2,3,4);
-      test3.print();
-      }*/
+      //test3.print();
+
+      Matrix test5;
+      test5.matrix(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+      LocalGeo test6;
+      LocalGeo test7 = LocalGeo(Point(4,5,6), Normal(1,1,1));
+
+ 
+      test6 = multiplicationL(test5, test7);
+      test6.printline();
+      }
 
 
 //****************************************************
