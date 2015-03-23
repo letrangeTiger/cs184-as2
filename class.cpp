@@ -604,20 +604,20 @@ Matrix::Matrix(){
 }
 Matrix::Matrix(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float m, float n, float o, float p){
       this->pos[0][0] = a;
-      this->pos[1][0] = b;
-      this->pos[2][0] = c;
-      this->pos[3][0] = d;
-      this->pos[0][1] = e;
+      this->pos[0][1] = b;
+      this->pos[0][2] = c;
+      this->pos[0][3] = d;
+      this->pos[1][0] = e;
       this->pos[1][1] = f;
-      this->pos[2][1] = g;
-      this->pos[3][1] = h;
-      this->pos[0][2] = i;
-      this->pos[1][2] = j;
+      this->pos[1][2] = g;
+      this->pos[1][3] = h;
+      this->pos[2][0] = i;
+      this->pos[2][1] = j;
       this->pos[2][2] = k;
-      this->pos[3][2] = l;
-      this->pos[0][3] = m;
-      this->pos[1][3] = n;
-      this->pos[2][3] = o;
+      this->pos[2][3] = l;
+      this->pos[3][0] = m;
+      this->pos[3][1] = n;
+      this->pos[3][2] = o;
       this->pos[3][3] = p;
  
 }
@@ -626,20 +626,20 @@ void Matrix::matrix(){
 }
 void Matrix::matrix(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float m, float n, float o, float p){
       this->pos[0][0] = a;
-      this->pos[1][0] = b;
-      this->pos[2][0] = c;
-      this->pos[3][0] = d;
-      this->pos[0][1] = e;
+      this->pos[0][1] = b;
+      this->pos[0][2] = c;
+      this->pos[0][3] = d;
+      this->pos[1][0] = e;
       this->pos[1][1] = f;
-      this->pos[2][1] = g;
-      this->pos[3][1] = h;
-      this->pos[0][2] = i;
-      this->pos[1][2] = j;
+      this->pos[1][2] = g;
+      this->pos[1][3] = h;
+      this->pos[2][0] = i;
+      this->pos[2][1] = j;
       this->pos[2][2] = k;
-      this->pos[3][2] = l;
-      this->pos[0][3] = m;
-      this->pos[1][3] = n;
-      this->pos[2][3] = o;
+      this->pos[2][3] = l;
+      this->pos[3][0] = m;
+      this->pos[3][1] = n;
+      this->pos[3][2] = o;
       this->pos[3][3] = p;
  
 }
@@ -695,7 +695,7 @@ Matrix Matrix::multiplication(Matrix temp){
       Matrix result;
       for (int i = 0; i < 4; i = i + 1){
             for (int j = 0; j < 4; j = j + 1){
-                  result.pos[i][j] = this->pos[0][i]*temp.pos[j][0] + this->pos[1][i]*temp.pos[j][1] + this->pos[2][i]*temp.pos[j][2] + this->pos[3][i]*temp.pos[j][3];
+                  result.pos[i][j] = this->pos[i][0]*temp.pos[0][j] + this->pos[i][1]*temp.pos[1][j] + this->pos[i][2]*temp.pos[2][j] + this->pos[i][3]*temp.pos[3][j];
             }
       }
       return result;
@@ -708,17 +708,17 @@ Vector multiplicationV(Matrix m, Vector v){
       return Vector(x, y, z);
 }
 Point multiplicationP(Matrix m, Point p){
-      float x = m.pos[0][0] * p.x + m.pos[1][0] * p.y + m.pos[2][0] * p.z + m.pos[3][0];
-      float y = m.pos[0][1] * p.x + m.pos[1][1] * p.y + m.pos[2][1] * p.z + m.pos[3][1];
-      float z = m.pos[0][2] * p.x + m.pos[1][2] * p.y + m.pos[2][2] * p.z + m.pos[3][2];
+      float x = m.pos[0][0] * p.x + m.pos[0][1] * p.y + m.pos[0][2] * p.z + m.pos[0][3];
+      float y = m.pos[1][0] * p.x + m.pos[1][1] * p.y + m.pos[1][2] * p.z + m.pos[1][3];
+      float z = m.pos[2][0] * p.x + m.pos[2][1] * p.y + m.pos[2][2] * p.z + m.pos[2][3];
       return Point(x, y, z);
 }
 Ray multiplicationR(Matrix m, Ray ray){
       Vector v = ray.get_dir();
       Point p = ray.get_pos();
-      float x = m.pos[0][0] * v.x + m.pos[1][0] * v.y + m.pos[2][0] * v.z;
-      float y = m.pos[0][1] * v.x + m.pos[1][1] * v.y + m.pos[2][1] * v.z;
-      float z = m.pos[0][2] * v.x + m.pos[1][2] * v.y + m.pos[2][2] * v.z;
+      float x = m.pos[0][0] * v.x + m.pos[0][1] * v.y + m.pos[0][2] * v.z;
+      float y = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z;
+      float z = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z;
       Vector r = Vector(x, y, z);
       return Ray(p, r, 0, 0);
 }
@@ -729,9 +729,9 @@ LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
       minv = m.inverse();
       minvt = minv.transpose();
 
-      float x = minvt.pos[0][0] * v.get_x() + minvt.pos[1][0] * v.get_y() + minvt.pos[2][0] * v.get_z();
-      float y = minvt.pos[0][1] * v.get_x() + minvt.pos[1][1] * v.get_y() + minvt.pos[2][1] * v.get_z();
-      float z = minvt.pos[0][2] * v.get_x() + minvt.pos[1][2] * v.get_y() + minvt.pos[2][2] * v.get_z();
+      float x = minvt.pos[0][0] * v.get_x() + minvt.pos[0][1] * v.get_y() + minvt.pos[0][2] * v.get_z();
+      float y = minvt.pos[1][0] * v.get_x() + minvt.pos[1][1] * v.get_y() + minvt.pos[1][2] * v.get_z();
+      float z = minvt.pos[2][0] * v.get_x() + minvt.pos[2][1] * v.get_y() + minvt.pos[2][2] * v.get_z();
 
       v.normal(x, y, z);
 
@@ -933,7 +933,7 @@ void Matrix::print(){
  
       for (i = 0; i < 4; i++){
             for (j = 0; j < 4; j++){
-                  printf("%f\t", pos[j][i]); 
+                  printf("%f\t", pos[i][j]); 
             }
             printf("\n");
       }
@@ -1869,10 +1869,13 @@ int main(int argc, char *argv[]) {
       LocalGeo test6;
       LocalGeo test7 = LocalGeo(Point(4,5,6), Normal(1,1,1));
       test7.printline();
+      Vector test8 = Vector(2,3,4);
+      Vector test81 = multiplicationV(test5, test8);
+      test81.printline();
 
  
-      test6 = multiplicationL(test5, test7);
-      test6.printline();
+      //test6 = multiplicationL(test5, test7);
+      //test6.printline();
       }
 
 
