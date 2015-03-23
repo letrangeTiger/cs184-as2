@@ -71,6 +71,7 @@ void Scene::render() {
 	//ur.printline();
 	RayTracer raytracer = RayTracer(max_depth, eye, aggreprim, lights);
 	while (sampler.generateSample(&sample)){
+		//cout <<"inside generate sample loop";
 		//cout << "after while loop"<< "\n";
 
 		Ray camray = Ray();
@@ -79,6 +80,7 @@ void Scene::render() {
 		camera.generateRay(sample, &camray);
 		//camray.printline();
 		raytracer.trace(camray, 0, &color);
+		//cout <<"after raytracer looo";
 		//cout <<color.get_r();
 		film.commit(sample, color);
 	}

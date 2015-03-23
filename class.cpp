@@ -29,7 +29,6 @@ class AggregatePrimitive;
 class GeometricPrimitive;
 class Intersection;
 class Material;
-class Color;
 class Shape;
 class Light;
 
@@ -206,7 +205,7 @@ Normal::Normal(){
       this->y = 0;
       this->z = 0;
 }
-Normal::Normal(float a, float b, float c){
+Normal::Normal(float x, float y, float z){
       if (x != 0 || y != 0 || z != 0) {
             Vector notnormalized;
             notnormalized.vector(x, y, z);
@@ -689,15 +688,15 @@ Matrix Matrix::multiplication(Matrix temp){
 }
 Vector multiplicationV(Matrix m, Vector v){
       Vector result;
-      float x = m.pos[0][0] * v.x + m.pos[0][1] * v.y + m.pos[0][2] * v.z + m.pos[0][3];
-      float y = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z + m.pos[1][3];
-      float z = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z + m.pos[2][3];
+      float x = m.pos[0][0] * v.x + m.pos[0][1] * v.y + m.pos[0][2] * v.z;
+      float y = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z;
+      float z = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z;
       return Vector(x, y, z);
 }
 Point multiplicationP(Matrix m, Point p){
-      float x = m.pos[0][0] * p.x + m.pos[0][1] * p.y + m.pos[0][2] * p.z + m.pos[0][3];
-      float y = m.pos[1][0] * p.x + m.pos[1][1] * p.y + m.pos[1][2] * p.z + m.pos[1][3];
-      float z = m.pos[2][0] * p.x + m.pos[2][1] * p.y + m.pos[2][2] * p.z + m.pos[2][3];
+      float x = m.pos[0][0] * p.x + m.pos[0][1] * p.y + m.pos[0][2] * p.z;
+      float y = m.pos[1][0] * p.x + m.pos[1][1] * p.y + m.pos[1][2] * p.z;
+      float z = m.pos[2][0] * p.x + m.pos[2][1] * p.y + m.pos[2][2] * p.z;
       return Point(x, y, z);
 }
 Ray multiplicationR(Matrix m, Ray ray){
@@ -707,10 +706,11 @@ Ray multiplicationR(Matrix m, Ray ray){
       float y = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z;
       float z = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z;
       Vector r = Vector(x, y, z);
-      return Ray(p, r, 0, 0);
+      return Ray(p, r, 0, 1000000);
 }
 LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
-      Vector v = localGeo.get_normal();
+      Normal v = localGeo.get_normal();
+      Matrix minv;
       Matrix minvt;
 
       minv = m.inverse();
@@ -722,7 +722,7 @@ LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
 
       v.normal(x, y, z);
 
-      return LocalGeo(multiplicationP(m, localGeo.pos), multiplicationV(minvt, localGeo.normal));
+      return LocalGeo(multiplicationP(m, localGeo.pos), v);
 }
 Matrix Matrix::identity(){
       Matrix result;
@@ -1385,6 +1385,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
       Same as intersect, but just return whether there is any intersection or not
 */
 bool Shape::intersectP(Ray& ray){
+      //cout << "dfasdfdsfdsfdsfsdfdsfsdfdsdfdsdfsdfdsfdfdsdsfsdfsdfsdfsddsfdsfd";
       bool isIntersect = false;
       Point* intersection;
       Normal* normal;
@@ -1562,7 +1563,7 @@ class AggregatePrimitive {
  
 public:
     std::vector<GeometricPrimitive*> primitives;
-    std::vector<GeometricPrimitive*>::iterator it;
+   // std::vector<GeometricPrimitive*>::iterator it;
     
  
     AggregatePrimitive();
@@ -1606,8 +1607,12 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
 }
  
 bool AggregatePrimitive::intersectP(Ray& ray){
+      //cout << "in aggprim";
+
+
     int i = 0;
     for (auto primitive : primitives){
+      //cout << "entered loop";
       
       if (primitive->shape->intersectP(ray)) {
         return true;
@@ -1791,7 +1796,12 @@ void Light::print(){
       cout << "has a x,y,z values of :"<<this->x << this->y << this->z<<"\n";
       cout << "color is :"<< this->color.get_r() << this->color.get_g()  << this->color.get_b();
 }
+
+
+
+
 /*
+
 int main(int argc, char *argv[]) {
       //test a: triangle-ray intersection
       Matrix test1;
@@ -1826,17 +1836,17 @@ int main(int argc, char *argv[]) {
       Matrix test5;
       test5.matrix(3.2,2,3,4,5,6,7,8,9,5.7,10,12,13,14,15,1);
       LocalGeo test6;
-      LocalGeo test7 = LocalGeo(Point(4,5,6), Normal(1,1,1));
-      test7.printline();
+      LocalGeo test7 = LocalGeo(Point(4,5,6), Normal(0.8,1,6));
+      //test7.printline();
       Vector test8 = Vector(2,3,4);
       Vector test81 = multiplicationV(test5, test8);
       test81.printline();
 
  
-      //test6 = multiplicationL(test5, test7);
-      //test6.printline();
+      test6 = multiplicationL(test5, test7);
+      test6.printline();
       }
-
+*/
 
 //****************************************************
 // TESTING SHAPE
@@ -1968,10 +1978,8 @@ int main(int argc, char *argv[]) {
 
 //       localgeo_d.printline();
 //       printf("%d\n", intersect_d);
-// }
-=======
-      test3.print();
-      }*/
+
+
 
 
 
