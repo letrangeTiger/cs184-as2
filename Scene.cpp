@@ -216,9 +216,9 @@ int main(int argc, char *argv[]) {
 		            istringstream(s) >> b;
 		            s = tokens[3];
 		            istringstream(s) >> c;
-      				Shape* triangle;
-      				triangle->makeTriangle(points[a-1],points[b-1],points[c-1]);
-      				GeometricPrimitive geoprim = GeometricPrimitive(triangle, Transformation(trans_mat), brdf);
+      				Shape triangle;
+      				triangle.makeTriangle(points[a-1],points[b-1],points[c-1]);
+      				GeometricPrimitive geoprim = GeometricPrimitive(&triangle, Transformation(trans_mat), brdf);
       				scene.aggreprim.addPrimitive(&geoprim);
       				//TODO: 3 items
       					// Shape triangle;
