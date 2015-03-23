@@ -44,7 +44,8 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
       } else {  
 
       //find BRDF at intersection point
-      //inn.primitive->getBRDF(inn.localGeo, brdf);
+      in.primitive->getBRDF(in.localGeo, &brdf);
+      float kdr = brdf->kdr;
       //in.localGeo.printline();   
       
 
@@ -64,7 +65,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             Vector l = currentray.get_dir().normalize();
             //l.printline();
             float NdotL = n.dot(l);
-            printf("%f", NdotL);
+            //printf("%f", NdotL);
             Vector r = l.reverse().add(n.scalarmultiply(2*NdotL));
 
             r = r.normalize();
@@ -78,12 +79,12 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             //printf("%f", fmx);
 
             
-            float test = brdf->kdr;//*lcolor.get_r()*fmx;
-            Color diffuse_comp = Color(brdf->kdr * lcolor.get_r()*fmx, brdf->kdg*lcolor.get_g()*fmx, brdf->kdb*lcolor.get_b()*fmx);
+            //float test = brdf->kdr;//*lcolor.get_r()*fmx;
+           // Color diffuse_comp = Color(brdf->kdr * lcolor.get_r()*fmx, brdf->kdg*lcolor.get_g()*fmx, brdf->kdb*lcolor.get_b()*fmx);
             
-            float RdotV = r.dot(v);
-            float rdv = fmax(RdotV,0.0f);
-            Color spec_comp = Color(brdf->ksr*lcolor.get_r()*rdv, brdf->ksg*lcolor.get_g()*rdv, brdf->ksb*lcolor.get_b()*rdv);
+           // float RdotV = r.dot(v);
+            //float rdv = fmax(RdotV,0.0f);
+            //Color spec_comp = Color(brdf->ksr*lcolor.get_r()*rdv, brdf->ksg*lcolor.get_g()*rdv, brdf->ksb*lcolor.get_b()*rdv);
 
             //Color ambient_comp = Color(brdf->kar*lcolor.get_r(), brdf->kag*lcolor.get_g(), brdf->kab*lcolor.get_b());
 
