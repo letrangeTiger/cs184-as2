@@ -69,7 +69,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             Vector v = (eye.PsubtractP(in.localGeo.get_pos())).normalize(); 
             float fmx = fmax(NdotL, 0.0f);
             //cout << fmx << "\n";
-            //float test = brdf->kdr*lcolor.get_r()*fmx;
+
             Color diffuse_comp = Color(brdf.kdr * lcolor.get_r()*fmx, brdf.kdg*lcolor.get_g()*fmx, brdf.kdb*lcolor.get_b()*fmx);
             //diffuse_comp.print();
             float RdotV = r.dot(v);
@@ -82,11 +82,18 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             *color = *color + diffuse_comp + spec_comp + ambient_comp;
 
             //color->print();
+
+            // printf("%f\n", brdf.kar);
+            // printf("%f\n", brdf.kag);
+            // printf("%f\n", brdf.kab);
+
             
             //cout << "this has run";
         }else{
             cout << "else";
-            *color = *color + Color(brdf.kar*lcolor.get_r(), brdf.kag*lcolor.get_g(), brdf.kab*lcolor.get_b());
+
+            *color = *color + Color(brdf.kar*amblight.color.get_r(), brdf.kag*amblight.color.get_g(), brdf.kab*amblight.color.get_b());
+
         }
     }}
       if(brdf.krr > 0 || brdf.krg > 0 || brdf.krb > 0){

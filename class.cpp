@@ -717,8 +717,16 @@ LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
       float y = minvt.pos[1][0] * v.x + minvt.pos[1][1] * v.y + minvt.pos[1][2] * v.z;
       float z = minvt.pos[2][0] * v.x + minvt.pos[2][1] * v.y + minvt.pos[2][2] * v.z;
       v = Normal(x, y, z);
+
+      Point p;
+      p = localGeo.pos;
+      float a = m.pos[0][0] * p.x + m.pos[0][1] * p.y + m.pos[0][2] * p.z;
+      float b = m.pos[1][0] * p.x + m.pos[1][1] * p.y + m.pos[1][2] * p.z;
+      float c = m.pos[2][0] * p.x + m.pos[2][1] * p.y + m.pos[2][2] * p.z;
       Point n;
+      n = Point(a,b,c);
       n = localGeo.pos;
+      
       LocalGeo t;
       t = LocalGeo(n, v);
       return t;
@@ -1541,11 +1549,11 @@ bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
             if (newThit < *thit){
             result = true;
             *thit = newThit;
-            *in = Intersection(olocal, this);
-            //*in = Intersection(objToWorld*olocal, this);
-           // olocal.printline();
-            //LocalGeo temp = objToWorld*olocal;
-            //temp.printline();
+            //*in = Intersection(olocal, this);
+            *in = Intersection(multiplicationL(objToWorld.m, olocal), this);
+           //olocal.printline();
+            LocalGeo temp = multiplicationL(objToWorld.m, olocal);
+            temp.printline();
             }            
       }
       return result;                               
@@ -1677,15 +1685,50 @@ void Color::color(float r, float g, float b){
 }
  
 void Color::addColors(Color addeeColor){
-	this->r += addeeColor.get_r();
-	this->g += addeeColor.get_g();
-	this->b += addeeColor.get_b();
+      if (addeeColor.get_r() + this->r > 1.0){
+            this->r = 1.0;
+      }
+      else {
+            this->r = addeeColor.get_r() + this->r;
+      }
+
+      if (addeeColor.get_g() + this->g > 1.0){
+            this->g = 1.0;
+      }
+      else {
+            this->g = addeeColor.get_g() + this->g;
+      }
+
+      if (addeeColor.get_b() + this->b > 1.0){
+            this->b = 1.0;
+      }
+      else {
+            this->b = addeeColor.get_b() + this->b;
+      }
 }
 Color Color::operator+(Color input){
       Color result;
-      result.r = this->get_r() + input.get_r();
-      result.g = this->get_g() + input.get_g();
-      result.b = this->get_b() + input.get_b();
+
+      if (input.get_r() + this->get_r() > 1.0){
+            result.set_r(1.0);
+      }
+      else {
+            result.set_r(input.get_r() + this->get_r());
+      }
+
+      if (input.get_g() + this->get_g() > 1.0){
+            result.set_g(1.0);
+      }
+      else {
+            result.set_g(input.get_g() + this->get_g());
+      }
+
+      if (input.get_b() + this->get_b() > 1.0){
+            result.set_b(1.0);
+      }
+      else {
+            result.set_b(input.get_b() + this->get_b());
+      }
       return result;
 }
 void Color::subColors(Color subtracteeColor){
@@ -1696,9 +1739,26 @@ void Color::subColors(Color subtracteeColor){
 }
  
 void Color::mulColorbyScalar(float scalar){
-	this->r = scalar*(this->r);
-	this->g = scalar*(this->g);
-	this->b = scalar*(this->b);
+	if (scalar*(this->r) > 1.0){
+            this->r = 1.0;
+      }
+      else {
+            this->r = scalar*(this->r);
+      }
+
+	if (scalar*(this->g) > 1.0){
+            this->g = 1.0;
+      }
+      else {
+            this->g = scalar*(this->g);
+      }
+
+	if (scalar*(this->b) > 1.0){
+            this->b = 1.0;
+      }
+      else {
+            this->b = scalar*(this->b);
+      }
 }
  
 void Color::divColorbyScalar(float scalar){
