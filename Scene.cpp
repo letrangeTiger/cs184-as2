@@ -71,17 +71,15 @@ void Scene::render() {
 	//ur.printline();
 	RayTracer raytracer = RayTracer(max_depth, eye, aggreprim, lights);
 	while (sampler.generateSample(&sample)){
-		//cout <<"inside generate sample loop";
 		//cout << "after while loop"<< "\n";
 
 		Ray camray = Ray();
 
-		Color color = Color(1,0,0);
+		Color color;
 		camera.generateRay(sample, &camray);
 		//camray.printline();
 		raytracer.trace(camray, 0, &color);
-		//cout <<"after raytracer looo";
-		//cout <<color.get_r();
+		//cout <<color.get_r()<<color.get_g()<<color.get_b();
 		film.commit(sample, color);
 	}
 	cout << "outputing image"<< "\n";
@@ -90,8 +88,8 @@ void Scene::render() {
 
 int main(int argc, char *argv[]) {
 
-	unsigned w = 100;
-	unsigned h = 100;
+	unsigned w = 500;
+	unsigned h = 500;
 	int maxdepth = 5;
 	Scene scene = Scene(w,h,maxdepth);
 

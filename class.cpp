@@ -29,6 +29,7 @@ class AggregatePrimitive;
 class GeometricPrimitive;
 class Intersection;
 class Material;
+class Color;
 class Shape;
 class Light;
 
@@ -590,20 +591,20 @@ Matrix::Matrix(){
 }
 Matrix::Matrix(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float m, float n, float o, float p){
       this->pos[0][0] = a;
-      this->pos[0][1] = b;
-      this->pos[0][2] = c;
-      this->pos[0][3] = d;
-      this->pos[1][0] = e;
+      this->pos[1][0] = b;
+      this->pos[2][0] = c;
+      this->pos[3][0] = d;
+      this->pos[0][1] = e;
       this->pos[1][1] = f;
-      this->pos[1][2] = g;
-      this->pos[1][3] = h;
-      this->pos[2][0] = i;
-      this->pos[2][1] = j;
+      this->pos[2][1] = g;
+      this->pos[3][1] = h;
+      this->pos[0][2] = i;
+      this->pos[1][2] = j;
       this->pos[2][2] = k;
-      this->pos[2][3] = l;
-      this->pos[3][0] = m;
-      this->pos[3][1] = n;
-      this->pos[3][2] = o;
+      this->pos[3][2] = l;
+      this->pos[0][3] = m;
+      this->pos[1][3] = n;
+      this->pos[2][3] = o;
       this->pos[3][3] = p;
  
 }
@@ -612,20 +613,20 @@ void Matrix::matrix(){
 }
 void Matrix::matrix(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float m, float n, float o, float p){
       this->pos[0][0] = a;
-      this->pos[0][1] = b;
-      this->pos[0][2] = c;
-      this->pos[0][3] = d;
-      this->pos[1][0] = e;
+      this->pos[1][0] = b;
+      this->pos[2][0] = c;
+      this->pos[3][0] = d;
+      this->pos[0][1] = e;
       this->pos[1][1] = f;
-      this->pos[1][2] = g;
-      this->pos[1][3] = h;
-      this->pos[2][0] = i;
-      this->pos[2][1] = j;
+      this->pos[2][1] = g;
+      this->pos[3][1] = h;
+      this->pos[0][2] = i;
+      this->pos[1][2] = j;
       this->pos[2][2] = k;
-      this->pos[2][3] = l;
-      this->pos[3][0] = m;
-      this->pos[3][1] = n;
-      this->pos[3][2] = o;
+      this->pos[3][2] = l;
+      this->pos[0][3] = m;
+      this->pos[1][3] = n;
+      this->pos[2][3] = o;
       this->pos[3][3] = p;
  
 }
@@ -681,22 +682,22 @@ Matrix Matrix::multiplication(Matrix temp){
       Matrix result;
       for (int i = 0; i < 4; i = i + 1){
             for (int j = 0; j < 4; j = j + 1){
-                  result.pos[i][j] = this->pos[i][0]*temp.pos[0][j] + this->pos[i][1]*temp.pos[1][j] + this->pos[i][2]*temp.pos[2][j] + this->pos[i][3]*temp.pos[3][j];
+                  result.pos[i][j] = this->pos[0][i]*temp.pos[j][0] + this->pos[1][i]*temp.pos[j][1] + this->pos[2][i]*temp.pos[j][2] + this->pos[3][i]*temp.pos[j][3];
             }
       }
       return result;
 }
 Vector multiplicationV(Matrix m, Vector v){
       Vector result;
-      float x = m.pos[0][0] * v.x + m.pos[0][1] * v.y + m.pos[0][2] * v.z;
-      float y = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z;
-      float z = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z;
+      float x = m.pos[0][0] * v.x + m.pos[0][1] * v.y + m.pos[0][2] * v.z + m.pos[0][3];
+      float y = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z + m.pos[1][3];
+      float z = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z + m.pos[2][3];
       return Vector(x, y, z);
 }
 Point multiplicationP(Matrix m, Point p){
-      float x = m.pos[0][0] * p.x + m.pos[0][1] * p.y + m.pos[0][2] * p.z;
-      float y = m.pos[1][0] * p.x + m.pos[1][1] * p.y + m.pos[1][2] * p.z;
-      float z = m.pos[2][0] * p.x + m.pos[2][1] * p.y + m.pos[2][2] * p.z;
+      float x = m.pos[0][0] * p.x + m.pos[0][1] * p.y + m.pos[0][2] * p.z + m.pos[0][3];
+      float y = m.pos[1][0] * p.x + m.pos[1][1] * p.y + m.pos[1][2] * p.z + m.pos[1][3];
+      float z = m.pos[2][0] * p.x + m.pos[2][1] * p.y + m.pos[2][2] * p.z + m.pos[2][3];
       return Point(x, y, z);
 }
 Ray multiplicationR(Matrix m, Ray ray){
@@ -706,23 +707,21 @@ Ray multiplicationR(Matrix m, Ray ray){
       float y = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z;
       float z = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z;
       Vector r = Vector(x, y, z);
-      return Ray(p, r, 0, 1000000);
+      return Ray(p, r, 0, 0);
 }
 LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
-      Normal v = localGeo.get_normal();
-      Matrix minv;
+      Vector v = localGeo.get_normal();
       Matrix minvt;
-
-      minv = m.inverse();
-      minvt = minv.transpose();
-
-      float x = minvt.pos[0][0] * v.get_x() + minvt.pos[0][1] * v.get_y() + minvt.pos[0][2] * v.get_z();
-      float y = minvt.pos[1][0] * v.get_x() + minvt.pos[1][1] * v.get_y() + minvt.pos[1][2] * v.get_z();
-      float z = minvt.pos[2][0] * v.get_x() + minvt.pos[2][1] * v.get_y() + minvt.pos[2][2] * v.get_z();
-
-      v.normal(x, y, z);
-
-      return LocalGeo(multiplicationP(m, localGeo.pos), v);
+      minvt = m.inverse();
+      float x = minvt.pos[0][0] * v.x + minvt.pos[0][1] * v.y + minvt.pos[0][2] * v.z;
+      float y = minvt.pos[1][0] * v.x + minvt.pos[1][1] * v.y + minvt.pos[1][2] * v.z;
+      float z = minvt.pos[2][0] * v.x + minvt.pos[2][1] * v.y + minvt.pos[2][2] * v.z;
+      v = Normal(x, y, z);
+      Point n;
+      n = localGeo.pos;
+      LocalGeo t;
+      t = LocalGeo(n, v);
+      return t;
 }
 Matrix Matrix::identity(){
       Matrix result;
@@ -920,7 +919,7 @@ void Matrix::print(){
  
       for (i = 0; i < 4; i++){
             for (j = 0; j < 4; j++){
-                  printf("%f\t", pos[i][j]); 
+                  printf("%f\t", pos[j][i]); 
             }
             printf("\n");
       }
@@ -1005,8 +1004,8 @@ public:
       void setKd(float r,float g, float b);
       void setKs(float r,float g, float b, float p);
       void setP(float p);
-      float get_kdr();
       void printline();
+ 
  
  };
  
@@ -1062,12 +1061,10 @@ void BRDF::setKr(float r,float g, float b){
       this->krg = g;
       this->krb = b;
 }
-float BRDF::get_kdr(){
-      return this->kdr;
-}
 void BRDF::printline(){
-      printf("BRDF-> kdr: %f, kdg: %f, kdb: %f, ksr: %f, ksg: %f, ksb: %f, kar: %f, kag: %f, kab: %f, krr: %f, krg: %f, krb: %f, p: %f\n"this->kdr, this->kdg, this->kdb, this->ksr, this->ksg, this->ksb, this->kar, this->kag, this->kab, this->krr, this->krg, this->krb, this->p);
+      printf("BRDF-> kdr: %f, kdg: %f, kdb: %f, ksr: %f, ksg: %f, ksb: %f, kar: %f, kag: %f, kab: %f, krr: %f, krg: %f, krb: %f, p: %f\n", this->kdr, this->kdg, this->kdb, this->ksr, this->ksg, this->ksb, this->kar, this->kag, this->kab, this->krr, this->krg, this->krb, this->p);
 }
+ 
  
  
  
@@ -1391,7 +1388,6 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
       Same as intersect, but just return whether there is any intersection or not
 */
 bool Shape::intersectP(Ray& ray){
-      //cout << "dfasdfdsfdsfdsfsdfdsfsdfdsdfdsdfsdfdsfdfdsdsfsdfsdfsdfsddsfdsfd";
       bool isIntersect = false;
       Point* intersection;
       Normal* normal;
@@ -1560,10 +1556,9 @@ bool GeometricPrimitive::intersectP(Ray& ray) {
                                                 
 }
 void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
-      cout << "successfully called";
-      brdf = this->brdf;
-      cout << "getBRDF completed";
+      *brdf = this->brdf;
 }
+
 
 /************AggregatePrimitive********************/         
 
@@ -1571,7 +1566,7 @@ class AggregatePrimitive {
  
 public:
     std::vector<GeometricPrimitive*> primitives;
-   // std::vector<GeometricPrimitive*>::iterator it;
+    std::vector<GeometricPrimitive*>::iterator it;
     
  
     AggregatePrimitive();
@@ -1615,13 +1610,10 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
 }
  
 bool AggregatePrimitive::intersectP(Ray& ray){
-      //cout << "in aggprim";
-
-
     int i = 0;
-    for (auto primitive : primitives){
-      //cout << "entered loop";
-      
+    for (it = primitives.begin() ; it < primitives.end(); it++, i++){
+      GeometricPrimitive *primitive;
+      primitive = primitives.at(i);
       if (primitive->shape->intersectP(ray)) {
         return true;
       }
@@ -1659,6 +1651,7 @@ public:
 	void set_r(float r);
 	void set_g(float g);
       void set_b(float b);
+      void print();
  
 };
 Color::Color() {
@@ -1731,7 +1724,11 @@ void Color::set_g(float g){
 void Color::set_b(float b){
 	  this->b = b;
 }
-
+void Color::print(){
+      cout << "r component: "<<this->r<<"\n";
+      cout << "g component: "<<this->g<<"\n";
+      cout << "b component: "<<this->b<<"\n";
+}
 
 
 
@@ -1791,12 +1788,15 @@ void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
             // create point light ray
         Vector light_dir = Point(x,y,z).PsubtractP(local.pos);
         Ray r = Ray(local.pos, light_dir, 0.0001, FLT_MAX);
+
         //r.printline();
+        *lcolor = this->color;
         *lray = r;
       } else if (this->type==1){
         Vector dirlight_dir = Vector(x,y,z);
         Ray r = Ray(local.pos, dirlight_dir, 0.0001, FLT_MAX);
-        lray = &r;
+        *lcolor = this->color;
+        *lray = r;
       }
 }
 void Light::print(){
@@ -1804,12 +1804,7 @@ void Light::print(){
       cout << "has a x,y,z values of :"<<this->x << this->y << this->z<<"\n";
       cout << "color is :"<< this->color.get_r() << this->color.get_g()  << this->color.get_b();
 }
-
-
-
-
 /*
-
 int main(int argc, char *argv[]) {
       //test a: triangle-ray intersection
       Matrix test1;
@@ -1838,156 +1833,7 @@ int main(int argc, char *argv[]) {
 
       Matrix test3;
       test3 = scaling(2,3,4);
-
-      //test3.print();
-
-      Matrix test5;
-      test5.matrix(3.2,2,3,4,5,6,7,8,9,5.7,10,12,13,14,15,1);
-      LocalGeo test6;
-      LocalGeo test7 = LocalGeo(Point(4,5,6), Normal(0.8,1,6));
-      //test7.printline();
-      Vector test8 = Vector(2,3,4);
-      Vector test81 = multiplicationV(test5, test8);
-      test81.printline();
-
- 
-      test6 = multiplicationL(test5, test7);
-      test6.printline();
-      }
-*/
-
-//****************************************************
-// TESTING SHAPE
-//****************************************************
-// int main(int argc, char *argv[]) {
-//       bool intersect_a, intersect_b, intersect_c, intersect_d, intersect_e;
-
-//       //test a: triangle-ray intersection
-//       printf("test a: triangle-ray intersection\n");
-
-//       Point point0_a, point1_a, point2_a, ray_point_a;
-//       Vector ray_dir_a, temp_ray_dir_a;
-//       Shape triangle_a;
-//       Ray ray_a;
-//       float thit_a = 0;
-//       LocalGeo localgeo_a = LocalGeo();
-
-//       point0_a.point(0, 0, 0);
-//       point1_a.point(0, 3, 0);
-//       point2_a.point(3, 0, 0);
-
-
-//       ray_point_a.point(1, 1, 3);
-//       temp_ray_dir_a.vector(0, 0, -1);
-//       ray_dir_a = temp_ray_dir_a.normalize();
-
-//       ray_a.ray(ray_point_a, ray_dir_a, 0, 10000);
-
-//       triangle_a.makeTriangle(point0_a, point1_a, point2_a);
-
-//       intersect_a = triangle_a.intersect(ray_a, &thit_a, &localgeo_a);
-      
-//       localgeo_a.printline();
-//       printf("%d\n", intersect_a);
-
-      
-
-//       //test b: sphere-ray intersection
-//       printf("\n");
-//       printf("test b: sphere-ray intersection\n");
-
-//       Point center_b, ray_point_b;
-//       float radius_b;
-//       Vector ray_dir_b, temp_ray_dir_b;
-//       Shape sphere_b;
-//       Ray ray_b;
-//       float thit_b;
-//       LocalGeo localgeo_b;
-
-//       center_b.point(0, 0, 0);
-//       radius_b = 5;
-
-//       ray_point_b.point(7, 2, 0);
-//       temp_ray_dir_b.vector(-1, -1, 0);
-
-//       temp_ray_dir_b.printline();
-
-//       ray_dir_b = temp_ray_dir_b.normalize();
-
-//       printf("ray_dir_b\n");
-//       ray_dir_b.printline();
-
-//       ray_b.ray(ray_point_b, ray_dir_b, 0, 10000);
-//       ray_b.printline();
-
-//       sphere_b.makeSphere(radius_b, center_b);
-
-//       intersect_b = sphere_b.intersect(ray_b, &thit_b, &localgeo_b);
-
-//       printf("%f\n", thit_b);
-
-//       localgeo_b.printline();
-//       printf("%d\n", intersect_b);
-      
-
-//       //test c: no intersection (triangle)
-//       printf("\n");
-//       printf("test c: no intersection (triangle)\n");
-
-//       Point point0_c, point1_c, point2_c, ray_point_c;
-//       Vector ray_dir_c, temp_ray_dir_c;
-//       Shape triangle_c;
-//       Ray ray_c;
-//       float thit_c;
-//       LocalGeo localgeo_c; 
-
-//       point0_c.point(2, 0, 0);
-//       point1_c.point(0, 0, 0);
-//       point2_c.point(0, 2, 0);
-
-//       ray_point_c.point(2, 2, 10);
-//       temp_ray_dir_c.vector(0, 0, -1);
-//       ray_dir_c = temp_ray_dir_c.normalize();
-
-//       ray_c.ray(ray_point_c, ray_dir_c, 0, 10000);
-
-//       triangle_c.makeTriangle(point0_c, point1_c, point2_c);
-
-//       intersect_c = triangle_c.intersect(ray_c, &thit_c, &localgeo_c);
-
-//       localgeo_c.printline();
-//       printf("%d\n", intersect_c);
-
-
-//       //test d: no intersection (sphere)
-//       printf("\n");
-//       printf("test d: no intersection (sphere)\n");
-
-//       Point center_d, ray_point_d;
-//       float radius_d;
-//       Vector ray_dir_d, temp_ray_dir_d;
-//       Shape sphere_d;
-//       Ray ray_d;
-//       float thit_d;
-//       LocalGeo localgeo_d;
-
-//       center_d.point(9, 9, 9);
-//       radius_d = 1;
-
-//       ray_point_d.point(11, 11, 0);
-//       temp_ray_dir_d.vector(1, 1, 0);
-//       ray_dir_d = temp_ray_dir_d.normalize();
-
-//       ray_d.ray(ray_point_d, ray_dir_d, 0, 10000);
-
-//       sphere_d.makeSphere(radius_d, center_d);
-
-//       intersect_d = sphere_d.intersect(ray_d, &thit_d, &localgeo_d);
-
-//       localgeo_d.printline();
-//       printf("%d\n", intersect_d);
-
-
-
+      test3.print();
+      }*/
 
 
