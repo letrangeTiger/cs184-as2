@@ -1078,6 +1078,7 @@ public:
       Sample(float x, float y);
       float get_x();
       float get_y();
+      void printline();
 };
 Sample::Sample(){
       x = 0.0;
@@ -1092,6 +1093,9 @@ float Sample::get_x(){
 }
 float Sample::get_y(){
       return this->y;
+}
+void Sample::printline(){
+      printf("Sample-> x: %f, y: %f\n", this->x, this->y);
 }
 
 
