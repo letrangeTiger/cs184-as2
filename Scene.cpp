@@ -38,7 +38,7 @@ class Scene {
 
 Scene::Scene(){
 	this->width = 1000;
-	this->height = 500;
+	this->height = 1000;
 	this->max_depth = 5;
 
 }

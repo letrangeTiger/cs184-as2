@@ -13,11 +13,11 @@ public:
       AggregatePrimitive primitives;
       int maxrecursiondepth;
       Point eye;
-      
       Light amblight;
       RayTracer();
       RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, std::vector<Light> lights, Light amblight);
       void trace(Ray& ray, int depth, Color* color);
+      Ray createReflectRay(LocalGeo &local, Ray &ray);
 };
 RayTracer::RayTracer(){
 
@@ -113,5 +113,6 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         trace(reflectRay, depth+1, &temp);
         *color = *color + Color(brdf.krr*temp.get_r(), brdf.krg*temp.get_g(), brdf.krb*temp.get_b());
     }
-  
-}}
+}
+}
+
