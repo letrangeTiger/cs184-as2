@@ -1151,6 +1151,9 @@ class Shape {
       Point point2;
 
 public:
+      Shape();
+      Shape(float radius, Point center);
+      Shape(Point point0, Point point1, Point point2);
       void shape();
       void makeSphere(float radius, Point center);
       void makeTriangle(Point point0, Point point1, Point point2);
@@ -1171,6 +1174,20 @@ public:
 
       void printline();
 };
+Shape::Shape(){
+      this->type = 2;
+}
+Shape::Shape(float radius, Point center){
+      this->type = 0;
+      this->radius = radius;
+      this->center = center;
+}
+Shape::Shape(Point point0, Point point1, Point point2){
+      this->type = 1;
+      this->point0 = point0;
+      this->point1 = point1;
+      this->point2 = point2;
+}
 void Shape::shape(){
       this->type = 2;
 }
@@ -1549,9 +1566,12 @@ bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
       LocalGeo olocal;
       //cout << "going in";                                 
       if (this->shape->intersect(ray, &newThit, &olocal)){
+            result = true;
             //cout <<"buggg";
             if (newThit < *thit){
-            result = true;
+            printf("%f\n", newThit);
+
+            
             *thit = newThit;
             //*in = Intersection(olocal, this);
             *in = Intersection(multiplicationL(objToWorld.m, olocal), this);
@@ -1561,7 +1581,8 @@ bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
             }            
       }
       return result;                               
-}
+} 
+
 bool GeometricPrimitive::intersectP(Ray& ray) {
       Ray oray = worldToObj*ray;
       return shape->intersectP(oray); 
@@ -1597,11 +1618,11 @@ AggregatePrimitive::AggregatePrimitive(){
 }
  
 AggregatePrimitive::AggregatePrimitive(std::vector<GeometricPrimitive*> list){
-     primitives = list;
 }
 void AggregatePrimitive::addPrimitive(GeometricPrimitive* temp){
      printf("FUCK EVERYTHING");
      primitives.push_back(temp);
+
 }
  
  
@@ -1611,7 +1632,13 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
     Intersection newInter;
     //cout << "outsideeeeeeeeeeeeeeeeee";
     int i = 0;
-    for (auto primitive : primitives){
+    //printf("%lu\n", primitives.size()); 
+    primitives.at(0)->shape->printline();
+    primitives.at(1)->shape->printline();
+    primitives.at(2)->shape->printline();
+
+    for (auto *primitive : primitives){
+       //primitive->shape->printline();
         if(primitive->intersect(ray, &newThit, &newInter)){
 
            //cout << "inside auto primitive loop";

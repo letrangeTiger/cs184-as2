@@ -141,13 +141,14 @@ int main(int argc, char *argv[]) {
 			float cz = atof(argv[counter+3]);
 			float r = atof(argv[counter+4]);
 			counter = counter+5;
-			Shape sphere;
-			sphere.makeSphere(r, Point(cx,cy,cz));
+			Shape* sphere = new Shape(r, Point(cx, cy, cz));
 
-			GeometricPrimitive geoprim = GeometricPrimitive(&sphere,Transformation(trans_mat), brdf);
+			GeometricPrimitive* geoprim = new GeometricPrimitive(sphere,Transformation(trans_mat), brdf);
 			//geoprim.shape->printline();
 			//scene.geoprims.push_back(geoprim);
-			scene.aggreprim.addPrimitive(&geoprim);
+			scene.aggreprim.addPrimitive(geoprim);
+
+
 			printf("%lu\n", scene.aggreprim.primitives.size());
 	    } else if (arg=="tri"){
 	    	//cout << "tri";
@@ -164,6 +165,7 @@ int main(int argc, char *argv[]) {
 			Shape triangle;
 			triangle.makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));
 			GeometricPrimitive geoprim = GeometricPrimitive(&triangle,Transformation(trans_mat), brdf);
+            geoprim.shape->printline();
 			scene.aggreprim.addPrimitive(&geoprim);
 	    } else if (arg=="obj"){
 	    	/*
