@@ -723,7 +723,7 @@ LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
       float x = minvt.pos[0][0] * v.x + minvt.pos[0][1] * v.y + minvt.pos[0][2] * v.z;
       float y = minvt.pos[1][0] * v.x + minvt.pos[1][1] * v.y + minvt.pos[1][2] * v.z;
       float z = minvt.pos[2][0] * v.x + minvt.pos[2][1] * v.y + minvt.pos[2][2] * v.z;
-      k = Normal(x, y, z);
+      Normal k = Normal(x, y, z);
       Point n = multiplicationP(m, localGeo.pos);
       LocalGeo t = LocalGeo(n, k);
       return t;
