@@ -717,8 +717,16 @@ LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
       float y = minvt.pos[1][0] * v.x + minvt.pos[1][1] * v.y + minvt.pos[1][2] * v.z;
       float z = minvt.pos[2][0] * v.x + minvt.pos[2][1] * v.y + minvt.pos[2][2] * v.z;
       v = Normal(x, y, z);
+
+      Point p;
+      p = localGeo.pos;
+      float a = m.pos[0][0] * p.x + m.pos[0][1] * p.y + m.pos[0][2] * p.z;
+      float b = m.pos[1][0] * p.x + m.pos[1][1] * p.y + m.pos[1][2] * p.z;
+      float c = m.pos[2][0] * p.x + m.pos[2][1] * p.y + m.pos[2][2] * p.z;
       Point n;
+      n = Point(a,b,c);
       n = localGeo.pos;
+      
       LocalGeo t;
       t = LocalGeo(n, v);
       return t;
@@ -1325,7 +1333,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
                   );
             myT = t_matrix.determinant()/A.determinant();
             if (myT < ray.get_t_min() || myT > ray.get_t_max()) {
-                  cout << "returning false for tri at alpha";
+                  //cout << "returning false for tri at alpha";
                   return false;
             }
 
@@ -1338,7 +1346,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             myGamma = gamma_matrix.determinant()/A.determinant();
 
             if (myGamma < 0 || myGamma > 1){
-                  cout << "returning false for tri at gamma";
+                  //cout << "returning false for tri at gamma";
                   return false;
             }
 
@@ -1351,7 +1359,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             myBeta = beta_matrix.determinant()/A.determinant();
 
             if (myBeta < 0 || myBeta > (1-myGamma)){
-                  cout << "returning false for tri at beta";
+                  //cout << "returning false for tri at beta";
                   return false;
             }
 
@@ -1379,11 +1387,11 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             //myLocal.printline();
             *local = myLocal;
             //local->printline();
-            cout << "returning true at tri";
+            //cout << "returning true at tri";
             return true;
       }
       else { //shape has not been set up
-            cout << "returning false due to non-implemented shape";
+            //cout << "returning false due to non-implemented shape";
             return false;
       }
 }
@@ -1545,10 +1553,10 @@ bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
             if (newThit < *thit){
             result = true;
             *thit = newThit;
-            *in = Intersection(olocal, this);
-            //*in = Intersection(objToWorld*olocal, this);
-           // olocal.printline();
-            //LocalGeo temp = objToWorld*olocal;
+            //*in = Intersection(olocal, this);
+            *in = Intersection(multiplicationL(objToWorld.m, olocal), this);
+           //olocal.printline();
+            //LocalGeo temp = multiplicationL(objToWorld.m, olocal);
             //temp.printline();
             }            
       }
@@ -1570,7 +1578,7 @@ class AggregatePrimitive {
  
 public:
     std::vector<GeometricPrimitive*> primitives;
-    std::vector<GeometricPrimitive*>::iterator it;
+   // std::vector<GeometricPrimitive*>::iterator it;
     
  
     AggregatePrimitive();
@@ -1601,10 +1609,12 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
     bool intersectobject = false;
     float newThit;
     Intersection newInter;
+    //cout << "outsideeeeeeeeeeeeeeeeee";
     int i = 0;
     for (auto primitive : primitives){
         if(primitive->intersect(ray, &newThit, &newInter)){
-           // cout << "assign hereeee";
+
+           //cout << "inside auto primitive loop";
             *in = newInter;
             *thit = newThit;
             intersectobject = true;
@@ -1615,11 +1625,13 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
 }
  
 bool AggregatePrimitive::intersectP(Ray& ray){
-    int i = 0;
-    for (it = primitives.begin() ; it < primitives.end(); it++, i++){
-      GeometricPrimitive *primitive;
-      primitive = primitives.at(i);
+      //printf("%lu\n", primitives.size());
+
+    for (auto primitive : primitives){
+      primitive->shape->printline();
+
       if (primitive->shape->intersectP(ray)) {
+        primitive->shape->printline();
         return true;
       }
     }

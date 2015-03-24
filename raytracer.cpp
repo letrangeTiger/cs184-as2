@@ -42,7 +42,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
       //if does not intersect anything return black
       else if(!primitives.intersect(ray, &thit, &in)){
          *color = Color(0,0,0);
-      } else {  
+      }else {
 
       //find BRDF at intersection point
       in.primitive->getBRDF(in.localGeo, &brdf);
@@ -56,10 +56,14 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         light.generateLightRay(in.localGeo, &currentray, &lcolor);
         //currentray.get_dir().printline();
         //lcolor.print();
+        printf("%lu\n", primitives.primitives.size());
+        cout << "Fdsfasdfsdfasdfds";
         if (!primitives.intersectP(currentray)) {
+          //cout << "in raytracer loop";
             Vector n = in.localGeo.normal;
-            Vector l = currentray.get_dir().normalize();
+            Vector l =  currentray.get_dir().normalize();
             float NdotL = n.dot(l);
+            //NdotL = - NdotL;
             //cout <<NdotL<<"\n";
             Vector r = l.reverse().add(n.scalarmultiply(2*NdotL));
             r = r.normalize();
@@ -71,25 +75,30 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             Color diffuse_comp = Color(brdf.kdr * lcolor.get_r()*fmx, brdf.kdg*lcolor.get_g()*fmx, brdf.kdb*lcolor.get_b()*fmx);
             //diffuse_comp.print();
             float RdotV = r.dot(v);
+            //RdotV = - RdotV;
             float rdv = pow(fmax(RdotV,0.0f),brdf.p);
             Color spec_comp = Color(brdf.ksr*lcolor.get_r()*rdv, brdf.ksg*lcolor.get_g()*rdv, brdf.ksb*lcolor.get_b()*rdv);
+
+            Color ambient_comp = Color(brdf.kar*amblight.color.get_r(), brdf.kag*amblight.color.get_g(), brdf.kab*amblight.color.get_b());
+
+            *color = *color + diffuse_comp + spec_comp + ambient_comp;
+
+            //color->print();
 
             // printf("%f\n", brdf.kar);
             // printf("%f\n", brdf.kag);
             // printf("%f\n", brdf.kab);
 
-            Color ambient_comp = Color(brdf.kar*amblight.color.get_r(), brdf.kag*amblight.color.get_g(), brdf.kab*amblight.color.get_b());
-
-            *color = *color + diffuse_comp + spec_comp + ambient_comp;
-            //*color = *color + spec_comp;
             
             //cout << "this has run";
         }else{
-            cout << "else";
+            //cout << "else";
+
             *color = *color + Color(brdf.kar*amblight.color.get_r(), brdf.kag*amblight.color.get_g(), brdf.kab*amblight.color.get_b());
-        }
-    }}
-      /*if(brdf->krr > 0 || brdf->krg > 0 || brdf->krb > 0){
+
+        }}
+    }
+      if(brdf.krr > 0 || brdf.krg > 0 || brdf.krb > 0){
         
 
         Vector n = in.localGeo.normal;
@@ -101,7 +110,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         //Make a recursive call to trace the reflected ray
         Color temp = Color(0,0,0);
         trace(reflectRay, depth+1, &temp);
-        *color = *color + Color(brdf->krr*temp.get_r(), brdf->krg*temp.get_g(), brdf->krb*temp.get_b());
-    }*/
+        *color = *color + Color(brdf.krr*temp.get_r(), brdf.krg*temp.get_g(), brdf.krb*temp.get_b());
+    }
   
 }

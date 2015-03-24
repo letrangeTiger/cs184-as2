@@ -82,7 +82,7 @@ void Scene::render() {
 		//cout <<color.get_r()<<color.get_g()<<color.get_b();
 		film.commit(sample, color);
 	}
-	cout << "outputing image"<< "\n";
+	//cout << "outputing image"<< "\n";
 	film.writeImage();
 }
 
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
   		//cout << "10000";
 		std::string arg = argv[counter];
 	  	if (arg=="cam") {
-	  		cout << "cam";
+	  		//cout << "cam";
 			float ex = atof(argv[counter+1]);
 			float ey = atof(argv[counter+2]);
 			float ez = atof(argv[counter+3]);
@@ -133,8 +133,8 @@ int main(int argc, char *argv[]) {
 			scene.ul = ul;
 			scene.ur = ur;
 	  	} else if (arg=="sph"){
-	  		printf("SPHERE BITCHES!!!!!!");
 	  		cout << "sph";
+	  		//cout << "sph";
 			float cx = atof(argv[counter+1]);
 			float cy = atof(argv[counter+2]);
 			float cz = atof(argv[counter+3]);
@@ -142,13 +142,14 @@ int main(int argc, char *argv[]) {
 			counter = counter+5;
 			Shape sphere;
 			sphere.makeSphere(r, Point(cx,cy,cz));
-			Shape* mySphere;
-			mySphere = &sphere;
-			GeometricPrimitive geoprim = GeometricPrimitive(mySphere, Transformation(trans_mat), brdf);
+
+			GeometricPrimitive geoprim = GeometricPrimitive(&sphere,Transformation(trans_mat), brdf);
+			//geoprim.shape->printline();
 			//scene.geoprims.push_back(geoprim);
 			scene.aggreprim.addPrimitive(&geoprim);
+			printf("%lu\n", scene.aggreprim.primitives.size());
 	    } else if (arg=="tri"){
-	    	cout << "tri";
+	    	//cout << "tri";
 			float ax = atof(argv[counter+1]);
 			float ay = atof(argv[counter+2]);
 			float az = atof(argv[counter+3]);
@@ -233,7 +234,7 @@ int main(int argc, char *argv[]) {
       		}	
       			counter = counter+2;
 	    } else if (arg=="ltp"){
-	    	cout << "ltp";
+	    	//cout << "ltp";
 	    	float px = atof(argv[counter+1]);
 	    	float py = atof(argv[counter+2]);
 	    	float pz = atof(argv[counter+3]);
@@ -246,7 +247,7 @@ int main(int argc, char *argv[]) {
 			ptlight.makePointLight(px,py,pz,Color(r,g,b),falloff); 
 			scene.lights.push_back(ptlight);
 	    } else if (arg=="ltd"){
-	    	cout << "ltd";
+	    	//cout << "ltd";
 	    	float dx = atof(argv[counter+1]);
 	    	float dy = atof(argv[counter+2]);
 	    	float dz = atof(argv[counter+3]);
@@ -258,7 +259,7 @@ int main(int argc, char *argv[]) {
 	  		drlight.makeDirectionalLight(dx,dy,dz,Color(r,g,b));
 	  		scene.lights.push_back(drlight);
 	  	} else if (arg=="lta"){
-	  		cout << "lta";
+	  		//cout << "lta";
 	  		float r = atof(argv[counter+1]);
 	    	float g = atof(argv[counter+2]);
 	    	float b = atof(argv[counter+3]);
@@ -266,26 +267,26 @@ int main(int argc, char *argv[]) {
 	    	scene.amblight = Light(r,g,b);
 
 	    } else if (arg=="xfz"){
-	    	cout << "xfz";
+	    	//cout << "xfz";
 			trans_mat = Matrix();
 			trans_mat = trans_mat.identity();	    	
 			counter+=1;
 	    } else if (arg=="xft"){
-	    	cout << "xft";
+	    	//cout << "xft";
 	    	float tx = atof(argv[counter+1]);
 	    	float ty = atof(argv[counter+2]);
 	    	float tz = atof(argv[counter+3]);
 	    	counter=counter+4;
 	    	trans_mat = trans_mat * translation(tx,ty,tz);
 	    } else if (arg=="xfr"){
-	    	cout << "xfr";
+	    	//cout << "xfr";
 	    	float rx = atof(argv[counter+1]);
 	    	float ry = atof(argv[counter+2]);
 	    	float rz = atof(argv[counter+3]);
 	    	counter=counter+4;
 	    	trans_mat = trans_mat * rotation(rx,ry,rz);
 	    } else if (arg=="xfs"){
-	    	cout << "xfs";
+	    	//cout << "xfs";
 	    	float sx = atof(argv[counter+1]);
 	    	float sy = atof(argv[counter+2]);
 	    	float sz = atof(argv[counter+3]);
@@ -319,7 +320,7 @@ int main(int argc, char *argv[]) {
 	    	counter=counter+14;
 	    } 
 	    else if (!strncmp(argv[counter], "xfz", 0)){
-	    	cout << "xfz";
+	    	//cout << "xfz";
 			trans_mat = Matrix();
 			trans_mat = trans_mat.identity();	    	
 			counter+=1;
