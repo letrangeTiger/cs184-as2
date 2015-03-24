@@ -984,6 +984,19 @@ LocalGeo Transformation::operator*(LocalGeo localgeo){
  
   
 public:
+      float kdr = 0;
+      float kdg = 0;
+      float kdb = 0;
+      float ksr = 0;
+      float ksg = 0;
+      float ksb = 0;
+      float kar = 0;
+      float kag = 0;
+      float kab = 0;
+      float krr = 0;
+      float krg = 0;
+      float krb = 0;
+      float p = 0;
 
       BRDF();
       BRDF(float kdr,float kdg, float kdb, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p);
@@ -1848,7 +1861,7 @@ void Light::makeDirectionalLight(float dx, float dy, float dz, Color c){
 void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
       if (this->type==0){
             // create point light ray
-        Vector light_dir = Point(x,y,z).PsubtractP(local.pos);
+        Vector light_dir = Point(x, y, z).PsubtractP(local.pos);
         Ray r = Ray(local.pos, light_dir, 0.0001, FLT_MAX);
  
         //r.printline();
