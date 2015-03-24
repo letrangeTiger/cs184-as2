@@ -43,7 +43,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
       //if does not intersect anything return black
       else if(!primitives.intersect(ray, &thit, &in)){
          *color = Color(0,0,0);
-      } else {  
+      }else {
 
       //find BRDF at intersection point
       in.primitive->getBRDF(in.localGeo, &brdf);
@@ -57,8 +57,10 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         light.generateLightRay(in.localGeo, &currentray, &lcolor);
         //currentray.get_dir().printline();
         //lcolor.print();
+        printf("%lu\n", primitives.primitives.size());
+        cout << "Fdsfasdfsdfasdfds";
         if (!primitives.intersectP(currentray)) {
-          cout << "in raytracer loop";
+          //cout << "in raytracer loop";
             Vector n = in.localGeo.normal;
             Vector l =  currentray.get_dir().normalize();
             float NdotL = n.dot(l);
@@ -91,12 +93,12 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
             
             //cout << "this has run";
         }else{
-            cout << "else";
+            //cout << "else";
 
             *color = *color + Color(brdf.kar*amblight.color.get_r(), brdf.kag*amblight.color.get_g(), brdf.kab*amblight.color.get_b());
 
-        }
-    }}
+        }}
+    }
       if(brdf.krr > 0 || brdf.krg > 0 || brdf.krb > 0){
         
 
