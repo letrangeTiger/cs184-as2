@@ -1633,9 +1633,9 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
     //cout << "outsideeeeeeeeeeeeeeeeee";
     int i = 0;
     //printf("%lu\n", primitives.size()); 
-    primitives.at(0)->shape->printline();
-    primitives.at(1)->shape->printline();
-    primitives.at(2)->shape->printline();
+    //primitives.at(0)->shape->printline();
+    //primitives.at(1)->shape->printline();
+    //primitives.at(2)->shape->printline();
 
     for (auto *primitive : primitives){
        //primitive->shape->printline();
