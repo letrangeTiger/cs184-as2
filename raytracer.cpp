@@ -13,11 +13,11 @@ public:
       AggregatePrimitive primitives;
       int maxrecursiondepth;
       Point eye;
-      BRDF brdf;
       Light amblight;
       RayTracer();
       RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, std::vector<Light> lights, Light amblight);
       void trace(Ray& ray, int depth, Color* color);
+      Ray createReflectRay(LocalGeo &local, Ray &ray);
 };
 RayTracer::RayTracer(){
 
@@ -45,6 +45,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
       }else {
 
       //find BRDF at intersection point
+      BRDF brdf;
       in.primitive->getBRDF(in.localGeo, &brdf);
       //in.localGeo.printline();   
      //brdf.printline();
@@ -96,7 +97,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
 
             *color = *color + Color(brdf.kar*amblight.color.get_r(), brdf.kag*amblight.color.get_g(), brdf.kab*amblight.color.get_b());
 
-        }}
+        }
     }
       if(brdf.krr > 0 || brdf.krg > 0 || brdf.krb > 0){
         
@@ -113,4 +114,5 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         *color = *color + Color(brdf.krr*temp.get_r(), brdf.krg*temp.get_g(), brdf.krb*temp.get_b());
     }
   
+}
 }

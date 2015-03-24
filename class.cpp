@@ -984,19 +984,7 @@ LocalGeo Transformation::operator*(LocalGeo localgeo){
  
   
 public:
-      float kdr=0.;
-      float kdg=0.;
-      float kdb=0.;
-      float ksr=0.;
-      float ksg=0.;
-      float ksb=0.;
-      float kar=0.;
-      float kag=0.;
-      float kab=0.;
-      float krr=0.;
-      float krg=0.;
-      float krb=0.;
-      float p=0.;
+
       BRDF();
       BRDF(float kdr,float kdg, float kdb, float ksr, float ksg, float ksb, float kar, float kag, float kab, float krr, float krg, float krb, float p);
       void setKa(float r,float g, float b);
@@ -1617,6 +1605,8 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
     float newThit;
     Intersection newInter;
     int i = 0;
+    //primitives.at(0)->shape->printline();
+    //primitives.at(1)->shape->printline();
     for (auto primitive : primitives){
         if(primitive->intersect(ray, &newThit, &newInter)){
            // cout << "assign hereeee";
@@ -1671,7 +1661,7 @@ public:
       void set_r(float r);
       void set_g(float g);
       void set_b(float b);
-      void print();
+      void printline();
   
 };
 Color::Color() {
@@ -1796,7 +1786,7 @@ void Color::set_g(float g){
 void Color::set_b(float b){
         this->b = b;
 }
-void Color::print(){
+void Color::printline(){
       cout << "r component: "<<this->r<<"\n";
       cout << "g component: "<<this->g<<"\n";
       cout << "b component: "<<this->b<<"\n";
@@ -1865,7 +1855,7 @@ void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
         *lcolor = this->color;
         *lray = r;
       } else if (this->type==1){
-        Vector dirlight_dir = Vector(x,y,z);
+        Vector dirlight_dir = Vector(-1.0*x,-1.0*y,-1.0*z);
         Ray r = Ray(local.pos, dirlight_dir, 0.0001, FLT_MAX);
         *lcolor = this->color;
         *lray = r;
