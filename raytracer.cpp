@@ -57,8 +57,8 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         light.generateLightRay(in.localGeo, &currentray, &lcolor);
         //currentray.get_dir().printline();
         //lcolor.print();
-        printf("%lu\n", primitives.primitives.size());
-        cout << "Fdsfasdfsdfasdfds";
+        //printf("%lu\n", primitives.primitives.size());
+        //cout << "Fdsfasdfsdfasdfds";
         if (!primitives.intersectP(currentray)) {
           //cout << "in raytracer loop";
             Vector n = in.localGeo.normal;
@@ -113,6 +113,6 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         trace(reflectRay, depth+1, &temp);
         *color = *color + Color(brdf.krr*temp.get_r(), brdf.krg*temp.get_g(), brdf.krb*temp.get_b());
     }
-  
 }
 }
+

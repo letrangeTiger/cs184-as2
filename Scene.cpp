@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
 			scene.aggreprim.addPrimitive(geoprim);
 
 
-			printf("%lu\n", scene.aggreprim.primitives.size());
+			//printf("%lu\n", scene.aggreprim.primitives.size());
 	    } else if (arg=="tri"){
 	    	//cout << "tri";
 			float ax = atof(argv[counter+1]);
@@ -222,10 +222,19 @@ int main(int argc, char *argv[]) {
 		            istringstream(s) >> b;
 		            s = tokens[3];
 		            istringstream(s) >> c;
-      				Shape triangle;
-      				triangle.makeTriangle(points[a-1],points[b-1],points[c-1]);
-      				GeometricPrimitive geoprim = GeometricPrimitive(&triangle, Transformation(trans_mat), brdf);
-      				scene.aggreprim.addPrimitive(&geoprim);
+
+
+
+		            Shape* triangle = new Shape(points[a-1], points[b-1], points[c-1]);
+      				GeometricPrimitive* geoprim = new GeometricPrimitive(triangle, Transformation(trans_mat), brdf);
+      				scene.aggreprim.addPrimitive(geoprim);
+
+
+
+      				// Shape triangle;
+      				// triangle.makeTriangle(points[a-1],points[b-1],points[c-1]);
+      				// GeometricPrimitive geoprim = GeometricPrimitive(&triangle, Transformation(trans_mat), brdf);
+      				// scene.aggreprim.addPrimitive(&geoprim);
       				//TODO: 3 items
       					// Shape triangle;
 						// triangle.makeTriangle(Point(ax,ay,az), Point(bx,by,bz), Point(cx,cy,cz));

@@ -1877,6 +1877,7 @@ void Light::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor){
         *lcolor = this->color;
         *lray = r;
       } else if (this->type==1){
+
         Vector dirlight_dir = Vector(-1.0*x,-1.0*y,-1.0*z);
         Ray r = Ray(local.pos, dirlight_dir, 0.0001, FLT_MAX);
         *lcolor = this->color;
