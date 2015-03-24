@@ -72,6 +72,7 @@ void Scene::render() {
 	RayTracer raytracer = RayTracer(max_depth, eye, aggreprim, lights, amblight);
 	while (sampler.generateSample(&sample)){
 		//cout << "after while loop"<< "\n";
+		sample.printline();
 
 		Ray camray = Ray();
 
