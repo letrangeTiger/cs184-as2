@@ -31,8 +31,8 @@ RayTracer::RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primit
 }
 
 void RayTracer::trace(Ray& ray, int depth, Color* color){
-      float thit= 0.0;
-      Intersection in ;
+      float thit;
+      Intersection in;
       /* Find the nearest shape that the ray intersects, if any */
 
       //no need to continue if reached maxrecursiondepth

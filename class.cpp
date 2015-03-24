@@ -591,20 +591,20 @@ Matrix::Matrix(){
 }
 Matrix::Matrix(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float m, float n, float o, float p){
       this->pos[0][0] = a;
-      this->pos[1][0] = b;
-      this->pos[2][0] = c;
-      this->pos[3][0] = d;
-      this->pos[0][1] = e;
+      this->pos[0][1] = b;
+      this->pos[0][2] = c;
+      this->pos[0][3] = d;
+      this->pos[1][0] = e;
       this->pos[1][1] = f;
-      this->pos[2][1] = g;
-      this->pos[3][1] = h;
-      this->pos[0][2] = i;
-      this->pos[1][2] = j;
+      this->pos[1][2] = g;
+      this->pos[1][3] = h;
+      this->pos[2][0] = i;
+      this->pos[2][1] = j;
       this->pos[2][2] = k;
-      this->pos[3][2] = l;
-      this->pos[0][3] = m;
-      this->pos[1][3] = n;
-      this->pos[2][3] = o;
+      this->pos[2][3] = l;
+      this->pos[3][0] = m;
+      this->pos[3][1] = n;
+      this->pos[3][2] = o;
       this->pos[3][3] = p;
   
 }
@@ -613,20 +613,20 @@ void Matrix::matrix(){
 }
 void Matrix::matrix(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float m, float n, float o, float p){
       this->pos[0][0] = a;
-      this->pos[1][0] = b;
-      this->pos[2][0] = c;
-      this->pos[3][0] = d;
-      this->pos[0][1] = e;
+      this->pos[0][1] = b;
+      this->pos[0][2] = c;
+      this->pos[0][3] = d;
+      this->pos[1][0] = e;
       this->pos[1][1] = f;
-      this->pos[2][1] = g;
-      this->pos[3][1] = h;
-      this->pos[0][2] = i;
-      this->pos[1][2] = j;
+      this->pos[1][2] = g;
+      this->pos[1][3] = h;
+      this->pos[2][0] = i;
+      this->pos[2][1] = j;
       this->pos[2][2] = k;
-      this->pos[3][2] = l;
-      this->pos[0][3] = m;
-      this->pos[1][3] = n;
-      this->pos[2][3] = o;
+      this->pos[2][3] = l;
+      this->pos[3][0] = m;
+      this->pos[3][1] = n;
+      this->pos[3][2] = o;
       this->pos[3][3] = p;
   
 }
@@ -689,38 +689,43 @@ Matrix Matrix::multiplication(Matrix temp){
 }
 Vector multiplicationV(Matrix m, Vector v){
       Vector result;
-      float x = m.pos[0][0] * v.x + m.pos[0][1] * v.y + m.pos[0][2] * v.z + m.pos[0][3];
-      float y = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z + m.pos[1][3];
-      float z = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z + m.pos[2][3];
+      float x = m.pos[0][0] * v.x + m.pos[0][1] * v.y + m.pos[0][2] * v.z;
+      float y = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z;
+      float z = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z;
       return Vector(x, y, z);
 }
 Point multiplicationP(Matrix m, Point p){
-      float x = m.pos[0][0] * p.x + m.pos[0][1] * p.y + m.pos[0][2] * p.z + m.pos[0][3];
-      float y = m.pos[1][0] * p.x + m.pos[1][1] * p.y + m.pos[1][2] * p.z + m.pos[1][3];
-      float z = m.pos[2][0] * p.x + m.pos[2][1] * p.y + m.pos[2][2] * p.z + m.pos[2][3];
+      float x = m.pos[0][0] * p.x + m.pos[0][1] * p.y + m.pos[0][2] * p.z;
+      float y = m.pos[1][0] * p.x + m.pos[1][1] * p.y + m.pos[1][2] * p.z;
+      float z = m.pos[2][0] * p.x + m.pos[2][1] * p.y + m.pos[2][2] * p.z;
       return Point(x, y, z);
 }
 Ray multiplicationR(Matrix m, Ray ray){
       Vector v = ray.get_dir();
       Point p = ray.get_pos();
-      float x = m.pos[0][0] * v.x + m.pos[0][1] * v.y + m.pos[0][2] * v.z;
-      float y = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z;
-      float z = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z;
-      Vector r = Vector(x, y, z);
-      return Ray(p, r, 0, 0);
+
+      float e = m.pos[0][0] * v.x + m.pos[0][1] * v.y + m.pos[0][2] * v.z;
+      float d = m.pos[1][0] * v.x + m.pos[1][1] * v.y + m.pos[1][2] * v.z;
+      float c = m.pos[2][0] * v.x + m.pos[2][1] * v.y + m.pos[2][2] * v.z;
+
+      float u = m.pos[0][0] * p.x + m.pos[0][1] * p.y + m.pos[0][2] * p.z;
+      float o = m.pos[1][0] * p.x + m.pos[1][1] * p.y + m.pos[1][2] * p.z;
+      float l = m.pos[2][0] * p.x + m.pos[2][1] * p.y + m.pos[2][2] * p.z;
+      
+      Vector r = Vector(e, d, c);
+      Point h = Point(u,o,l);
+      return Ray(h, r, 0.0001, ray.t_max);
 }
 LocalGeo multiplicationL(Matrix m, LocalGeo localGeo){
       Vector v = localGeo.get_normal();
       Matrix minvt;
-      minvt = m.inverse();
+      minvt = m.inverse().transpose();
       float x = minvt.pos[0][0] * v.x + minvt.pos[0][1] * v.y + minvt.pos[0][2] * v.z;
       float y = minvt.pos[1][0] * v.x + minvt.pos[1][1] * v.y + minvt.pos[1][2] * v.z;
       float z = minvt.pos[2][0] * v.x + minvt.pos[2][1] * v.y + minvt.pos[2][2] * v.z;
-      v = Normal(x, y, z);
-      Point n;
-      n = localGeo.pos;
-      LocalGeo t;
-      t = LocalGeo(n, v);
+      k = Normal(x, y, z);
+      Point n = multiplicationP(m, localGeo.pos);
+      LocalGeo t = LocalGeo(n, k);
       return t;
 }
 Matrix Matrix::identity(){
@@ -1552,17 +1557,21 @@ GeometricPrimitive::GeometricPrimitive(Shape *shape, float tx, float ty, float t
 }
 bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
       bool result = false;
-      Ray oray = worldToObj*ray;
+      //ray.printline();
+      Ray oray;
+      oray = worldToObj*ray;
+      //oray.printline();
+      //worldToObj.m.print();
       *thit = FLT_MAX;
       float newThit;
       LocalGeo olocal;
       //cout << "going in";                                 
-      if (this->shape->intersect(ray, &newThit, &olocal)){
+      if (this->shape->intersect(oray, &newThit, &olocal)){
             //cout <<"buggg";
             if (newThit < *thit){
             result = true;
             *thit = newThit;
-            *in = Intersection(olocal, this);
+            *in = Intersection(objToWorld*olocal, this);
             //*in = Intersection(objToWorld*olocal, this);
            // olocal.printline();
             //LocalGeo temp = objToWorld*olocal;
@@ -1879,12 +1888,12 @@ void Light::print(){
       cout << "has a x,y,z values of :"<<this->x << this->y << this->z<<"\n";
       cout << "color is :"<< this->color.get_r() << this->color.get_g()  << this->color.get_b();
 }
-/*
-int main(int argc, char *argv[]) {
+
+/*int main(int argc, char *argv[]) {
       //test a: triangle-ray intersection
       Matrix test1;
       Matrix test11;
-      test1.matrix(3.2,2,3,4,5,6,7,8,9,5.7,10,12,13,14,15,1);
+      test1.matrix(1,0,0,-1,0,1,0,1,0,0,1,0,0,0,0,1);
       test11 = test1.inverse();
       //test11.print();
       Matrix test2;
@@ -1906,4 +1915,10 @@ int main(int argc, char *argv[]) {
       Matrix test3;
       test3 = scaling(2,3,4);
       test3.print();
+
+      Ray testray1 = Ray(Point(0,0,2), Vector(0.576773,0.577927,0.577350), 0.001, 1000000);
+      testray1.printline();
+      Ray resultray1 = multiplicationR(test1, testray1);
+      resultray1.printline();
+
       }*/
