@@ -1155,7 +1155,8 @@ public:
       void makeSphere(float radius, Point center);
       void makeTriangle(Point point0, Point point1, Point point2);
       bool intersect(Ray& ray, float* thit, LocalGeo* local);
-      bool intersectP(Ray& ray, std::vector<Point> points);
+      //bool intersectP(Ray& ray, std::vector<Point> points);
+      bool intersectP(Ray& ray);
  
       float get_radius();
       Point get_center();
@@ -1413,7 +1414,8 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
 /*
       Same as intersect, but just return whether there is any intersection or not
 */
-bool Shape::intersectP(Ray& ray, std::vector<Point> points){
+//bool Shape::intersectP(Ray& ray, std::vector<Point> points){
+bool Shape::intersectP(Ray& ray){
       //bool isIntersect = false;
       //Point* intersection;
       //Normal* normal;
@@ -1447,11 +1449,11 @@ bool Shape::intersectP(Ray& ray, std::vector<Point> points){
                   return false;
             }
 
-            Point intersection;
-            intersection = ray.get_pos().PaddvectorV(ray.get_dir().scalarmultiply(myT));
-            if (std::find(points.begin(), points.end(), intersection) != points.end()) {
-                  return false;
-            }
+            // Point intersection;
+            // intersection = ray.get_pos().PaddvectorV(ray.get_dir().scalarmultiply(myT));
+            // if (std::find(points.begin(), points.end(), intersection) != points.end()) {
+            //       return false;
+            // }
 
             float myGamma;
             SmallMatrix gamma_matrix;
