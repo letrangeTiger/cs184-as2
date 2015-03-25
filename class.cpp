@@ -1155,7 +1155,7 @@ public:
       void makeSphere(float radius, Point center);
       void makeTriangle(Point point0, Point point1, Point point2);
       bool intersect(Ray& ray, float* thit, LocalGeo* local);
-      bool intersectP(Ray& ray);
+      bool intersectP(Ray& ray, std::vector<Point> points);
  
       float get_radius();
       Point get_center();
@@ -1898,36 +1898,36 @@ void Light::print(){
       cout << "color is :"<< this->color.get_r() << this->color.get_g()  << this->color.get_b();
 }
 
-/*int main(int argc, char *argv[]) {
-      //test a: triangle-ray intersection
-      Matrix test1;
-      Matrix test11;
-      test1.matrix(1,0,0,-1,0,1,0,1,0,0,1,0,0,0,0,1);
-      test11 = test1.inverse();
-      //test11.print();
-      Matrix test2;
-      test2 = translation(2,3,4);
-      //test2.print();
+// int main(int argc, char *argv[]) {
+//       //test a: triangle-ray intersection
+//       Matrix test1;
+//       Matrix test11;
+//       test1.matrix(1,0,0,-1,0,1,0,1,0,0,1,0,0,0,0,1);
+//       test11 = test1.inverse();
+//       //test11.print();
+//       Matrix test2;
+//       test2 = translation(2,3,4);
+//       //test2.print();
        
-      Matrix test4;
-      Matrix test41;
-      Matrix test42;
-      Matrix test43;
-      test4.matrix(1,2,3,4,5,6,7,8,9,10,11,11,13,14,15,16);
-      test4.print();
-      test41 = test4.transpose();
-      test42 = test41.identity();
-      test41.print();
-      //test42.print();
-      test43 = test4*test41;
-      //test43.print();
-      Matrix test3;
-      test3 = scaling(2,3,4);
-      test3.print();
+//       Matrix test4;
+//       Matrix test41;
+//       Matrix test42;
+//       Matrix test43;
+//       test4.matrix(1,2,3,4,5,6,7,8,9,10,11,11,13,14,15,16);
+//       test4.print();
+//       test41 = test4.transpose();
+//       test42 = test41.identity();
+//       test41.print();
+//       //test42.print();
+//       test43 = test4*test41;
+//       //test43.print();
+//       Matrix test3;
+//       test3 = scaling(2,3,4);
+//       test3.print();
 
-      Ray testray1 = Ray(Point(0,0,2), Vector(0.576773,0.577927,0.577350), 0.001, 1000000);
-      testray1.printline();
-      Ray resultray1 = multiplicationR(test1, testray1);
-      resultray1.printline();
+//       Ray testray1 = Ray(Point(0,0,2), Vector(0.576773,0.577927,0.577350), 0.001, 1000000);
+//       testray1.printline();
+//       Ray resultray1 = multiplicationR(test1, testray1);
+//       resultray1.printline();
 
-      }*/
+//       }

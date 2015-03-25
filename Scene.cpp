@@ -332,6 +332,7 @@ int main(int argc, char *argv[]) {
 	    } 
 	    else if (!strncmp(argv[counter], "xfz", 0)){
 	    	//cout << "xfz";
+	    	//printf("wtf meow\n");
 			trans_mat = Matrix();
 			trans_mat = trans_mat.identity();	    	
 			counter+=1;
