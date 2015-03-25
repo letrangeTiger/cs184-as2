@@ -10,24 +10,26 @@ class RayTracer{
 public:
       std::vector<Light> lights;
       std::vector<Light>::iterator iter;
+      std::vector<Point> points;
       AggregatePrimitive primitives;
       int maxrecursiondepth;
       Point eye;
       Light amblight;
       RayTracer();
-      RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, std::vector<Light> lights, Light amblight);
+      RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, std::vector<Light> lights, Light amblight, std::vector<Point> points);
       void trace(Ray& ray, int depth, Color* color);
       Ray createReflectRay(LocalGeo &local, Ray &ray);
 };
 RayTracer::RayTracer(){
 
 }
-RayTracer::RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, std::vector<Light> lights, Light amblight){
+RayTracer::RayTracer(int maxrecursiondepth, Point eye, AggregatePrimitive primitives, std::vector<Light> lights, Light amblight, std::vector<Point> points){
       this->maxrecursiondepth = maxrecursiondepth;
       this->eye = eye;
       this->primitives = primitives;
       this->lights = lights;
       this->amblight = amblight;
+      this->points = points;
 }
 
 void RayTracer::trace(Ray& ray, int depth, Color* color){
@@ -59,7 +61,8 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
         //lcolor.print();
         //printf("%lu\n", primitives.primitives.size());
         //cout << "Fdsfasdfsdfasdfds";
-        if (!primitives.intersectP(currentray)) {
+        if (!primitives.intersectP(currentray, points)) {
+          printf("%lu\n", points.size());
           //cout << "in raytracer loop";
             Vector n = in.localGeo.normal;
             Vector l =  currentray.get_dir().normalize();

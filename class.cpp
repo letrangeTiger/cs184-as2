@@ -301,6 +301,7 @@ public:
       void set_z(float z);
       void printline();
       void print();
+      bool equals(Point a);
   
 };
 Point::Point(){
@@ -367,6 +368,14 @@ void Point::printline(){                //for testing
 }
 void Point::print(){              //for testing
       printf("x=%f, y=%f, z=%f", this->x, this->y, this->z);
+}
+bool Point::equals(Point a){
+      if (this->x == a.x && this->y == a.y && this->z == a.z){
+            return true;
+      }
+      else{
+            return false;
+      }
 }
   
   
@@ -1447,11 +1456,6 @@ bool Shape::intersectP(Ray& ray, std::vector<Point> points){
                   return false;
             }
 
-            Point intersection;
-            intersection = ray.get_pos().PaddvectorV(ray.get_dir().scalarmultiply(myT));
-            if (std::find(points.begin(), points.end(), intersection) != points.end()) {
-                  return false;
-            }
 
             float myGamma;
             SmallMatrix gamma_matrix;
@@ -1477,7 +1481,13 @@ bool Shape::intersectP(Ray& ray, std::vector<Point> points){
                   return false;
             }
 
-
+            Point intersection;
+            intersection = ray.get_pos().PaddvectorV(ray.get_dir().scalarmultiply(myT));
+            for (auto point:points){
+                  if (point.equals(intersection)){
+                        return false;
+                  }
+            }
  
             return true;
       }
@@ -1503,7 +1513,7 @@ public:
       GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rotx, float roty, float rotz, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
       GeometricPrimitive(Shape *shape, float tx, float ty, float tz, float sx, float sy, float sz, float rx, float ry, float rz, float angle, float kar, float kag, float  kab, float kdr, float kdg, float kdb, float ksr, float ksg, float ksb);
       bool intersect(Ray& ray, float* thit, Intersection* in);
-      bool intersectP(Ray& ray);
+      bool intersectP(Ray& ray, std::vector<Point> points);
       void getBRDF(LocalGeo& local, BRDF *brdf);
 }; 
 GeometricPrimitive::GeometricPrimitive(){
@@ -1588,9 +1598,9 @@ bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)  {
       }
       return result;                               
 }
-bool GeometricPrimitive::intersectP(Ray& ray) {
+bool GeometricPrimitive::intersectP(Ray& ray, std::vector<Point> points) {
       Ray oray = worldToObj*ray;
-      return shape->intersectP(oray); 
+      return shape->intersectP(oray, points); 
                                                  
 }
 void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf) {
@@ -1611,7 +1621,7 @@ public:
     AggregatePrimitive(std::vector<GeometricPrimitive*> list);
     void addPrimitive(GeometricPrimitive* temp);
     bool intersect(Ray& ray, float* thit, Intersection* in);
-    bool intersectP(Ray& ray);
+    bool intersectP(Ray& ray, std::vector<Point> points);
     void getBRDF(LocalGeo& local, BRDF* brdf){
         //exit(1);
         //This should never get called, because in->primitve
@@ -1649,12 +1659,12 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in){
     return intersectobject;
 }
   
-bool AggregatePrimitive::intersectP(Ray& ray){
+bool AggregatePrimitive::intersectP(Ray& ray, std::vector<Point> points){
     int i = 0;
     for (it = primitives.begin() ; it < primitives.end(); it++, i++){
       GeometricPrimitive *primitive;
       primitive = primitives.at(i);
-      if (primitive->shape->intersectP(ray)) {
+      if (primitive->shape->intersectP(ray, points)) {
         return true;
       }
     }
