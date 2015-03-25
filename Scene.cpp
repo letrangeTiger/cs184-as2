@@ -28,6 +28,7 @@ class Scene {
 		std::vector<GeometricPrimitive> geoprims;
 		std::vector<GeometricPrimitive>::iterator it;
 		std::vector<Light> lights;
+		std::vector<Point> points;
 		Light amblight;
 		unsigned width, height;
 		Scene();
@@ -69,7 +70,7 @@ void Scene::render() {
 	//lr.printline();
 	//ul.printline();
 	//ur.printline();
-	RayTracer raytracer = RayTracer(max_depth, eye, aggreprim, lights, amblight);
+	RayTracer raytracer = RayTracer(max_depth, eye, aggreprim, lights, amblight, points);
 	while (sampler.generateSample(&sample)){
 		//cout << "after while loop"<< "\n";
 		sample.printline();
@@ -257,6 +258,8 @@ int main(int argc, char *argv[]) {
 			Light ptlight;
 			ptlight.makePointLight(px,py,pz,Color(r,g,b),falloff); 
 			scene.lights.push_back(ptlight);
+			Point p = Point(px, py, pz);
+			scene.points.push_back(p);
 	    } else if (arg=="ltd"){
 	    	//cout << "ltd";
 	    	float dx = atof(argv[counter+1]);
