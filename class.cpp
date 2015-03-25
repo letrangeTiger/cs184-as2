@@ -1347,7 +1347,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
                   );
             myT = t_matrix.determinant()/A.determinant();
             if (myT < ray.get_t_min() || myT > ray.get_t_max()) {
-                  cout << "returning false for tri at alpha";
+                  //cout << "returning false for tri at alpha";
                   return false;
             }
  
@@ -1360,7 +1360,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             myGamma = gamma_matrix.determinant()/A.determinant();
  
             if (myGamma < 0 || myGamma > 1){
-                  cout << "returning false for tri at gamma";
+                  //cout << "returning false for tri at gamma";
                   return false;
             }
  
@@ -1373,7 +1373,7 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             myBeta = beta_matrix.determinant()/A.determinant();
  
             if (myBeta < 0 || myBeta > (1-myGamma)){
-                  cout << "returning false for tri at beta";
+                  //cout << "returning false for tri at beta";
                   return false;
             }
  
@@ -1401,11 +1401,11 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
             //myLocal.printline();
             *local = myLocal;
             //local->printline();
-            cout << "returning true at tri";
+            //cout << "returning true at tri";
             return true;
       }
       else { //shape has not been set up
-            cout << "returning false due to non-implemented shape";
+            //cout << "returning false due to non-implemented shape";
             return false;
       }
 }
@@ -1413,11 +1413,11 @@ bool Shape::intersect(Ray& ray, float* thit, LocalGeo* local){
 /*
       Same as intersect, but just return whether there is any intersection or not
 */
-bool Shape::intersectP(Ray& ray){
-      bool isIntersect = false;
-      Point* intersection;
-      Normal* normal;
-      float* thit;
+bool Shape::intersectP(Ray& ray, std::vector<Point> points){
+      //bool isIntersect = false;
+      //Point* intersection;
+      //Normal* normal;
+      //float* thit;
       if (this->type == 0){ //sphere
             if (find_discriminant(this->center, this->radius, ray.get_pos(), ray.get_dir()) < 0) {
                   return false;
@@ -1446,7 +1446,13 @@ bool Shape::intersectP(Ray& ray){
             if (myT < ray.get_t_min() || myT > ray.get_t_max()) {
                   return false;
             }
- 
+
+            Point intersection;
+            intersection = ray.get_pos().PaddvectorV(ray.get_dir().scalarmultiply(myT));
+            if (std::find(points.begin(), points.end(), intersection) != points.end()) {
+                  return false;
+            }
+
             float myGamma;
             SmallMatrix gamma_matrix;
             gamma_matrix.smallMatrix(this->point0.get_x() - this->point1.get_x(), this->point0.get_x() - ray.get_pos().get_x(), ray.get_dir().get_x(),
@@ -1470,6 +1476,8 @@ bool Shape::intersectP(Ray& ray){
             if (myBeta < 0 || myBeta > (1-myGamma)){
                   return false;
             }
+
+
  
             return true;
       }
